@@ -25,8 +25,8 @@ GameObject::~GameObject()
 	if (mID == 0) {
 		for (GameObject* obj : mChildren) {
 			delete obj;
-			mChildren.clear();
 		}
+		mChildren.clear();
 	}
 	}
 

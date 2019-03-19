@@ -39,6 +39,8 @@ class GameObject {
 			return component;
 		}
 
+		GameObject* GetParent() { return mParent; }
+
 		UI32 GetID();
 		std::string GetName();
 		static GameObject* Create();

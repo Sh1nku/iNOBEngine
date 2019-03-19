@@ -85,6 +85,7 @@ TEST(ManagerTest, GetGameObjectByName_Non_Existent) {
 	delete(manager);
 }
 
+///TODO Assert
 TEST(ManagerTest, Destroy_Chain_GameObjects) {
 	Manager* manager = Manager::GetInstance();
 	GameObject* obj = new GameObject();
