@@ -1,0 +1,16 @@
+#pragma once
+
+#include "io\luaimplementation.h"
+#include "io\settings.h"
+#include "types\component.h"
+#include "types\components\testcomponent.h"
+#include "types\components\transform.h"
+#include "types\gameobject.h"
+#include "types\systemprogram.h"
+#include "types\systems\testsystem.h"
+#include "types\systems\rendersystem.h"
+#include "types\vectors.h"
+#include "types\enginetypes.h"
+#include "window\window.h"
+#include "manager.h"
+#include "Box2D\Box2D.h"
