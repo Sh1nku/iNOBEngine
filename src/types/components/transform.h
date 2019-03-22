@@ -5,9 +5,10 @@
 class Transform : public Component {
 public:
 	Transform(GameObject *parent = nullptr) : Component(parent) { mWorldPosition = b2Vec2(0, 0); }
+	Transform(b2Vec2 position, GameObject *parent = nullptr) : Component(parent), mWorldPosition(position) {};
 	Component::TYPE GetBitcode() override;
-	b2Vec2 GetWorldPosition();
-	b2Vec2 GetLocalPosition();
+	b2Vec2 GetWorldPosition() const;
+	b2Vec2 GetLocalPosition() const;
 	void SetLocalPosition(b2Vec2* position);
 	void SetWorldPosition(b2Vec2* position);
 

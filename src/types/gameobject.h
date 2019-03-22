@@ -39,6 +39,8 @@ class GameObject {
 			return component;
 		}
 
+		Component* AddComponent(Component* component);
+
 		GameObject* GetParent() { return mParent; }
 
 		UI32 GetID();
@@ -46,7 +48,7 @@ class GameObject {
 		Transform *transform;
 
 		static GameObject* Create();
-		static GameObject* LoadFromFile(std::string fileContents);
+		static GameObject* LoadFromFile(std::string fileContents, GameObject* parent = nullptr);
 	private:
 		std::vector<Component*> mComponents;
 		std::vector<GameObject*> mChildren;

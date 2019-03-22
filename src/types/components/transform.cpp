@@ -6,43 +6,57 @@ Component::TYPE Transform::GetBitcode() {
 	return Component::TYPE::TRANSFORM;
 }
 
-b2Vec2 Transform::GetLocalPosition() {
-	if (mParent->mParent != nullptr) {
-		return mParent->mParent->transform->mWorldPosition - mWorldPosition;
+b2Vec2 Transform::GetLocalPosition() const{
+	if (mParent != nullptr) {
+		if (mParent->mParent != nullptr) {
+			return mParent->mParent->transform->mWorldPosition - mWorldPosition;
+		}
+		return mWorldPosition;
 	}
 	else {
 		return mWorldPosition;
 	}
 }
 
-b2Vec2 Transform::GetWorldPosition() {
+b2Vec2 Transform::GetWorldPosition() const{
 	return mWorldPosition;
 }
 
 void Transform::SetLocalPosition(b2Vec2* position) {
-	if (mParent->mParent != nullptr) {
-		mWorldPosition = mParent->mParent->transform->mWorldPosition + *position;
+	if (mParent != nullptr) {
+		if (mParent->mParent != nullptr) {
+			mWorldPosition = mParent->mParent->transform->mWorldPosition + *position;
+		}
+		else {
+			mWorldPosition = *position;
+		}
 	}
 	else {
 		mWorldPosition = *position;
 	}
-	for (GameObject* go : mParent->mChildren) {
-		go->transform->SetWorldPosition(&(go->transform->GetLocalPosition()));
+	if (mParent != nullptr) {
+		for (GameObject* go : mParent->mChildren) {
+			go->transform->SetWorldPosition(&(go->transform->GetLocalPosition()));
+		}
 	}
 }
 
 void Transform::SetWorldPosition(b2Vec2* position) {
 	mWorldPosition = *position;
-	for (GameObject* go : mParent->mChildren) {
-		go->transform->SetWorldPosition(&(go->transform->GetLocalPosition()));
+	if (mParent != nullptr) {
+		for (GameObject* go : mParent->mChildren) {
+			go->transform->SetWorldPosition(&(go->transform->GetLocalPosition()));
+		}
 	}
 }
 
 void to_json(nlohmann::json& j, const Transform& t) {
-	j = nlohmann::json{ { "position", 32 } };
+	b2Vec2 position = t.GetLocalPosition();
+	j = nlohmann::json{ {"name", "Transform"}, {"position", std::vector<float>{position.x, position.y} } };
 }
 
 void from_json(const nlohmann::json& j, Transform& t) {
-	int i;
-	j.at("position").get_to(i);
+	std::vector<float> positionVector;
+	j.at("position").get_to(positionVector);
+	t.SetLocalPosition(new b2Vec2(positionVector[0], positionVector[1]));
 }

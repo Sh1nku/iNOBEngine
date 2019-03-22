@@ -15,7 +15,7 @@ GameObject* Resources::GetPrefab(std::string name) {
 void Resources::Load(std::string directory) {
 	for (auto& p : fs::recursive_directory_iterator(directory)) {
 		if (p.is_regular_file() && p.path().extension() == "prfb") {
-			prefabs.emplace(p.path().stem(), GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string())));
+			prefabs.emplace(p.path().stem().string(), GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string())));
 		}
 	}
 }
