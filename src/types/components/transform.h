@@ -1,6 +1,6 @@
 #pragma once
 #include "../component.h"
-#include "Box2D\Box2D.h"
+#include "Box2D/Box2D.h"
 
 class Transform : public Component {
 public:

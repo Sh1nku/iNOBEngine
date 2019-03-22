@@ -1,11 +1,11 @@
 #include "manager.h"
-#include "types\gameobject.h"
+#include "types/gameobject.h"
 #include <typeindex>
 #include <vector>
-#include "types\systemprogram.h"
+#include "types/systemprogram.h"
 #include <algorithm>
-#include "types\components\transform.h"
-#include "Box2D\Box2D.h"
+#include "types/components/transform.h"
+#include "Box2D/Box2D.h"
 
 Manager* Manager::manager = nullptr;
 

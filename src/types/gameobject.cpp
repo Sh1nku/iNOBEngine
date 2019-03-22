@@ -1,6 +1,6 @@
 #include "gameobject.h"
 #include <iostream>
-#include "types\components\transform.h"
+#include "types/components/transform.h"
 
 UI32 globalID = 1;
 std::vector<UI32> globalPoolIDS;

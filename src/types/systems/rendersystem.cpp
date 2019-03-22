@@ -1,5 +1,5 @@
 #include "rendersystem.h"
-#include "window\window.h"
+#include "window/window.h"
 #include "../component.h"
 
 RenderSystem::RenderSystem() {
