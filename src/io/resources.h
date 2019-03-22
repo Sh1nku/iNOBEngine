@@ -7,9 +7,10 @@ class GameObject;
 
 class Resources {
 public:
+	static void Load(std::string directory);
 	static GameObject* GetPrefab(std::string name);
 private:
-	static std::unordered_map<std::string, GameObject> prefabs;
-	static std::unordered_map<std::string, Sound> sounds;
-	static std::unordered_map<std::string, Texture> textures;
+	static std::unordered_map<std::string, GameObject*> prefabs;
+	static std::unordered_map<std::string, Sound*> sounds;
+	static std::unordered_map<std::string, Texture*> textures;
 };

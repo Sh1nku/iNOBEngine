@@ -43,8 +43,10 @@ class GameObject {
 
 		UI32 GetID();
 		std::string GetName();
-		static GameObject* Create();
 		Transform *transform;
+
+		static GameObject* Create();
+		static GameObject* LoadFromFile(std::string fileContents);
 	private:
 		std::vector<Component*> mComponents;
 		std::vector<GameObject*> mChildren;

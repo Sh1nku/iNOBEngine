@@ -33,18 +33,22 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE TEST_SOURCES "tests/*.cpp")
 file(GLOB_RECURSE TEST_HEADERS "tests/*.h")
 
+
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Header Files" FILES ${HEADERS})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Source Files" FILES ${SOURCES})
 
-set ( PROJECT_LINK_LIBS SDL2.lib SDL2main.lib lua5.1.lib opengl32.lib glu32.lib)
+set ( PROJECT_LINK_LIBS SDL2.lib SDL2main.lib lua5.1.lib opengl32.lib glu32.lib SDL2_image.lib)
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
-link_directories( ../Libraries/SDL2-2.0.4/lib/x86 ../Libraries/lua-5.1.5)
-include_directories( ../Libraries/SDL2-2.0.4/include ../Libraries/lua-5.1.5/include ../Libraries/Sol2 ../Libraries/JSON)
+link_directories( ../Libraries/SDL2-2.0.4/lib/x86 ../Libraries/lua-5.1.5 ../Libraries/SDL2_image-2.0.4/lib/x86)
+include_directories( ../Libraries/SDL2-2.0.4/include ../Libraries/lua-5.1.5/include ../Libraries/Sol2 ../Libraries/JSON ../Libraries/SDL2_image-2.0.4/include)
 
 add_library(iNOBEngine ${SOURCES} ${HEADERS})
 target_link_libraries(iNOBEngine ${PROJECT_LINK_LIBS} )
 
 include_directories( src/ )
-link_directories( ../Libraries/SDL2-2.0.4/lib/x86 ../Libraries/lua-5.1.5)
+link_directories( ../Libraries/SDL2-2.0.4/lib/x86 ../Libraries/lua-5.1.5 ../Libraries/SDL2_image-2.0.4/lib/x86)
 add_executable(Tests ${TEST_SOURCES} ${TEST_HEADERS})
 target_link_libraries(Tests ${PROJECT_LINK_LIBS} iNOBEngine gtest_main)
+
+set_property(TARGET iNOBEngine PROPERTY CXX_STANDARD 17)
+set_property(TARGET Tests PROPERTY CXX_STANDARD 17)
