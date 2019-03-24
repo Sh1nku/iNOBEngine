@@ -3,7 +3,7 @@
 #include "../component.h"
 
 RenderSystem::RenderSystem() {
-	mMap.emplace( Component::TYPE::TRANSFORM, new std::vector<std::vector<Component*>*>());
+	mMap.insert({ Component::TYPE::TRANSFORM, new std::unordered_map<GameObject*,std::unordered_map<UI32,Component*>*>() });
 
 	window = new Window();
 	window->Create();

@@ -35,7 +35,7 @@ GameObject* Manager::AddGameObject(GameObject *obj) {
 		globalPoolIDS.pop_back();
 	}
 	mGameObjects.insert({ obj->GetID(), obj });
-	for (GameObject* obj2 : obj->mChildren) {
+	for (GameObject* obj2 : (*(obj)).mChildren) {
 		AddGameObject(obj2);
 	}
 	return obj;

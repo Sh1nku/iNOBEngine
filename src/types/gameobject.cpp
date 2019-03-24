@@ -20,9 +20,10 @@ GameObject* GameObject::Create() {
 
 GameObject::~GameObject() 
 {
-	for (Component* v : mComponents) {
-		delete v;
+	for (auto &v : mComponents) {
+		delete v.second;
 	}
+	mComponents.clear();
 	if (mID == 0) {
 		for (GameObject* obj : mChildren) {
 			delete obj;
@@ -35,19 +36,34 @@ UI32 GameObject::GetID() {
 	return mID;
 }
 
+UI32 GameObject::GetComponentEnum() {
+	UI32 compEnum = 0;
+	for (auto& entry : mComponents) {
+		compEnum |= entry.second->GetBitcode();
+	}
+	return compEnum;
+}
+
 std::string GameObject::GetName() {
 	return mName;
 }
 
 Component* GameObject::AddComponent(Component* component) {
 	if (std::type_index(typeid(*component)) == std::type_index(typeid(Transform))) {
-		mComponents.erase(mComponents.begin());
-		delete transform;
+		if (mComponents.size() > 0) {
+			for (auto& entry : mComponents) {
+				if (entry.first == Component::TRANSFORM) {
+					delete entry.second;
+					entry.second = component;
+				}
+			}
+		}
 		transform = (Transform*) component;
-		mComponents.push_back(component);
+		mComponents.emplace( component->GetBitcode(), component );
+		return component;
 	}
 	else {
-		mComponents.push_back(component);
+		mComponents.emplace(component->GetBitcode(), component);
 		return component;
 	}
 }
@@ -73,3 +89,12 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	}
 	return gameObject;
 };
+
+Component* GameObject::GetComponent(Component::TYPE type) {
+	try {
+		return mComponents.at(type);
+	}
+	catch (std::exception ex) {
+		return nullptr;
+	}
+}

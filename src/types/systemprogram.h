@@ -14,8 +14,9 @@ public:
 	virtual ~SystemProgram();
 	bool active = true;
 	virtual void Update(float dt);
-	std::vector<std::vector<Component*>*>* GetEntries(UI32 bitcode);
+	void AddToSystem(GameObject* obj);
+	std::unordered_map<GameObject* ,std::unordered_map<UI32,Component*>*>* GetEntries(UI32 bitcode);
 protected:
-	std::unordered_map<UI32, std::vector<std::vector<Component*>*>*> mMap;
+	std::unordered_map<UI32, std::unordered_map<GameObject* ,std::unordered_map<UI32,Component*>*>*> mMap;
 };
 

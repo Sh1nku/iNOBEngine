@@ -1,9 +1,10 @@
 #include "systemprogram.h"
+#include "component.h"
+#include "gameobject.h"
 
 
+SystemProgram::SystemProgram() {
 
-SystemProgram::SystemProgram()
-{
 }
 
 
@@ -15,6 +16,20 @@ void SystemProgram::Update(float dt) {
 
 }
 
-std::vector<std::vector<Component*>*>* SystemProgram::GetEntries(UI32 bitcode) {
+void SystemProgram::AddToSystem(GameObject* obj) {
+	for (auto& thing : mMap) {
+		if ((thing.first & obj->GetComponentEnum()) == thing.first) {
+			auto componentMap = new std::unordered_map<UI32, Component*>;
+			for (auto& comp : obj->mComponents) {
+				if (comp.first & thing.first) {
+					componentMap->emplace(comp);
+				}
+			}
+			thing.second->emplace(obj,componentMap);
+		}
+	}
+}
+
+std::unordered_map<GameObject* ,std::unordered_map<UI32,Component*>*>* SystemProgram::GetEntries(UI32 bitcode) {
 	return mMap.at(bitcode);
 }

@@ -5,7 +5,7 @@
 
 class TestComponent : public Component {
 public:
-	TestComponent() {}
+	TestComponent() { value = 0; value2 = ""; position = b2Vec2(0, 0); }
 	TestComponent(int value, std::string value2, b2Vec2 position) : value(value), value2(value2), position(position) {}
 	Component::TYPE GetBitcode() override;
 	int value;
