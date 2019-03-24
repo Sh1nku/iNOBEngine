@@ -3,8 +3,8 @@
 
 
 TestSystem::TestSystem() {
-	mMap.insert({ Component::TYPE::TEST_COMPONENT, new  std::unordered_map<GameObject*, std::unordered_map<UI32,Component*>*> });
-	mMap.insert({ Component::TYPE::TEST_COMPONENT | Component::TYPE::TRANSFORM, new  std::unordered_map<GameObject*, std::unordered_map<UI32,Component*>*> });
+	mMap.insert({ Component::TYPE::TEST_COMPONENT, std::make_unique<gameObject_map>() });
+	mMap.insert({ Component::TYPE::TEST_COMPONENT | Component::TYPE::TRANSFORM, std::make_unique<gameObject_map>() });
 }
 
 TestSystem::~TestSystem() {

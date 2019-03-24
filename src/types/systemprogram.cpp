@@ -8,8 +8,8 @@ SystemProgram::SystemProgram() {
 }
 
 
-SystemProgram::~SystemProgram()
-{
+SystemProgram::~SystemProgram() {
+
 }
 
 void SystemProgram::Update(float dt) {
@@ -19,17 +19,17 @@ void SystemProgram::Update(float dt) {
 void SystemProgram::AddToSystem(GameObject* obj) {
 	for (auto& thing : mMap) {
 		if ((thing.first & obj->GetComponentEnum()) == thing.first) {
-			auto componentMap = new std::unordered_map<UI32, Component*>;
+			auto componentMap = std::make_unique<std::unordered_map<UI32, Component*>>();
 			for (auto& comp : obj->mComponents) {
 				if (comp.first & thing.first) {
 					componentMap->emplace(comp);
 				}
 			}
-			thing.second->emplace(obj,componentMap);
+			thing.second->emplace(obj,std::move(componentMap));
 		}
 	}
 }
 
-std::unordered_map<GameObject* ,std::unordered_map<UI32,Component*>*>* SystemProgram::GetEntries(UI32 bitcode) {
-	return mMap.at(bitcode);
+gameObject_map* SystemProgram::GetEntries(UI32 bitcode) {
+	return mMap.at(bitcode).get();
 }
