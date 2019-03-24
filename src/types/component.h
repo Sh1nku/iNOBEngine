@@ -12,7 +12,7 @@ class Component
 {
 public:
 	friend class GameObject;
-	enum TYPE{ COMPONENT = 1 << 0,TRANSFORM = 1 << 1, TEST_COMPONENT = 1 << 2};
+	enum TYPE{ TRANSFORM = 1 , TEST_COMPONENT = 1 << 1, CAMERA = 1 << 3, ANIMATION = 1 << 4};
 	Component(GameObject *parent = nullptr);
 	virtual ~Component();
 

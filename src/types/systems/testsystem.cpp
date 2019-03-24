@@ -25,7 +25,7 @@ void TestSystem::Update(float dt) {
 			//Should not run
 				TestComponent* comp = (TestComponent*)entry.second->at(Component::TEST_COMPONENT);
 				comp->value += 1;
-			}
+		}
 	}
 	catch (const std::exception&) {
 

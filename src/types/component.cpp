@@ -2,10 +2,14 @@
 #include "gameobject.h"
 #include "types/components/testcomponent.h"
 #include "types/components/transform.h"
+#include "types/components/camera.h"
+#include "types/components/animation.h"
 
 mapType jsonComponentList = {
 	{"TestComponent" , &CreateComponent<TestComponent>},
-	{"Transform" , &CreateComponent<Transform>}
+	{"Transform" , &CreateComponent<Transform>},
+	{"Camera", &CreateComponent<Camera>},
+	{"Animation", &CreateComponent<Animation>}
 };
 
 Component::Component(GameObject *parent) {
