@@ -58,5 +58,5 @@ void to_json(nlohmann::json& j, const Transform& t) {
 void from_json(const nlohmann::json& j, Transform& t) {
 	std::vector<float> positionVector;
 	j.at("position").get_to(positionVector);
-	t.SetLocalPosition(new b2Vec2(positionVector[0], positionVector[1]));
+	t.SetLocalPosition(&b2Vec2(positionVector[0], positionVector[1]));
 }

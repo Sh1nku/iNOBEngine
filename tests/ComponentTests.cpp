@@ -4,6 +4,7 @@
 TEST(ComponentTest, TransformCreation) {
 	Transform *transform = new Transform();
 	ASSERT_NE(transform, nullptr);
+	delete transform;
 
 }
 
@@ -16,6 +17,7 @@ TEST(ComponentTest, GetParent) {
 	GameObject *obj = new GameObject();
 	Transform transform(obj);
 	ASSERT_EQ(obj,transform.GetParent() );
+	delete obj;
 }
 
 TEST(ComponentTest, ToJSON_TestComponent) {

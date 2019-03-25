@@ -16,6 +16,7 @@ Window::Window()
 
 Window::~Window()
 {
+	SDL_GL_DeleteContext(mContext);
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 	

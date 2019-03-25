@@ -12,5 +12,6 @@ TEST(TestSystemTest, TestSystem_TestComponent) {
 	testSystem->Update(0);
 	testSystem->Update(0);
 	ASSERT_EQ(6, ((TestComponent*)obj->GetComponent(Component::TEST_COMPONENT))->value);
+	delete obj;
 	delete testSystem;
 }
