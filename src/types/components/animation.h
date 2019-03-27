@@ -4,7 +4,7 @@
 class Animation : public Component {
 public:
 	Animation(GameObject *parent = nullptr) : Component(parent) { }
-	TYPE GetBitcode() override;
+	UI32 GetBitcode() override;
 };
 
 void to_json(nlohmann::json& j, const Animation& t);

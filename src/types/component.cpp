@@ -1,16 +1,8 @@
 #include "component.h"
 #include "gameobject.h"
-#include "types/components/testcomponent.h"
-#include "types/components/transform.h"
-#include "types/components/camera.h"
-#include "types/components/animation.h"
 
-mapType jsonComponentList = {
-	{"TestComponent" , &CreateComponent<TestComponent>},
-	{"Transform" , &CreateComponent<Transform>},
-	{"Camera", &CreateComponent<Camera>},
-	{"Animation", &CreateComponent<Animation>}
-};
+mapType jsonComponentList;
+std::unordered_map< std::string, UI32> bitcodes;
 
 Component::Component(GameObject *parent) {
 	this->mParent = parent;
@@ -19,6 +11,11 @@ Component::Component(GameObject *parent) {
 
 Component::~Component()
 {
+}
+
+void Component::AddBitcode(std::string name) {
+	static UI32 code = 0;
+	bitcodes.emplace(name, 1 << code++);
 }
 
 GameObject *Component::GetParent(){
@@ -32,3 +29,8 @@ Component* Component::GetComponentFromJson(nlohmann::json &json) {
 void Component::SetParent(GameObject *parent) {
 	mParent = parent;
 }
+
+UI32 Component::GetBitcode(std::string name) {
+	return bitcodes.at(name);
+}
+

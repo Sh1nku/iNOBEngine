@@ -10,7 +10,8 @@ TEST(ComponentTest, TransformCreation) {
 
 TEST(ComponentTest, GetBitcode) {
 	Transform transform;
-	ASSERT_EQ(transform.GetBitcode(), Component::TYPE::TRANSFORM);
+	bitcodes;
+	ASSERT_EQ(transform.GetBitcode(), Component::GetBitcode("Transform"));
 }
 
 TEST(ComponentTest, GetParent) {

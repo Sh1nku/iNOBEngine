@@ -4,7 +4,7 @@
 class Camera : public Component {
 public:
 	Camera(GameObject *parent = nullptr) : Component(parent) { }
-	TYPE GetBitcode() override;
+	UI32 GetBitcode() override;
 };
 
 void to_json(nlohmann::json& j, const Camera& t);

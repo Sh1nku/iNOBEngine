@@ -1,8 +1,15 @@
 #include "camera.h"
 
-Component::TYPE Camera::GetBitcode() {
-	return Component::TYPE::CAMERA;
+UI32 Camera::GetBitcode() {
+	static UI32 bitcode = bitcodes.at("Camera");
+	return bitcode;
 }
+
+const auto x = [&] {
+	Component::AddBitcode("Camera");
+	jsonComponentList.emplace("Camera", &CreateComponent<Camera>);
+	return true;
+}();
 
 void to_json(nlohmann::json& j, const Camera& t) {
 

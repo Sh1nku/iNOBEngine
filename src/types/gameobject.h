@@ -39,7 +39,8 @@ class GameObject {
 			AddComponent(component);
 			return component;
 		}
-		Component* GetComponent(Component::TYPE type);
+		Component* GetComponent(UI32 type);
+		Component* GetComponent(std::string type);
 
 
 		Component* AddComponent(Component* component);

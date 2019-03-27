@@ -2,9 +2,16 @@
 #include "../gameobject.h"
 #include "../component.h"
 
-Component::TYPE Transform::GetBitcode() {
-	return Component::TYPE::TRANSFORM;
+UI32 Transform::GetBitcode() {
+	static UI32 bitcode = bitcodes.at("Transform");
+	return bitcode;
 }
+
+const auto x = [&] {
+	Component::AddBitcode("Transform");
+	jsonComponentList.emplace("Transform", &CreateComponent<Transform>);
+	return true;
+}();
 
 b2Vec2 Transform::GetLocalPosition() const{
 	if (mParent != nullptr) {

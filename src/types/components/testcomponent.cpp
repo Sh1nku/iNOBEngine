@@ -1,9 +1,16 @@
 #include "testcomponent.h"
 #include <vector>
 
-Component::TYPE TestComponent::GetBitcode() {
-	return Component::TYPE::TEST_COMPONENT;
+UI32 TestComponent::GetBitcode() {
+	static UI32 bitcode = bitcodes.at("TestComponent");
+	return bitcode;
 }
+
+const auto x = [&] {
+	Component::AddBitcode("TestComponent");
+	jsonComponentList.emplace("TestComponent", &CreateComponent<TestComponent>);
+	return true;
+}();
 
 void to_json(nlohmann::json& j, const TestComponent& c) {
 	j = nlohmann::json{ { "value", c.value }, {"value2", c.value2}, {"position", std::vector<float>{c.position.x,c.position.y} } };

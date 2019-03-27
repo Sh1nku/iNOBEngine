@@ -52,7 +52,7 @@ Component* GameObject::AddComponent(Component* component) {
 	if (std::type_index(typeid(*component)) == std::type_index(typeid(Transform))) {
 		if (mComponents.size() > 0) {
 			for (auto& entry : mComponents) {
-				if (entry.first == Component::TRANSFORM) {
+				if (entry.first == bitcodes.at("Transform")) {
 					delete entry.second;
 					entry.second = component;
 				}
@@ -90,9 +90,18 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	return gameObject;
 };
 
-Component* GameObject::GetComponent(Component::TYPE type) {
+Component* GameObject::GetComponent(UI32 type) {
 	try {
 		return mComponents.at(type);
+	}
+	catch (std::exception ex) {
+		return nullptr;
+	}
+}
+
+Component* GameObject::GetComponent(std::string type) {
+	try {
+		return mComponents.at(bitcodes.at(type));
 	}
 	catch (std::exception ex) {
 		return nullptr;
