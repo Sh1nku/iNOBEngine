@@ -1,32 +1,11 @@
 cmake_minimum_required(VERSION 3.4.0)
+
+if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      CACHE STRING "")
+endif()
+
 project (iNOBEngine)
-
-
-# Download and unpack googletest at configure time
-configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "CMake step for googletest failed: ${result}")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "Build step for googletest failed: ${result}")
-endif()
-
-# Prevent overriding the parent project's compiler/linker
-# settings on Windows
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-# Add googletest directly to our build. This defines
-# the gtest and gtest_main targets.
-add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
-                 ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
-                 EXCLUDE_FROM_ALL)
-
 
 file(GLOB_RECURSE HEADERS "src/*.h")
 file(GLOB_RECURSE SOURCES "src/*.cpp")
@@ -37,18 +16,26 @@ file(GLOB_RECURSE TEST_HEADERS "tests/*.h")
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Header Files" FILES ${HEADERS})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Source Files" FILES ${SOURCES})
 
-set ( PROJECT_LINK_LIBS SDL2.lib SDL2main.lib lua5.1.lib opengl32.lib glu32.lib SDL2_image.lib)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(sdl2-image CONFIG REQUIRED)
+find_package(sol2 CONFIG REQUIRED)
+find_package(lua 5.1 REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+
+include_directories( ${LUA_INCULDE_DIR} )
+set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32.lib glu32.lib SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json ${LUA_LIBRARIES})
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
-link_directories( ../Libraries/SDL2-2.0.4/lib/x86 ../Libraries/lua-5.1.5 ../Libraries/SDL2_image-2.0.4/lib/x86)
-include_directories( ../Libraries/SDL2-2.0.4/include ../Libraries/lua-5.1.5/include ../Libraries/Sol2 ../Libraries/JSON ../Libraries/SDL2_image-2.0.4/include)
 
 add_library(iNOBEngine ${SOURCES} ${HEADERS})
-target_link_libraries(iNOBEngine ${PROJECT_LINK_LIBS} )
+target_link_libraries(iNOBEngine PRIVATE ${PROJECT_LINK_LIBS} )
 
-include_directories( src/ )
-link_directories( ../Libraries/SDL2-2.0.4/lib/x86 ../Libraries/lua-5.1.5 ../Libraries/SDL2_image-2.0.4/lib/x86)
+enable_testing()
+find_package(GTest MODULE REQUIRED)
+
+include_directories( src/ ${LUA_INCULDE_DIR})
+
 add_executable(Tests ${TEST_SOURCES} ${TEST_HEADERS})
-target_link_libraries(Tests ${PROJECT_LINK_LIBS} iNOBEngine gtest_main)
+target_link_libraries(Tests PRIVATE ${PROJECT_LINK_LIBS} iNOBEngine GTest::GTest GTest::Main)
 
 set_property(TARGET iNOBEngine PROPERTY CXX_STANDARD 17)
 set_property(TARGET Tests PROPERTY CXX_STANDARD 17)
