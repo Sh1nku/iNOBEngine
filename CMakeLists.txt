@@ -21,9 +21,10 @@ find_package(sdl2-image CONFIG REQUIRED)
 find_package(sol2 CONFIG REQUIRED)
 find_package(lua 5.1 REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
+find_package(opengl REQUIRED)
 
 include_directories( ${LUA_INCULDE_DIR} )
-set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32.lib glu32.lib SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json ${LUA_LIBRARIES})
+set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32 glu32 SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json ${LUA_LIBRARIES})
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
 
 add_library(iNOBEngine ${SOURCES} ${HEADERS})
