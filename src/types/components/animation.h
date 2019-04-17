@@ -5,14 +5,13 @@
 
 class Animation : public Component {
 public:
-	Animation(GameObject *parent = nullptr) : Component(parent) { }
+	Animation(GameObject *parent = nullptr);
 	UI32 GetBitcode() override;
 	void SetClip(std::string& name);
-
-
-private:
 	AnimationClip* currentClip;
 	int currentFrame;
+
+private:
 };
 
 void to_json(nlohmann::json& j, const Animation& t);

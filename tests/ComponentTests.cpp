@@ -30,7 +30,7 @@ TEST(ComponentTest, ToJSON_TestComponent) {
 }
 
 TEST(ComponentTest, ToJSON_Transform) {
-	Transform transformComponent(b2Vec2(3, 4));
+	Transform transformComponent(b2Vec2(3, 4), 0);
 	nlohmann::json j = transformComponent;
 	auto component = j.get<Transform>();
 	ASSERT_EQ(component.GetLocalPosition().x, transformComponent.GetLocalPosition().x);

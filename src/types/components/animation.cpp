@@ -3,6 +3,10 @@
 #include "../component.h"
 #include "io/resources.h"
 
+Animation::Animation(GameObject *parent) : Component(parent), currentFrame(0) {
+	currentClip = Resources::GetClip(std::string("error_clip"));
+}
+
 UI32 Animation::GetBitcode() {
 	static UI32 bitcode = bitcodes.at("Animation");
 	return bitcode;

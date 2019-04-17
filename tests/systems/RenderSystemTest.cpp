@@ -17,5 +17,5 @@ TEST(RenderSystemTest, ShowFromComponent) {
 	obj.AddComponent(new Transform());
 	renderSystem.AddToSystem(&obj);
 	renderSystem.Update(0);
-	SDL_Delay(5000);
+	SDL_Delay(3000);
 }

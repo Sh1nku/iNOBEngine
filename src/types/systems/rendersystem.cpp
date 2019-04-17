@@ -22,12 +22,25 @@ void RenderSystem::Update(float dt) {
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
 		Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
 		Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
-		glBegin(GL_TRIANGLES);
-		glColor4f(0, 1, 0, 1);
-		glVertex3f(-1, -1, -5);
-		glVertex3f(1, -1, -5);
-		glVertex3f(0, 1, -5);
+		UI32 id = anim->currentClip->texture->GetID();
+		b2Vec2& worldPos = transform->GetWorldPosition();
+		AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
+
+		glPushMatrix();
+		glTranslatef(worldPos.x, worldPos.y, -5);
+		glRotatef(transform->GetWorldRotation() , 0, 0, 1);
+		glBegin(GL_QUADS);
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexCoord2f(coords.bottomLeft.x,coords.bottomLeft.y);
+		glVertex3f(-.5f, -.5f, 0);
+		glTexCoord2f(coords.bottomRight.x, coords.bottomRight.y);
+		glVertex3f(.5f, -.5f, 0);
+		glTexCoord2f(coords.topRight.x, coords.topRight.y);
+		glVertex3f(.5f, .5f, 0);
+		glTexCoord2f(coords.topLeft.x, coords.topLeft.y);
+		glVertex3f(-.5f, .5f, 0);
 		glEnd();
+		glPopMatrix();
 	}
 	SDL_GL_SwapWindow(window->mWindow);
 	

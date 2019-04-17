@@ -2,6 +2,7 @@
 #include "resources.h"
 #include "types/gameobject.h"
 #include "fileutils.h"
+#include "texture.h"
 namespace fs = std::filesystem;
 
 std::unordered_map<std::string, std::unique_ptr<GameObject>> Resources::prefabs;
@@ -12,6 +13,31 @@ std::unordered_map<std::string, std::unique_ptr<Texture>> Resources::textures;
 GameObject* Resources::GetPrefab(std::string& name) {
 	return prefabs.at(name).get();
 }
+
+Texture* Resources::GetTexture(std::string& name) {
+	Texture* tex = nullptr;
+	try {
+		Texture* tex = textures.at(name).get();
+	}
+	catch (std::exception ex) {
+		try {
+			tex = textures.at("error_texture").get();
+		}
+		catch (std::exception exs) {
+			Resources::textures.emplace("error_texture", std::move(Texture::LoadTexture(std::string("THIS_FILE_SHOULD_NOT_EXIST"))));
+			tex = textures.at("error_texture").get();
+		}
+	}
+	return tex;
+}
+
+const auto loadErrorClip = [&] {
+	std::unique_ptr errorClip = std::make_unique<AnimationClip>();
+	errorClip.get()->AddFrame(AnimationFrame(AnimationCoords(0, 0, 1, 1), 0));
+	errorClip.get()->texture = Resources::GetTexture(std::string("error_texture"));
+	Resources::clips.emplace("error_clip", std::move(errorClip));
+	return true;
+}();
 
 void Resources::Load(std::string directory) {
 	FileUtils::GetFileToString(directory + "/animationClips.clips");

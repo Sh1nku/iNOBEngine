@@ -25,7 +25,23 @@ b2Vec2 Transform::GetLocalPosition() const{
 	}
 }
 
-b2Vec2 Transform::GetWorldPosition() const{
+float Transform::GetWorldRotation() const{
+	return mWorldRotation;
+}
+
+float Transform::GetLocalRotation() const {
+	if (mParent != nullptr) {
+		if (mParent->mParent != nullptr) {
+			return mParent->mParent->transform->mWorldRotation - mWorldRotation;
+		}
+		return mWorldRotation;
+	}
+	else {
+		return mWorldRotation;
+	}
+}
+
+b2Vec2 Transform::GetWorldPosition() const {
 	return mWorldPosition;
 }
 
