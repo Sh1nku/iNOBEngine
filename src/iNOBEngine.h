@@ -2,9 +2,12 @@
 
 #include "io/luaimplementation.h"
 #include "io/settings.h"
+#include "io/texture.h"
 #include "types/component.h"
 #include "types/components/testcomponent.h"
 #include "types/components/transform.h"
+#include "types/components/animation.h"
+#include "types/components/camera.h"
 #include "types/gameobject.h"
 #include "types/systemprogram.h"
 #include "types/systems/testsystem.h"

@@ -12,9 +12,9 @@ const auto x = [&] {
 }();
 
 void to_json(nlohmann::json& j, const Camera& t) {
-
+	j = nlohmann::json{ {"name", "Camera"} };
 }
 
 void from_json(const nlohmann::json& j, Camera& t) {
-
+	t;
 }

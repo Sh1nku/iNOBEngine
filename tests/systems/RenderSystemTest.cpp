@@ -9,3 +9,13 @@ TEST(RenderSystemTest, CreateRenderSystem) {
 	ASSERT_EQ(renderSystem,renderSystem2);
 	delete manager;
 }
+
+TEST(RenderSystemTest, ShowFromComponent) {
+	RenderSystem renderSystem;
+	GameObject obj;
+	obj.AddComponent(new Animation());
+	obj.AddComponent(new Transform());
+	renderSystem.AddToSystem(&obj);
+	renderSystem.Update(0);
+	SDL_Delay(5000);
+}

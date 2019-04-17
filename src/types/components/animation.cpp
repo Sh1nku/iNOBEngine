@@ -1,4 +1,7 @@
 #include "animation.h"
+#include "../gameobject.h"
+#include "../component.h"
+#include "io/resources.h"
 
 UI32 Animation::GetBitcode() {
 	static UI32 bitcode = bitcodes.at("Animation");
@@ -12,9 +15,15 @@ const auto x = [&] {
 }();
 
 void to_json(nlohmann::json& j, const Animation& t) {
-
+	j = nlohmann::json{ {"name", "Animation"}};
 }
 
 void from_json(const nlohmann::json& j, Animation& t) {
+	std::string clip = j.at("currentClip");
+	t.SetClip(clip);
+}
 
+void Animation::SetClip(std::string& clip) {
+	currentClip = Resources::GetClip(clip);
+	currentFrame = 0;
 }

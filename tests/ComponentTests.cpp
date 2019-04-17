@@ -36,3 +36,11 @@ TEST(ComponentTest, ToJSON_Transform) {
 	ASSERT_EQ(component.GetLocalPosition().x, transformComponent.GetLocalPosition().x);
 
 }
+
+TEST(ComponentTest, ALLCOMPONENTS) {
+	Transform trans;
+	Animation anim;
+	Camera camera;
+	TestComponent test;
+
+}

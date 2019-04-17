@@ -1,6 +1,6 @@
 #pragma once
 #include "enginetypes.h"
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <unordered_map>
 
 class Component;
