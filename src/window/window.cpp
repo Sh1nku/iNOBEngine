@@ -41,7 +41,7 @@ void Window::Create()
 	mContext = SDL_GL_CreateContext(mWindow);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45, 4 / 3, 0.1, 100);
+	gluPerspective(45, ((float) SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glEnable(GL_DEPTH_TEST);
