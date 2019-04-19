@@ -48,9 +48,9 @@ Texture* Texture::LoadTexture(std::string& file) {
 	if (tempSurface->format->BytesPerPixel == 4) {
 		mode = GL_RGBA;
 	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, tempSurface->w, tempSurface->h, 0, mode, GL_UNSIGNED_BYTE, tempSurface->pixels);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Texture *tex = new Texture(textureHandle, tempSurface->w, tempSurface->h, tempSurface->format->BytesPerPixel);
 	SDL_FreeSurface(tempSurface);
 	return tex;

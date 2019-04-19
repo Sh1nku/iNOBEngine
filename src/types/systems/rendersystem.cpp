@@ -27,10 +27,10 @@ void RenderSystem::Update(float dt) {
 		AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
 
 		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, id);
 		glTranslatef(worldPos.x, worldPos.y, -5);
 		glRotatef(transform->GetWorldRotation() , 0, 0, 1);
 		glBegin(GL_QUADS);
-		glBindTexture(GL_TEXTURE_2D, id);
 		glTexCoord2f(coords.bottomLeft.x,coords.bottomLeft.y);
 		glVertex3f(-.5f, -.5f, 0);
 		glTexCoord2f(coords.bottomRight.x, coords.bottomRight.y);

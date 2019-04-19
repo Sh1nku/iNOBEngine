@@ -23,15 +23,16 @@ find_package(lua 5.1 REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(opengl REQUIRED)
 find_package(unofficial-box2d CONFIG REQUIRED)
+find_package(PNG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 include_directories( ${LUA_INCULDE_DIR} )
-set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32 glu32 SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json unofficial::box2d::Box2D ${LUA_LIBRARIES})
+set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32 glu32 SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json unofficial::box2d::Box2D PNG::PNG ZLIB::ZLIB ${LUA_LIBRARIES})
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
 
 add_library(iNOBEngine ${SOURCES} ${HEADERS})
 target_link_libraries(iNOBEngine PRIVATE ${PROJECT_LINK_LIBS} )
 
-enable_testing()
 find_package(GTest MODULE REQUIRED)
 
 include_directories( src/ ${LUA_INCULDE_DIR})
