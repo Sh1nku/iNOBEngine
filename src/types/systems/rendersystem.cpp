@@ -1,4 +1,5 @@
 #include "rendersystem.h"
+#include "io/resources.h"
 #include "window/window.h"
 #include "../component.h"
 #include "../components/animation.h"
@@ -9,6 +10,19 @@ RenderSystem::RenderSystem() {
 
 	window = new Window();
 	window->Create();
+	//Load textures that could not be loaded because glContext did not exist
+	for (auto& texture : Resources::textureBacklog) {
+		Texture* tempTex = Texture::LoadTexture(texture.first);
+		memcpy(texture.second, tempTex, sizeof(Texture));
+	}
+	//Reload textures that were deleted from a previous context
+	for (auto& texturePair : Resources::textures) {
+		if (!glIsTexture(texturePair.second->GetID())) {
+			Texture* tempTex = Texture::LoadTexture((std::string)texturePair.first);
+			memcpy(texturePair.second.get(), tempTex, sizeof(Texture));
+		}
+	}
+	Resources::textureBacklog.clear();
 }
 
 RenderSystem::~RenderSystem() {

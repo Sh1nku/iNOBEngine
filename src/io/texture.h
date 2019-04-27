@@ -8,6 +8,7 @@
 
 class Texture {
 public:
+	friend class RenderSystem;
 	Texture();
 	Texture(UI32 id, UI32 width, UI32 height, UI32 comp);
 	static Texture* LoadTexture(std::string& name);
