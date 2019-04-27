@@ -1,6 +1,6 @@
 #include "rendersystem.h"
-#include "io/resources.h"
-#include "window/window.h"
+#include "../../io/resources.h"
+#include "../../window/window.h"
 #include "../component.h"
 #include "../components/animation.h"
 #include "../components/transform.h"

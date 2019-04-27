@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
-#include "window/window.h"
+#include "../window/window.h"
 
 Texture::Texture() {
 
@@ -91,7 +91,7 @@ void from_json(const nlohmann::json& j, AnimationClip& t) {
 	try {
 		tex = Resources::textures.at(j.at("texture")).get();
 	}
-	catch (std::exception ex) {
+	catch (std::exception) {
 		tex = Texture::LoadTexture((std::string) j.at("texture"));
 		Resources::textures.insert({ j.at("texture"), std::make_unique<Texture>(*tex) });
 	}

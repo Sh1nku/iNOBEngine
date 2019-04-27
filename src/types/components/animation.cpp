@@ -1,7 +1,7 @@
 #include "animation.h"
 #include "../gameobject.h"
 #include "../component.h"
-#include "io/resources.h"
+#include "../../io/resources.h"
 
 Animation::Animation(GameObject *parent) : Component(parent), currentFrame(0) {
 	currentClip = Resources::GetClip(std::string("error_clip"));

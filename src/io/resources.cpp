@@ -1,7 +1,7 @@
 #include <filesystem>
 #include <SDL.h>
 #include "resources.h"
-#include "types/gameobject.h"
+#include "../types/gameobject.h"
 #include "fileutils.h"
 #include "texture.h"
 namespace fs = std::filesystem;
@@ -21,11 +21,11 @@ Texture* Resources::GetTexture(std::string& name) {
 	try {
 		Texture* tex = textures.at(name).get();
 	}
-	catch (std::exception ex) {
+	catch (std::exception) {
 		try {
 			tex = textures.at("error_texture").get();
 		}
-		catch (std::exception exs) {
+		catch (std::exception) {
 			Resources::textures.emplace("error_texture", std::move(Texture::LoadTexture(std::string("THIS_FILE_SHOULD_NOT_EXIST"))));
 			tex = textures.at("error_texture").get();
 		}

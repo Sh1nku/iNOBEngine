@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types/systemprogram.h"
+#include "../../types/systemprogram.h"
 
 class TestSystem : public SystemProgram {
 public:

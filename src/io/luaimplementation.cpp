@@ -1,6 +1,6 @@
 #include "luaimplementation.h"
 #include "../types/gameobject.h"
-#include "manager.h"
+#include "../manager.h"
 
 sol::state* LuaImplementation::lua;
 

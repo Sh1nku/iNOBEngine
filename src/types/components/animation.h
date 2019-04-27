@@ -1,6 +1,6 @@
 #pragma once
 #include "../component.h"
-#include "io/texture.h"
+#include "../../io/texture.h"
 #include "Box2D/Box2D.h"
 
 class Animation : public Component {

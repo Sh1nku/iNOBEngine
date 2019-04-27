@@ -1,7 +1,7 @@
 #include "gameobject.h"
 #include "component.h"
 #include <iostream>
-#include "types/components/transform.h"
+#include "components/transform.h"
 
 UI32 globalID = 1;
 std::vector<UI32> globalPoolIDS;
@@ -77,7 +77,7 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 		gameObject->mName = name;
 		gameObject->mNamed = true;
 	}
-	catch(std::exception& ex) {
+	catch(std::exception) {
 		std::cout << "Name not found" << std::endl;
 	}
 	nlohmann::json components = go.at("components");
@@ -94,7 +94,7 @@ Component* GameObject::GetComponent(UI32 type) {
 	try {
 		return mComponents.at(type);
 	}
-	catch (std::exception ex) {
+	catch (std::exception) {
 		return nullptr;
 	}
 }
@@ -103,7 +103,7 @@ Component* GameObject::GetComponent(std::string type) {
 	try {
 		return mComponents.at(bitcodes.at(type));
 	}
-	catch (std::exception ex) {
+	catch (std::exception) {
 		return nullptr;
 	}
 }
