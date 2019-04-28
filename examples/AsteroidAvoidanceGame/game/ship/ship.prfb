@@ -1,0 +1,9 @@
+{
+	"GameObject": {
+		"name" : "Ship",
+		"components" : [{
+			"name": "Transform",
+			"position" : [3.0, 2.0]
+		}]
+	}
+}
