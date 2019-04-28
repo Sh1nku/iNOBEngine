@@ -44,6 +44,8 @@ void Window::Create()
 	gluPerspective(45, ((float) SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	glClearColor(1.f, 0.f, 0.f, 1.f);

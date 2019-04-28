@@ -61,6 +61,9 @@ GameObject* Manager::Instantiate(GameObject* obj, std::string name, b2Vec2* pos)
 	else {
 		obj->transform->SetLocalPosition(&b2Vec2(0, 0));
 	}
+	for (auto& system : mSystems) {
+		system->AddToSystem(obj);
+	}
 	return obj;
 }
 
@@ -69,13 +72,14 @@ void Manager::Destroy(GameObject* obj) {
 		Destroy(child);
 	}
 	if (obj->GetID() != 0) {
-		///TODO Remove components from systems
-
 		globalPoolIDS.push_back(obj->mID);
 		mGameObjects.erase(obj->GetID());
 
 		if (obj->mNamed) {
 			namedObjects.erase(std::remove(namedObjects.begin(), namedObjects.end(), obj), namedObjects.end());
+		}
+		for (auto& system : mSystems) {
+			system->RemoveFromSystem(obj->GetID());
 		}
 	}
 	delete obj;
@@ -83,6 +87,9 @@ void Manager::Destroy(GameObject* obj) {
 
 SystemProgram* Manager::AddSystem(SystemProgram* system) {
 	mSystems.emplace_back(system);
+	for (auto& obj : mGameObjects) {
+		system->AddToSystem(obj.second);
+	}
 	return system;
 }
 
@@ -105,4 +112,10 @@ GameObject* Manager::GetGameObjectByName(std::string name) {
 		}
 	}
 	return nullptr;
+}
+
+void Manager::Update(float dt) {
+	for (SystemProgram* system : mSystems) {
+		system->Update(dt);
+	}
 }

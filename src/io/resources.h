@@ -18,5 +18,6 @@ public:
 	static std::unordered_map<std::string, std::unique_ptr<AnimationClip>> clips;
 	static std::unordered_map<std::string, std::unique_ptr<Texture>> textures;
 	static std::vector<std::pair<std::string, Texture*>> textureBacklog;
+	static std::string gameDir;
 private:
 };

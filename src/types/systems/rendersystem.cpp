@@ -38,6 +38,7 @@ void RenderSystem::Update(float dt) {
 		Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
 		UI32 id = anim->currentClip->texture->GetID();
 		b2Vec2& worldPos = transform->GetWorldPosition();
+		Texture* tex = anim->currentClip->texture;
 		AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
 
 		glPushMatrix();
@@ -45,13 +46,13 @@ void RenderSystem::Update(float dt) {
 		glTranslatef(worldPos.x, worldPos.y, -5);
 		glRotatef(transform->GetWorldRotation() , 0, 0, 1);
 		glBegin(GL_QUADS);
-		glTexCoord2f(coords.bottomLeft.x,coords.bottomLeft.y);
+		glTexCoord2f(coords.bottomLeft.x / tex->width,coords.bottomLeft.y / tex->height);
 		glVertex3f(-.5f, -.5f, 0);
-		glTexCoord2f(coords.bottomRight.x, coords.bottomRight.y);
+		glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
 		glVertex3f(.5f, -.5f, 0);
-		glTexCoord2f(coords.topRight.x, coords.topRight.y);
+		glTexCoord2f(coords.topRight.x / tex->width, coords.topRight.y / tex->height);
 		glVertex3f(.5f, .5f, 0);
-		glTexCoord2f(coords.topLeft.x, coords.topLeft.y);
+		glTexCoord2f(coords.topLeft.x / tex->width, coords.topLeft.y / tex->height);
 		glVertex3f(-.5f, .5f, 0);
 		glEnd();
 		glPopMatrix();

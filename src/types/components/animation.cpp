@@ -23,7 +23,7 @@ void to_json(nlohmann::json& j, const Animation& t) {
 }
 
 void from_json(const nlohmann::json& j, Animation& t) {
-	std::string clip = j.at("currentClip");
+	std::string clip = j.at("default");
 	t.SetClip(clip);
 }
 

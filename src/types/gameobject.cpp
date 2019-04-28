@@ -82,7 +82,7 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	}
 	nlohmann::json components = go.at("components");
 	for (nlohmann::json componentJson : components) {
-		Component* component = jsonComponentList[componentJson.at("name")](componentJson);
+		Component* component = jsonComponentList.at(componentJson.at("name"))(componentJson);
 		component->SetParent(gameObject);
 		gameObject->AddComponent(component);
 

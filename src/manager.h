@@ -16,7 +16,8 @@ public:
 	SystemProgram* AddSystem(SystemProgram *system);
 	GameObject* Instantiate(GameObject* obj, std::string name = "", b2Vec2* pos = nullptr);
 	void Destroy(GameObject* obj);
-	
+	void Update(float dt);
+
 	template <class T>
 	T* GetSystem() {
 		for (SystemProgram* v : mSystems) {

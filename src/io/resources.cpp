@@ -11,6 +11,7 @@ std::unordered_map<std::string, std::unique_ptr<Sound>> Resources::sounds;
 std::unordered_map<std::string, std::unique_ptr<AnimationClip>> Resources::clips;
 std::unordered_map<std::string, std::unique_ptr<Texture>> Resources::textures;
 std::vector<std::pair<std::string, Texture*>> Resources::textureBacklog;
+std::string Resources::gameDir = "";
 
 GameObject* Resources::GetPrefab(std::string& name) {
 	return prefabs.at(name).get();
@@ -33,31 +34,37 @@ Texture* Resources::GetTexture(std::string& name) {
 	return tex;
 }
 
+void loadClips(std::string& contents) {
+	nlohmann::json jsonAll = nlohmann::json::parse(contents);
+	std::vector<nlohmann::json> clips;
+	jsonAll.at("AnimationClips").get_to(clips);
+	for (nlohmann::json& clip : clips) {
+		std::string clipName = clip.at("name");
+		std::unique_ptr animationClip = std::make_unique<AnimationClip>();
+		clip.get_to(*animationClip.get());
+		Resources::clips.emplace(clipName, std::move(animationClip));
+	}
+}
+
 void Resources::Load(std::string directory) {
-	FileUtils::GetFileToString(directory + "/animationClips.clips");
+	Resources::gameDir = directory + "/";
+	loadClips(FileUtils::GetFileToString(gameDir + "animationClips.clips"));
 	for (auto& p : fs::recursive_directory_iterator(directory)) {
-		if (p.is_regular_file() && p.path().extension() == "prfb") {
-			prefabs.insert({ p.path().stem().string(), std::make_unique<GameObject>(GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string()))) });
+		auto ex = p.path().extension();
+		if (p.is_regular_file() && p.path().extension() == ".prfb") {
+			GameObject* obj = GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string()));
+			prefabs.insert({ p.path().stem().string(), std::make_unique<GameObject>(*obj) });
 		}
 	}
 }
 
 const auto loadErrorClip = [&] {
 	std::unique_ptr errorClip = std::make_unique<AnimationClip>();
-	errorClip.get()->AddFrame(AnimationFrame(AnimationCoords(0, 0, 1, 1), 0));
+	errorClip.get()->AddFrame(AnimationFrame(AnimationCoords(0, 0, 2, 2), 0));
 	errorClip.get()->texture = Resources::GetTexture(std::string("error_texture"));
 	Resources::clips.emplace("error_clip", std::move(errorClip));
 	return true;
 }();
-
-void loadClips(std::string& contents) {
-	nlohmann::json jsonAll = nlohmann::json::parse(contents);
-	std::vector<nlohmann::json> clips;
-	jsonAll.at("animationClips").get_to(clips);
-	for (nlohmann::json& clip : clips) {
-		
-	}
-}
 
 AnimationClip* Resources::GetClip(std::string& clip) {
 	return clips.at(clip).get();

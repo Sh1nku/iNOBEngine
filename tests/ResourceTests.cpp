@@ -22,7 +22,7 @@ R"(
 	"looping": false,
 	"frames": [{
 		"length": 0,
-		"coords": [0, 0, 1, 1]
+		"coords": [0, 0, 10, 10]
 	}]
 }
 )";
