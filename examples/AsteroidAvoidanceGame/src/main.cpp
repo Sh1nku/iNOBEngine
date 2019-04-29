@@ -2,6 +2,7 @@
 
 int main(int argc, char **argv) {
 	Resources::Load("../examples/AsteroidAvoidanceGame/game");
+	Resources::scenes;
 	{
 		Animation anim;
 		Transform transform;
@@ -10,7 +11,7 @@ int main(int argc, char **argv) {
 	}
 	Manager* manager = Manager::GetInstance();
 	manager->AddSystem(new RenderSystem());
-	manager->Instantiate(Resources::GetPrefab(std::string("ship")));
+	Resources::LoadScene((std::string)"game");
 	while (true) {
 		manager->Update(0);
 	}

@@ -4,12 +4,15 @@
 #include "../types/gameobject.h"
 #include "fileutils.h"
 #include "texture.h"
+#include "scene.h"
+#include "../manager.h"
 namespace fs = std::filesystem;
 
 std::unordered_map<std::string, std::unique_ptr<GameObject>> Resources::prefabs;
 std::unordered_map<std::string, std::unique_ptr<Sound>> Resources::sounds;
 std::unordered_map<std::string, std::unique_ptr<AnimationClip>> Resources::clips;
 std::unordered_map<std::string, std::unique_ptr<Texture>> Resources::textures;
+std::unordered_map<std::string, std::string> Resources::scenes;
 std::vector<std::pair<std::string, Texture*>> Resources::textureBacklog;
 std::string Resources::gameDir = "";
 
@@ -55,7 +58,20 @@ void Resources::Load(std::string directory) {
 			GameObject* obj = GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string()));
 			prefabs.insert({ p.path().stem().string(), std::make_unique<GameObject>(*obj) });
 		}
+		else if (p.is_regular_file() && p.path().extension() == ".scene") {
+			scenes.insert({ p.path().stem().string(), p.path().string() });
+		}
 	}
+}
+
+///TODO Implement with proper copy constructors for gameobjects and all subobjects
+void Resources::LoadScene(std::string& name) {
+	Scene* scene = Scene::LoadFromFile(FileUtils::GetFileToString(scenes.at((std::string)name)));
+	Manager* manager = Manager::GetInstance();
+	for (GameObject* obj : scene->mSceneObjects) {
+		manager->Instantiate(obj);
+	}
+	delete scene;
 }
 
 const auto loadErrorClip = [&] {
