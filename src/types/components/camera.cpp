@@ -1,5 +1,11 @@
 #include "camera.h"
 
+Component* Camera::Clone(GameObject* parent) {
+	Camera* camera = new Camera();
+	camera->mParent = mParent;
+	return camera;
+}
+
 UI32 Camera::GetBitcode() {
 	static UI32 bitcode = bitcodes.at("Camera");
 	return bitcode;

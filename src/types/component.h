@@ -24,6 +24,7 @@ public:
 protected:
 	GameObject *mParent;
 	void SetParent(GameObject* parent);
+	virtual Component* Clone(GameObject* parent = nullptr) = 0;
 };
 
 template<typename T> Component* CreateComponent(nlohmann::json json) {

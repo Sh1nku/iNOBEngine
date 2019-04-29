@@ -50,10 +50,16 @@ Manager *Manager::GetInstance(){
 
 GameObject* Manager::Instantiate(GameObject* obj, std::string name, b2Vec2* pos) {
 	AddGameObject(obj);
-	obj->mName = name;
-	if (name != "") {
+	if (obj->mName != "") {
 		obj->mNamed = true;
 		namedObjects.emplace_back(obj);
+	}
+	else {
+		obj->mName = name;
+		if (name != "") {
+			obj->mNamed = true;
+			namedObjects.emplace_back(obj);
+		}
 	}
 	if (pos != nullptr) {
 		obj->transform->SetLocalPosition(pos);

@@ -17,7 +17,8 @@ std::vector<std::pair<std::string, Texture*>> Resources::textureBacklog;
 std::string Resources::gameDir = "";
 
 GameObject* Resources::GetPrefab(std::string& name) {
-	return prefabs.at(name).get();
+	GameObject* obj = new GameObject(*(prefabs.at(name).get()));
+	return obj;
 }
 
 Texture* Resources::GetTexture(std::string& name) {

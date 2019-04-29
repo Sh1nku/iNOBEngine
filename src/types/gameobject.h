@@ -20,6 +20,7 @@ class GameObject {
 	friend class SystemProgram;
 	public:
 		GameObject(GameObject* parent = nullptr);
+		GameObject(const GameObject&);
 		~GameObject();
 
 		template <class T>

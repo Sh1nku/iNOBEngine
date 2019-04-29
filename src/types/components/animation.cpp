@@ -7,6 +7,14 @@ Animation::Animation(GameObject *parent) : Component(parent), currentFrame(0) {
 	currentClip = Resources::GetClip(std::string("error_clip"));
 }
 
+Component* Animation::Clone(GameObject* parent) {
+	Animation* anim = new Animation();
+	anim->mParent = mParent;
+	anim->currentClip = currentClip;
+	anim->currentFrame = currentFrame;
+	return anim;
+}
+
 UI32 Animation::GetBitcode() {
 	static UI32 bitcode = bitcodes.at("Animation");
 	return bitcode;

@@ -14,6 +14,22 @@ GameObject::GameObject(GameObject* parent) : mID(0), mName(""), mNamed(false), m
 	transform = this->AddComponent<Transform>();
 }
 
+GameObject::GameObject(const GameObject& old) {
+	mName = old.mName.c_str();
+	mNamed = old.mNamed;
+	mID = 0;
+	mParent = old.mParent;
+	for (auto comp : old.mComponents) {
+		mComponents.emplace(comp.first, comp.second->Clone(this));
+	}
+	transform = (Transform*) GetComponent("Transform");
+	for (auto childObj : old.mChildren) {
+		GameObject* newObj = new GameObject(childObj);
+		newObj->mParent = this;
+		mChildren.emplace_back(newObj);
+	}
+}
+
 GameObject* GameObject::Create() {
 	return new GameObject();
 }

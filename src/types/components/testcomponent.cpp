@@ -1,6 +1,15 @@
 #include "testcomponent.h"
 #include <vector>
 
+Component* TestComponent::Clone(GameObject* parent) {
+	TestComponent* component = new TestComponent();
+	component->mParent = mParent;
+	component->value = value;
+	component->value2 = value2.c_str();
+	component->position = position;
+	return component;
+}
+
 UI32 TestComponent::GetBitcode() {
 	static UI32 bitcode = bitcodes.at("TestComponent");
 	return bitcode;

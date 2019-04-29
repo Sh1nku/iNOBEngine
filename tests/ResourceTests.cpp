@@ -27,6 +27,19 @@ R"(
 }
 )";
 
+std::string testGameObjectJson =
+R"(
+{
+	"GameObject": {
+		"name" : "Ship",
+		"components" : [{
+			"name": "Transform",
+			"position" : [1.0, 0.0]
+		}]
+	}
+}
+)";
+
 TEST(ResourceTest, LoadPNG) {
 	std::ofstream file;
 	file.open("TEMP_FILE_PNG.png", std::ios::binary | std::ios::out);
@@ -37,6 +50,20 @@ TEST(ResourceTest, LoadPNG) {
 	ASSERT_EQ(tex->GetComp(), 4);
 	delete tex;
 	remove("TEMP_FILE_PNG.png");
+}
+
+TEST(ResourceTest, InstantiateDestroyAndReinstantiatePrefab) {
+	Manager* manager = Manager::GetInstance();
+	GameObject *tempObj = GameObject::LoadFromFile(testGameObjectJson);
+	Resources::prefabs.emplace("test_prefab", std::make_unique<GameObject>(*tempObj));
+	GameObject* obj = Resources::GetPrefab((std::string)"test_prefab");
+	manager->Instantiate(obj);
+	manager->Destroy(obj);
+	GameObject* obj2 = Resources::GetPrefab((std::string)"test_prefab");
+	manager->Instantiate(obj2);
+	ASSERT_EQ(obj2->GetName(), "Ship");
+	manager->Destroy(obj2);
+	delete manager;
 }
 
 TEST(RenderSystemTest, ShowTexture) {

@@ -6,6 +6,7 @@
 class Animation : public Component {
 public:
 	Animation(GameObject *parent = nullptr);
+	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
 	void SetClip(std::string& name);
 	AnimationClip* currentClip;

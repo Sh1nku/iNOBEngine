@@ -6,6 +6,7 @@ class Transform : public Component {
 public:
 	Transform(GameObject *parent = nullptr) : Component(parent), mWorldPosition(b2Vec2(0,0)), mWorldRotation(0) {}
 	Transform(b2Vec2 position, float rotation, GameObject *parent = nullptr) : Component(parent), mWorldPosition(position), mWorldRotation(rotation) {};
+	Component* Clone(GameObject* parent);
 	b2Vec2 GetWorldPosition() const;
 	b2Vec2 GetLocalPosition() const;
 	float GetWorldRotation() const;

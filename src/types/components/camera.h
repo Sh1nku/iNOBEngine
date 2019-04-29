@@ -4,6 +4,7 @@
 class Camera : public Component {
 public:
 	Camera(GameObject *parent = nullptr) : Component(parent) { }
+	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
 };
 

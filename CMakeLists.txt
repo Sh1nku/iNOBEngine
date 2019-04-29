@@ -15,8 +15,7 @@ file(GLOB_RECURSE EXAMPLES_ASTEROID_SOURCES "examples/AsteroidAvoidanceGame/src/
 file(GLOB_RECURSE EXAMPLES_ASTEROID_HEADERS "examples/AsteroidAvoidanceGame/src/*.h")
 
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Header Files" FILES ${HEADERS})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Source Files" FILES ${SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Source Files" FILES ${SOURCES} ${HEADERS})
 
 find_package(SDL2 CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)

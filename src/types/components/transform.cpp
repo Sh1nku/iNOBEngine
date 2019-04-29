@@ -2,6 +2,14 @@
 #include "../gameobject.h"
 #include "../component.h"
 
+Component* Transform::Clone(GameObject* parent) {
+	Transform* component = new Transform();
+	component->mParent = mParent;
+	component->mWorldPosition = mWorldPosition;
+	component->mWorldRotation = mWorldRotation;
+	return component;
+}
+
 UI32 Transform::GetBitcode() {
 	static UI32 bitcode = bitcodes.at("Transform");
 	return bitcode;
