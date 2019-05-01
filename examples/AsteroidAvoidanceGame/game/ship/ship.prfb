@@ -12,7 +12,7 @@
 		{
 			"name": "ScriptComponent",
 			"scripts" : [
-				"testscript"
+				"ship/testscript.lua"
 			]
 		},
 		{

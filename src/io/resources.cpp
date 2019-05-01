@@ -71,7 +71,9 @@ void Resources::Load(std::string directory) {
 		}
 		else if (p.is_regular_file() && p.path().extension() == ".lua") {
 			LuaImplementation::Init();
-			scripts.insert({ p.path().stem().string(), std::make_unique<Script>(FileUtils::GetFileToString(p.path().string())) });
+			std::string path = p.path().generic_string();
+			path.erase(0, gameDir.length());
+			scripts.insert({ path, std::make_unique<Script>(FileUtils::GetFileToString(p.path().string())) });
 		}
 	}
 	for (auto& p : prefabBacklog) {
