@@ -9,7 +9,7 @@ Animation::Animation(GameObject *parent) : Component(parent), currentFrame(0) {
 
 Component* Animation::Clone(GameObject* parent) {
 	Animation* anim = new Animation();
-	anim->mParent = mParent;
+	anim->mParent = parent;
 	anim->currentClip = currentClip;
 	anim->currentFrame = currentFrame;
 	return anim;

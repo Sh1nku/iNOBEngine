@@ -2,7 +2,7 @@
 
 Component* Camera::Clone(GameObject* parent) {
 	Camera* camera = new Camera();
-	camera->mParent = mParent;
+	camera->mParent = parent;
 	return camera;
 }
 

@@ -1,11 +1,13 @@
 #include <filesystem>
 #include <SDL.h>
 #include "resources.h"
+#include "../types/script.h"
 #include "../types/gameobject.h"
 #include "fileutils.h"
 #include "texture.h"
 #include "scene.h"
 #include "../manager.h"
+#include "luaimplementation.h"
 namespace fs = std::filesystem;
 
 std::unordered_map<std::string, std::unique_ptr<GameObject>> Resources::prefabs;
@@ -13,7 +15,9 @@ std::unordered_map<std::string, std::unique_ptr<Sound>> Resources::sounds;
 std::unordered_map<std::string, std::unique_ptr<AnimationClip>> Resources::clips;
 std::unordered_map<std::string, std::unique_ptr<Texture>> Resources::textures;
 std::unordered_map<std::string, std::string> Resources::scenes;
+std::unordered_map<std::string, std::unique_ptr<Script>> Resources::scripts;
 std::vector<std::pair<std::string, Texture*>> Resources::textureBacklog;
+std::vector<std::filesystem::directory_entry> Resources::prefabBacklog;
 std::string Resources::gameDir = "";
 
 GameObject* Resources::GetPrefab(std::string& name) {
@@ -38,6 +42,10 @@ Texture* Resources::GetTexture(std::string& name) {
 	return tex;
 }
 
+Script* Resources::GetScript(std::string& name) {
+	return scripts.at(name).get();
+}
+
 void loadClips(std::string& contents) {
 	nlohmann::json jsonAll = nlohmann::json::parse(contents);
 	std::vector<nlohmann::json> clips;
@@ -56,13 +64,22 @@ void Resources::Load(std::string directory) {
 	for (auto& p : fs::recursive_directory_iterator(directory)) {
 		auto ex = p.path().extension();
 		if (p.is_regular_file() && p.path().extension() == ".prfb") {
-			GameObject* obj = GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string()));
-			prefabs.insert({ p.path().stem().string(), std::make_unique<GameObject>(*obj) });
+			prefabBacklog.emplace_back(p.path().string());
 		}
 		else if (p.is_regular_file() && p.path().extension() == ".scene") {
 			scenes.insert({ p.path().stem().string(), p.path().string() });
 		}
+		else if (p.is_regular_file() && p.path().extension() == ".lua") {
+			LuaImplementation::Init();
+			scripts.insert({ p.path().stem().string(), std::make_unique<Script>(FileUtils::GetFileToString(p.path().string())) });
+		}
 	}
+	for (auto& p : prefabBacklog) {
+		GameObject* obj = GameObject::LoadFromFile(FileUtils::GetFileToString(p.path().string()));
+		prefabs.insert({ p.path().stem().string(), std::make_unique<GameObject>(*obj) });
+	}
+	prefabBacklog.clear();
+
 }
 
 ///TODO Implement with proper copy constructors for gameobjects and all subobjects

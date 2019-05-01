@@ -3,7 +3,7 @@
 
 Component* TestComponent::Clone(GameObject* parent) {
 	TestComponent* component = new TestComponent();
-	component->mParent = mParent;
+	component->mParent = parent;
 	component->value = value;
 	component->value2 = value2.c_str();
 	component->position = position;

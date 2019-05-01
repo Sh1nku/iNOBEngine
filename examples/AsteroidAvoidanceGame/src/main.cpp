@@ -1,19 +1,24 @@
 #include <iNOBEngine.h>
 
 int main(int argc, char **argv) {
+	LuaImplementation::Init();
 	Resources::Load("../examples/AsteroidAvoidanceGame/game");
-	Resources::scenes;
 	{
 		Animation anim;
 		Transform transform;
 		Camera camera;
 		TestComponent component;
+		ScriptComponent scriptComponent;
+		Input input;
 	}
 	Manager* manager = Manager::GetInstance();
 	manager->AddSystem(new RenderSystem());
+	manager->AddSystem(new ScriptSystem());
+	manager->AddSystem(new InputSystem());
 	Resources::LoadScene((std::string)"game");
 	while (true) {
 		manager->Update(0);
+		SDL_Delay(1);
 	}
 	return 0;
 }

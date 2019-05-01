@@ -1,10 +1,10 @@
 #pragma once
 #include "../systemprogram.h"
 
-class ScriptSystem : public SystemProgram {
+class InputSystem : public SystemProgram {
 public:
-	ScriptSystem();
-	~ScriptSystem();
+	InputSystem();
+	~InputSystem();
 	void Update(float dt) override;
 private:
 };

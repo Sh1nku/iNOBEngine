@@ -9,6 +9,15 @@
 			{
 				"name": "Animation",
 				"default": "ship_idle"
+			},
+			{
+				"name": "ScriptComponent",
+				"scripts" : [
+					"testscript"
+				]
+			},
+			{
+				"name": "Input"
 			}]
 		}
 	}

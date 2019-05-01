@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 #include "../types/component.h"
+#include "../types/components/transform.h"
+#include "../types/components/input.h"
 #include <typeindex>
 #include "enginetypes.h"
 
@@ -13,6 +15,7 @@ extern std::vector<UI32> globalPoolIDS;
 struct b2Vec2;
 class Transform;
 class SystemProgram;
+class Script;
 
 class GameObject {
 	friend class Manager;
@@ -25,9 +28,9 @@ class GameObject {
 
 		template <class T>
 		T *GetComponent() {
-			for (Component* v : mComponents) {
-				if (std::type_index(typeid(T)) == std::type_index(typeid(*v))) {
-					return ((T*)v);
+			for (auto& v : mComponents) {
+				if (std::type_index(typeid(T)) == std::type_index(typeid(*v.second))) {
+					return ((T*)v.second);
 				}
 				
 			}
@@ -40,9 +43,7 @@ class GameObject {
 			AddComponent(component);
 			return component;
 		}
-		Component* GetComponent(UI32 type);
 		Component* GetComponent(std::string type);
-
 
 		Component* AddComponent(Component* component);
 
@@ -57,6 +58,7 @@ class GameObject {
 		static GameObject* LoadFromFile(std::string fileContents, GameObject* parent = nullptr);
 	private:
 		std::unordered_map<UI32 ,Component*> mComponents;
+		std::vector<Script> mScripts;
 		std::vector<GameObject*> mChildren;
 		std::string mName;
 		bool mNamed;

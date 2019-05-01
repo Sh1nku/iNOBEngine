@@ -4,7 +4,7 @@
 
 Component* Transform::Clone(GameObject* parent) {
 	Transform* component = new Transform();
-	component->mParent = mParent;
+	component->mParent = parent;
 	component->mWorldPosition = mWorldPosition;
 	component->mWorldRotation = mWorldRotation;
 	return component;

@@ -79,7 +79,7 @@ void from_json(const nlohmann::json& j, AnimationFrame& t) {
 	t.length = j.at("length");
 	std::vector<UI32> coords;
 	j.at("coords").get_to(coords);
-	t.coords = AnimationCoords(coords[0], coords[1], coords[2], coords[3]);
+	t.coords = AnimationCoords((float)coords[0], (float)coords[1], (float)coords[2], (float)coords[3]);
 }
 
 void to_json(nlohmann::json& j, const AnimationClip& t) {

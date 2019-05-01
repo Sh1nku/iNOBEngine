@@ -2,6 +2,7 @@
 #include "component.h"
 #include <iostream>
 #include "components/transform.h"
+#include "script.h"
 
 UI32 globalID = 1;
 std::vector<UI32> globalPoolIDS;
@@ -105,15 +106,6 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	}
 	return gameObject;
 };
-
-Component* GameObject::GetComponent(UI32 type) {
-	try {
-		return mComponents.at(type);
-	}
-	catch (std::exception) {
-		return nullptr;
-	}
-}
 
 Component* GameObject::GetComponent(std::string type) {
 	try {
