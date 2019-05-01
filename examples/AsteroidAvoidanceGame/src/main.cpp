@@ -15,10 +15,10 @@ int main(int argc, char **argv) {
 	manager->AddSystem(new RenderSystem());
 	manager->AddSystem(new ScriptSystem());
 	manager->AddSystem(new InputSystem());
-	Resources::LoadScene((std::string)"game");
+	Resources::LoadScene((std::string)"game.scene");
 	while (true) {
 		manager->Update(0);
-		SDL_Delay(1);
+		SDL_Delay(33);
 	}
 	return 0;
 }

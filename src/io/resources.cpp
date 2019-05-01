@@ -67,7 +67,9 @@ void Resources::Load(std::string directory) {
 			prefabBacklog.emplace_back(p.path().string());
 		}
 		else if (p.is_regular_file() && p.path().extension() == ".scene") {
-			scenes.insert({ p.path().stem().string(), p.path().string() });
+			std::string path = p.path().generic_string();
+			path.erase(0, gameDir.length());
+			scenes.insert({ path, p.path().string() });
 		}
 		else if (p.is_regular_file() && p.path().extension() == ".lua") {
 			LuaImplementation::Init();

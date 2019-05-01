@@ -10,6 +10,7 @@ RenderSystem::RenderSystem() {
 
 	window = new Window();
 	window->Create();
+	backgroundColor = std::make_tuple(0, 1, 0, 1);
 	//Load textures that could not be loaded because glContext did not exist
 	for (auto& texture : Resources::textureBacklog) {
 		Texture* tempTex = Texture::LoadTexture(texture.first);
@@ -31,7 +32,7 @@ RenderSystem::~RenderSystem() {
 
 void RenderSystem::Update(float dt) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.f, 0.f, 1.f, 1.f);
+	glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), std::get<3>(backgroundColor));
 	//gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
 		Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
@@ -59,4 +60,8 @@ void RenderSystem::Update(float dt) {
 	}
 	SDL_GL_SwapWindow(window->mWindow);
 	
+}
+
+void RenderSystem::SetBackgroundColor(float r, float g, float b, float a) {
+	backgroundColor = std::make_tuple(r, g, b, a);
 }

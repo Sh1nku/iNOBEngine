@@ -20,5 +20,20 @@
 				"name": "Input"
 			}]
 		}
+	},
+	{
+		"GameObject": {
+			"name" : "Ship",
+			"components" : [{
+				"name": "Transform",
+				"position" : [0.0, 0.0]
+			},
+			{
+				"name": "ScriptComponent",
+				"scripts" : [
+					"manager/manager.lua"
+				]
+			}]
+		}
 	}
 ]
