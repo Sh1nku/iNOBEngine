@@ -1,6 +1,8 @@
 #include "input.h"
+#include "../systems/inputsystem.h"
 
 std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>> keyCodes;
+std::unordered_map <UI8, SDL_GameController*> controllers;
 
 bool Input::GetKeyDown(std::string key) {
 	try {
@@ -33,6 +35,69 @@ bool Input::IsKeyPressed(std::string key) {
 	catch (std::out_of_range) {
 		return false;
 	}
+}
+
+bool Input::GetControllerButtonDown(std::string button) {
+	auto id = SDL_GameControllerGetButtonFromString(button.c_str());
+ 	return std::get<0>(controllerButtons[id]);
+}
+
+bool Input::GetControllerButtonUp(std::string button) {
+	auto id = SDL_GameControllerGetButtonFromString(button.c_str());
+	return std::get<1>(controllerButtons[id]);
+}
+
+bool Input::IsControllerButtonPressed(std::string button) {
+	auto id = SDL_GameControllerGetButtonFromString(button.c_str());
+	return std::get<2>(controllerButtons[id]);
+}
+
+b2Vec2 Input::GetControllerLeftAxis() {
+	float x = 0, y = 0;
+	if (controllerAxes[SDL_CONTROLLER_AXIS_LEFTX] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_LEFTX] < -DEAD_ZONE) {
+		x = controllerAxes[SDL_CONTROLLER_AXIS_LEFTX] / ((float)INT16_MAX);
+	}
+	if (controllerAxes[SDL_CONTROLLER_AXIS_LEFTY] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_LEFTY] < -DEAD_ZONE) {
+		y = controllerAxes[SDL_CONTROLLER_AXIS_LEFTY] / ((float)INT16_MAX);
+	}
+	b2Vec2 vec(x,y);
+	float length = vec.Length();
+	vec.Set(x / length, y / length);
+	return vec;
+}
+
+b2Vec2 Input::GetControllerRightAxis() {
+	float x = 0, y = 0;
+	if (controllerAxes[SDL_CONTROLLER_AXIS_RIGHTX] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_RIGHTX] < -DEAD_ZONE) {
+		x = controllerAxes[SDL_CONTROLLER_AXIS_RIGHTX] / ((float)INT16_MAX);
+	}
+	if (controllerAxes[SDL_CONTROLLER_AXIS_RIGHTY] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_RIGHTY] < -DEAD_ZONE) {
+		y = controllerAxes[SDL_CONTROLLER_AXIS_RIGHTY] / ((float)INT16_MAX);
+	}
+	b2Vec2 vec(x, y);
+	float length = vec.Length();
+	vec.Set(x / length, y / length);
+	return vec;
+}
+
+float Input::GetControllerLeftTrigger() {
+	float x = 0;
+	if (controllerAxes[SDL_CONTROLLER_AXIS_TRIGGERLEFT] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_TRIGGERLEFT] < -DEAD_ZONE) {
+		x = controllerAxes[SDL_CONTROLLER_AXIS_TRIGGERLEFT] / ((float)INT16_MAX);
+	}
+	return x;
+}
+
+float Input::GetControllerRightTrigger() {
+	float y = 0;
+	if (controllerAxes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] < -DEAD_ZONE) {
+		y = controllerAxes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] / ((float)INT16_MAX);
+	}
+	return y;
+}
+
+void Input::SetController(I8 id) {
+
 }
 
 Component* Input::Clone(GameObject* parent) {

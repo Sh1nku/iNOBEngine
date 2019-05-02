@@ -2,21 +2,38 @@
 #include "../component.h"
 #include <unordered_map>
 #include "SDL.h"
+#include "Box2D/Box2D.h"
+
+class InputSystem;
 
 class Input : public Component {
 public:
-	Input(GameObject *parent = nullptr) : Component(parent) { }
+	friend class InputSystem;
+	Input(GameObject *parent = nullptr) : Component(parent), id(-1) { }
 	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
 	bool GetKeyDown(std::string key);
 	bool GetKeyUp(std::string key);
 	bool IsKeyPressed(std::string key);
-
-private:
+	///TODO Implement multiple controllers
+	void SetController(I8 id);
+	b2Vec2 GetControllerLeftAxis();
+	b2Vec2 GetControllerRightAxis();
+	float GetControllerLeftTrigger();
+	float GetControllerRightTrigger();
+	bool GetControllerButtonDown(std::string button);
+	bool GetControllerButtonUp(std::string button);
+	bool IsControllerButtonPressed(std::string button);
 	
+protected:
+	I16 controllerAxes[SDL_CONTROLLER_AXIS_MAX];
+	std::tuple<bool, bool, bool> controllerButtons[SDL_CONTROLLER_BUTTON_MAX];
+	I8 id;
 };
 
 void to_json(nlohmann::json& j, const Input& t);
 void from_json(const nlohmann::json& j, Input& t);
 
+constexpr int DEAD_ZONE = 3000;
 extern std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>> keyCodes;
+extern std::unordered_map <UI8, SDL_GameController*> controllers;

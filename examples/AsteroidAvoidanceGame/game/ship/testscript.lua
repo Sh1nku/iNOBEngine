@@ -21,4 +21,14 @@ function update()
 		local currentPos = localObject.transform:getLocalPosition()
 		localObject.transform:setPosition(Vec2(currentPos.x + 0.01, currentPos.y))
 	end
+	
+	if input:getControllerButtonDown("a") then
+		print("a was pressed on controller")
+	end
+	if input:getControllerButtonUp("a") then
+		print("a was released on controller")
+	end
+	if input:isControllerButtonPressed("X") then
+		print("x was continually pressed")
+	end
 end

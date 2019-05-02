@@ -44,7 +44,15 @@ void LuaImplementation::CreateBindings() {
 		"new", sol::no_constructor,
 		"getKeyDown", &Input::GetKeyDown,
 		"getKeyUp", &Input::GetKeyUp,
-		"isKeyPressed", &Input::IsKeyPressed);
+		"isKeyPressed", &Input::IsKeyPressed,
+		"getControllerButtonDown", &Input::GetControllerButtonDown,
+		"getControllerButtonUp", &Input::GetControllerButtonUp,
+		"isControllerButtonPressed", &Input::IsControllerButtonPressed,
+		"getControllerLeftAxis", &Input::GetControllerLeftAxis,
+		"getControllerRightAxis", &Input::GetControllerRightAxis,
+		"getControllerLeftTrigger", &Input::GetControllerLeftTrigger,
+		"getControllerRightTrigger", &Input::GetControllerRightTrigger,
+		"setController", &Input::SetController);
 
 	//// Systems
 	lua->new_usertype<SystemProgram>("SystemProgram",
