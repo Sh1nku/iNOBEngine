@@ -1,5 +1,6 @@
 #include "inputsystem.h"
 #include "../components/input.h"
+#include "../../eventmanager.h"
 
 SDL_Event e;
 
@@ -107,6 +108,11 @@ void InputSystem::Update(float dt) {
 					}
 				}
 				break;
+			}
+
+			case SDL_QUIT:
+			{
+				EventManager::FireEvent("QUIT", nullptr);
 			}
 		}
 

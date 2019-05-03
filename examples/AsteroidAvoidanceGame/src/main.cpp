@@ -1,6 +1,7 @@
 #include <iNOBEngine.h>
 
 int main(int argc, char **argv) {
+	bool quit = false;
 	LuaImplementation::Init();
 	Resources::Load("../examples/AsteroidAvoidanceGame/game");
 	{
@@ -16,7 +17,8 @@ int main(int argc, char **argv) {
 	manager->AddSystem(new ScriptSystem());
 	manager->AddSystem(new InputSystem());
 	Resources::LoadScene((std::string)"game.scene");
-	while (true) {
+	EventManager::Subscribe("QUIT", [&](void* data) {quit = true; });
+	while (!quit) {
 		manager->Update(0);
 		SDL_Delay(33);
 	}

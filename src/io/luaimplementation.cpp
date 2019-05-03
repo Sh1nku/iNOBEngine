@@ -17,6 +17,7 @@ void LuaImplementation::Init() {
 
 void LuaImplementation::Destroy() {
 	delete lua;
+	lua = nullptr;
 }
 
 void LuaImplementation::CreateBindings() {

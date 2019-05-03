@@ -21,4 +21,5 @@
 #include "types/enginetypes.h"
 #include "window/window.h"
 #include "manager.h"
+#include "eventmanager.h"
 #include "Box2D/Box2D.h"
