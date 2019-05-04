@@ -4,20 +4,23 @@
 
 class Transform : public Component {
 public:
-	Transform(GameObject *parent = nullptr) : Component(parent), mWorldPosition(b2Vec2(0,0)), mWorldRotation(0) {}
-	Transform(b2Vec2 position, float rotation, GameObject *parent = nullptr) : Component(parent), mWorldPosition(position), mWorldRotation(rotation) {};
+	Transform(GameObject *parent = nullptr) : Component(parent), mWorldPosition(b2Vec2(0,0)), mWorldRotation(0), zCoord(0) {}
+	Transform(b2Vec2 position, float rotation, float zCoord, GameObject *parent = nullptr) : Component(parent), mWorldPosition(position), zCoord(zCoord), mWorldRotation(rotation) {};
 	Component* Clone(GameObject* parent);
 	b2Vec2 GetWorldPosition() const;
 	b2Vec2 GetLocalPosition() const;
 	float GetWorldRotation() const;
 	float GetLocalRotation() const;
+	float GetZCoord() const;
 	void SetLocalPosition(b2Vec2* position);
 	void SetWorldPosition(b2Vec2* position);
+	void SetZCoord(float zCoord);
 	UI32 GetBitcode() override;
 
 private:
 	b2Vec2 mWorldPosition;
 	float mWorldRotation;
+	float zCoord;
 };
 
 void to_json(nlohmann::json& j, const Transform& t);

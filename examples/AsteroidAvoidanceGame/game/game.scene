@@ -23,7 +23,7 @@
 	},
 	{
 		"GameObject": {
-			"name" : "Ship",
+			"name" : "Manager",
 			"components" : [{
 				"name": "Transform",
 				"position" : [0.0, 0.0]
@@ -33,6 +33,21 @@
 				"scripts" : [
 					"manager/manager.lua"
 				]
+			}]
+		}
+	},
+	{
+		"GameObject": {
+		"name": "Camera",
+		"components": [{
+				"name": "Transform",
+				"position": [0.0, 0.0],
+				"z": 5.0
+			},
+			{
+				"name": "Camera",
+				"type": "orthographic"
+
 			}]
 		}
 	}

@@ -64,9 +64,6 @@ GameObject* Manager::Instantiate(GameObject* obj, std::string name, b2Vec2* pos)
 	if (pos != nullptr) {
 		obj->transform->SetLocalPosition(pos);
 	}
-	else {
-		obj->transform->SetLocalPosition(&b2Vec2(0, 0));
-	}
 	for (auto& system : mSystems) {
 		system->AddToSystem(obj);
 	}

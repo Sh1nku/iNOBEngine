@@ -4,9 +4,13 @@
 #include "../component.h"
 #include "../components/animation.h"
 #include "../components/transform.h"
+#include "../components/camera.h"
+#include "../gameobject.h"
+#include "../../eventmanager.h"
 
 RenderSystem::RenderSystem() {
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
+	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
 
 	window = new Window();
 	window->Create();
@@ -24,6 +28,20 @@ RenderSystem::RenderSystem() {
 		}
 	}
 	Resources::textureBacklog.clear();
+	EventManager::Subscribe("CHANGE_PERSPECTIVE", [&](void* data) {
+		auto& tuple = *(std::tuple <CAMERA_TYPE, UI16, float, float >*) data;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		if (std::get<0>(tuple) == ORTHOGRAPHIC) {
+			glOrtho(-(Window::SCREEN_WIDTH / ((float)Window::SCREEN_HEIGHT)), (Window::SCREEN_WIDTH / ((float)Window::SCREEN_HEIGHT)), -1, 1, std::get<2>(tuple), std::get<3>(tuple));
+		}
+		else {
+			gluPerspective(std::get<1>(tuple), ((float)Window::SCREEN_WIDTH) / Window::SCREEN_HEIGHT, (std::get<2>(tuple) > 0 ? std::get<2>(tuple) : 0.01), std::get<3>(tuple));
+		}
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		delete data;
+	});
 }
 
 RenderSystem::~RenderSystem() {
@@ -33,7 +51,20 @@ RenderSystem::~RenderSystem() {
 void RenderSystem::Update(float dt) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), std::get<3>(backgroundColor));
-	//gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
+	glLoadIdentity();
+	for (auto& entry : *GetEntries(Component::GetBitcode("Camera"))) {
+		Camera* camera = (Camera*)entry.second->at(Component::GetBitcode("Camera"));
+		Transform* transform = camera->GetParent()->transform;
+		b2Vec2 pos = transform->GetWorldPosition();
+		glPushMatrix();
+		if (camera->type == CAMERA_TYPE::PERSPECTIVE) {
+			gluLookAt(pos.x, pos.y, transform->GetZCoord(), pos.x, pos.y, 0, 0, 1, 0);
+		}
+		else {
+			glScalef(transform->GetZCoord() / 10, transform->GetZCoord() / 10, transform->GetZCoord() / 10);
+			glTranslatef(-pos.x, -pos.y, 0);
+		}
+	}
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
 		Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
 		Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
@@ -44,7 +75,7 @@ void RenderSystem::Update(float dt) {
 
 		glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, id);
-		glTranslatef(worldPos.x, worldPos.y, -5);
+		glTranslatef(worldPos.x, worldPos.y, transform->GetZCoord());
 		glRotatef(transform->GetWorldRotation() , 0, 0, 1);
 		glBegin(GL_QUADS);
 		glTexCoord2f(coords.bottomLeft.x / tex->width,coords.bottomLeft.y / tex->height);
@@ -58,6 +89,7 @@ void RenderSystem::Update(float dt) {
 		glEnd();
 		glPopMatrix();
 	}
+	glPopMatrix();
 	SDL_GL_SwapWindow(window->mWindow);
 	
 }

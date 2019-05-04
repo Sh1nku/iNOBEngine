@@ -7,6 +7,7 @@ Component* Transform::Clone(GameObject* parent) {
 	component->mParent = parent;
 	component->mWorldPosition = mWorldPosition;
 	component->mWorldRotation = mWorldRotation;
+	component->zCoord = zCoord;
 	return component;
 }
 
@@ -81,13 +82,25 @@ void Transform::SetWorldPosition(b2Vec2* position) {
 	}
 }
 
+void Transform::SetZCoord(float zCoord) {
+	this->zCoord = zCoord;
+}
+
+float Transform::GetZCoord() const{
+	return this->zCoord;
+}
+
 void to_json(nlohmann::json& j, const Transform& t) {
 	b2Vec2 position = t.GetLocalPosition();
-	j = nlohmann::json{ {"name", "Transform"}, {"position", std::vector<float>{position.x, position.y} } };
+	j = nlohmann::json{ {"name", "Transform"}, {"position", std::vector<float>{position.x, position.y} }, {"z", t.GetZCoord()} };
 }
 
 void from_json(const nlohmann::json& j, Transform& t) {
 	std::vector<float> positionVector;
 	j.at("position").get_to(positionVector);
 	t.SetLocalPosition(&b2Vec2(positionVector[0], positionVector[1]));
+	auto& it = j.find("z");
+	if (it != j.end()) {
+		t.SetZCoord(it.value());
+	}
 }
