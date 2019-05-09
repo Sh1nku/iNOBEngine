@@ -1,6 +1,10 @@
 #include "inputsystem.h"
 #include "../components/input.h"
 #include "../../eventmanager.h"
+#include "imgui.h"
+#include "../../window/imgui/imgui_impl_sdl.h"
+#include "../../window/imgui/imgui_impl_opengl2.h"
+#include "../../window/window.h"
 
 SDL_Event e;
 
@@ -36,6 +40,13 @@ void InputSystem::Update(float dt) {
 		}
 	}
 	while (SDL_PollEvent(&e)) {
+		if (Window::mWindow != nullptr) {
+			ImGui_ImplSDL2_ProcessEvent(&e);
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+				continue;
+			}
+		}
 		switch (e.type) {
 			case SDL_KEYDOWN:
 			{

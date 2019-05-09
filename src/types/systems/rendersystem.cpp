@@ -5,12 +5,17 @@
 #include "../components/animation.h"
 #include "../components/transform.h"
 #include "../components/camera.h"
+#include "../components/uicomponent.h"
 #include "../gameobject.h"
 #include "../../eventmanager.h"
+#include "imgui.h"
+#include "../../window/imgui/imgui_impl_opengl2.h"
+#include "../../window/imgui/imgui_impl_sdl.h"
 
-RenderSystem::RenderSystem() {
+RenderSystem::RenderSystem() : showFPS(false) {
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
+	mMap.insert({ Component::GetBitcode("UIComponent"), std::make_unique<gameObject_map>() });
 
 	window = new Window();
 	window->Create();
@@ -19,12 +24,14 @@ RenderSystem::RenderSystem() {
 	for (auto& texture : Resources::textureBacklog) {
 		Texture* tempTex = Texture::LoadTexture(texture.first);
 		memcpy(texture.second, tempTex, sizeof(Texture));
+		delete tempTex;
 	}
 	//Reload textures that were deleted from a previous context
 	for (auto& texturePair : Resources::textures) {
 		if (!glIsTexture(texturePair.second->GetID())) {
 			Texture* tempTex = Texture::LoadTexture((std::string)texturePair.first);
 			memcpy(texturePair.second.get(), tempTex, sizeof(Texture));
+			delete tempTex;
 		}
 	}
 	Resources::textureBacklog.clear();
@@ -52,6 +59,22 @@ void RenderSystem::Update(float dt) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), std::get<3>(backgroundColor));
 	glLoadIdentity();
+
+	StartGUIDraw();
+	if (showFPS) {
+		ShowFPS();
+	}
+	for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
+		UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
+		if (ui->type == UI_TYPE::LABEL) {
+			RenderLabel(*ui);
+		}
+		else {
+			RenderButton(*ui);
+		}
+	}
+	EndGUIDraw();
+
 	for (auto& entry : *GetEntries(Component::GetBitcode("Camera"))) {
 		Camera* camera = (Camera*)entry.second->at(Component::GetBitcode("Camera"));
 		Transform* transform = camera->GetParent()->transform;
@@ -96,4 +119,54 @@ void RenderSystem::Update(float dt) {
 
 void RenderSystem::SetBackgroundColor(float r, float g, float b, float a) {
 	backgroundColor = std::make_tuple(r, g, b, a);
+}
+
+void RenderSystem::StartGUIDraw() {
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(Window::mWindow);
+	ImGui::NewFrame();
+}
+
+void RenderSystem::EndGUIDraw() {
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+}
+
+void RenderSystem::SetShowFPS(bool active) {
+	showFPS = active;
+}
+
+void RenderSystem::ShowFPS() {
+	ImGui::SetNextWindowPos(ImVec2(0, 0) , ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(90,20), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowBgAlpha(0);
+	ImGui::Begin("FPSCounter", nullptr,
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+	ImGui::End();
+}
+
+void RenderSystem::RenderLabel(UIComponent& component) {
+	ImGui::SetNextWindowPos(component.GetPosition(), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(component.GetSize(), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowBgAlpha(0);
+	ImGui::Begin(component.windowID.c_str(), nullptr,
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+	ImGui::Text(component.GetText().c_str(), ImGui::GetIO().Framerate);
+	ImGui::End();
+}
+
+void RenderSystem::RenderButton(UIComponent& component) {
+	ImGui::SetNextWindowPos(component.GetPosition(), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(component.GetSize(), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowBgAlpha(0);
+	ImGui::Begin(component.windowID.c_str(), nullptr,
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+	if (ImGui::Button(component.GetText().c_str(), ImGui::GetContentRegionAvail())) {
+		EventManager::FireEvent(component.buttonEvent,nullptr);
+	}
+	ImGui::End();
 }

@@ -11,6 +11,7 @@
 #include "types/components/camera.h"
 #include "types/components/scriptcomponent.h"
 #include "types/components/input.h"
+#include "types/components/uicomponent.h"
 #include "types/gameobject.h"
 #include "types/systemprogram.h"
 #include "types/systems/testsystem.h"

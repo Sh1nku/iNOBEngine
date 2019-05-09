@@ -11,6 +11,7 @@ int main(int argc, char **argv) {
 		TestComponent component;
 		ScriptComponent scriptComponent;
 		Input input;
+		UIComponent uiComponent;
 	}
 	Manager* manager = Manager::GetInstance();
 	manager->AddSystem(new RenderSystem());

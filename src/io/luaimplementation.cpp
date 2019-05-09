@@ -4,6 +4,7 @@
 #include "../types/components/transform.h"
 #include "../types/systems/rendersystem.h"
 #include "../manager.h"
+#include "../eventmanager.h"
 
 sol::state* LuaImplementation::lua;
 
@@ -62,7 +63,8 @@ void LuaImplementation::CreateBindings() {
 	lua->new_usertype<RenderSystem>("RenderSystem",
 		sol::base_classes, sol::bases<SystemProgram>(),
 		"new", sol::no_constructor,
-		"setBackgroundColor", &RenderSystem::SetBackgroundColor);
+		"setBackgroundColor", &RenderSystem::SetBackgroundColor,
+		"setShowFPS", &RenderSystem::SetShowFPS);
 
 	lua->new_usertype<Manager>("Manager",
 		"new", sol::no_constructor,
@@ -70,6 +72,10 @@ void LuaImplementation::CreateBindings() {
 		"instantiate", &Manager::Instantiate,
 		"getGameObjectByID", &Manager::GetGameObjectByID,
 		"getRenderSystem", &Manager::GetSystem<RenderSystem>);
+
+	lua->new_usertype<Manager>("EventManager",
+		"new", sol::no_constructor,
+		"subscribe", &EventManager::Subscribe);
 
 	lua->new_usertype<b2Vec2>("Vec2",
 		sol::constructors<b2Vec2(), b2Vec2(float, float)>(),

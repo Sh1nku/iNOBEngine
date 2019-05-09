@@ -26,8 +26,9 @@ find_package(opengl REQUIRED)
 find_package(unofficial-box2d CONFIG REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(imgui CONFIG REQUIRED)
 
-set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32 glu32 SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json unofficial::box2d::Box2D PNG::PNG ZLIB::ZLIB ${LUA_LIBRARIES})
+set ( PROJECT_LINK_LIBS SDL2::SDL2 SDL2::SDL2main opengl32 glu32 SDL2::SDL2_image sol2 nlohmann_json nlohmann_json::nlohmann_json unofficial::box2d::Box2D PNG::PNG ZLIB::ZLIB imgui::imgui ${LUA_LIBRARIES})
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
 
 add_library(iNOBEngine ${SOURCES} ${HEADERS})

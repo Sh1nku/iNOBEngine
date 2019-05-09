@@ -1,4 +1,7 @@
 #include "window.h"
+#include <imgui.h>
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_opengl2.h"
 
 SDL_Window *Window::mWindow = NULL;
 SDL_GLContext Window::mContext;
@@ -26,8 +29,11 @@ void Window::Create()
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
 	if (Window::SCREEN_FULLSCREEN)
 	{
@@ -37,8 +43,18 @@ void Window::Create()
 	{
 		mWindow = SDL_CreateWindow("2DRPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	}
-
 	mContext = SDL_GL_CreateContext(mWindow);
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.IniFilename = NULL;
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForOpenGL(mWindow, mContext);
+	ImGui_ImplOpenGL2_Init();
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.WindowBorderSize = 0.0f;
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45, ((float) SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1, 100);
