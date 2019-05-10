@@ -35,6 +35,9 @@ GameObject* Manager::AddGameObject(GameObject *obj) {
 		globalPoolIDS.pop_back();
 	}
 	mGameObjects.insert({ obj->GetID(), obj });
+	for (auto& system : mSystems) {
+		system->AddToSystem(obj);
+	}
 	for (GameObject* obj2 : (*(obj)).mChildren) {
 		AddGameObject(obj2);
 	}
@@ -63,9 +66,6 @@ GameObject* Manager::Instantiate(GameObject* obj, std::string name, b2Vec2* pos)
 	}
 	if (pos != nullptr) {
 		obj->transform->SetLocalPosition(pos);
-	}
-	for (auto& system : mSystems) {
-		system->AddToSystem(obj);
 	}
 	return obj;
 }

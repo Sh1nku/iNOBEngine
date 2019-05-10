@@ -1,6 +1,6 @@
 {
 	"GameObject": {
-		"name" : "Ship",
+		"name" : "Manager",
 		"components" : [{
 			"name": "Transform",
 			"position" : [0.0, 0.0]

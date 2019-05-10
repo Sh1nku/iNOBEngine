@@ -53,44 +53,57 @@
 	},
 	{
 		"GameObject": {
-			"name": "Label",
-			"components": [{
-					"name": "Transform",
-					"position": [0.0, 0.0],
-					"z": 0.0
-				},
-				{
-					"name": "UIComponent",
-					"type": "label",
-					"position": ["90%", "0"],
-					"size": ["10%", "20px"],
-					"text": "Test"
-				}
-			]
-		}
-	},
-	{
-		"GameObject": {
-			"name": "Button",
+			"name": "UI",
 			"components": [{
 					"name": "Transform",
 					"position": [0.0, 0.0],
 					"z": 5.0
-				},
-				{
-					"name": "UIComponent",
-					"type": "button",
-					"position": ["40%", "0"],
-					"size": ["20%", "20px"],
-					"text": "Test",
-					"buttonevent": "TEST_BUTTON"
-				},
-				{
-					"name": "ScriptComponent",
-					"scripts" : [
-						"testbutton/testbutton.lua"
+				}
+			],
+			"children" : [
+			{
+				"GameObject": {
+					"name": "Label",
+					"components": [{
+							"name": "Transform",
+							"position": [0.0, 0.0],
+							"z": 5.0
+						},
+						{
+							"name": "UIComponent",
+							"type": "label",
+							"position": ["90%", "0"],
+							"size": ["10%", "20px"],
+							"text": "Test"
+						}
 					]
 				}
+			},
+			{
+				"GameObject": {
+					"name": "Button",
+					"components": [{
+							"name": "Transform",
+							"position": [0.0, 0.0],
+							"z": 5.0
+						},
+						{
+							"name": "UIComponent",
+							"type": "button",
+							"position": ["40%", "0"],
+							"size": ["20%", "20px"],
+							"text": "Test",
+							"buttonevent": "TEST_BUTTON"
+						},
+						{
+							"name": "ScriptComponent",
+							"scripts" : [
+								"ui/testbutton.lua"
+							]
+						}
+					]
+				}
+			}
 			]
 		}
 	}

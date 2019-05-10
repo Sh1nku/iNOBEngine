@@ -88,7 +88,7 @@ Component* GameObject::AddComponent(Component* component) {
 GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	nlohmann::json jsonAll = nlohmann::json::parse(contents);
 	nlohmann::json go = jsonAll.at("GameObject");
-	GameObject* gameObject = new GameObject();
+	GameObject* gameObject = new GameObject(parent);
 	try {
 		std::string name = go.at("name");
 		gameObject->mName = name;
@@ -103,6 +103,12 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 		component->SetParent(gameObject);
 		gameObject->AddComponent(component);
 
+	}
+	auto& children = go.find("children");
+	if (children != go.end()) {
+		for (nlohmann::json childJson : children.value()) {
+			GameObject* child = LoadFromFile(childJson.dump(), gameObject);
+		}
 	}
 	return gameObject;
 };

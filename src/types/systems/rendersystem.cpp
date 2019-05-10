@@ -166,7 +166,7 @@ void RenderSystem::RenderButton(UIComponent& component) {
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
 		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 	if (ImGui::Button(component.GetText().c_str(), ImGui::GetContentRegionAvail())) {
-		EventManager::FireEvent(component.buttonEvent,nullptr);
+		EventManager::FireEvent(component.buttonEvent,(void*)"Test text");
 	}
 	ImGui::End();
 }

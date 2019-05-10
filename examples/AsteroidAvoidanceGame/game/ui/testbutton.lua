@@ -1,6 +1,6 @@
 
-function testButtonPressed()
-	print("Test button was pressed")
+function testButtonPressed(data)
+	print(voidToString(data))
 end
 
 function start()

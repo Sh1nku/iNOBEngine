@@ -84,5 +84,7 @@ void LuaImplementation::CreateBindings() {
 	lua->set_function("Vec2", 
 		[](float x, float y) {return b2Vec2(x, y); }
 	);
+	lua->set_function("voidToString", [](void* data) {return (const char*)data; });
+	lua->set_function("voidToInt", [](void* data) {return ((int)data); });
 	//lua["Manager"]["getInstance"] = &Manager::GetManager;
 }
