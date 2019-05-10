@@ -7,7 +7,7 @@
 UI32 globalID = 1;
 std::vector<UI32> globalPoolIDS;
 
-GameObject::GameObject(GameObject* parent) : mID(0), mName(""), mNamed(false), mParent(parent)
+GameObject::GameObject(GameObject* parent) : mID(0), mName(""), mNamed(false), mParent(parent), active(true)
 {
 	if (parent != nullptr) {
 		this->mParent->mChildren.emplace_back(this);
@@ -20,6 +20,7 @@ GameObject::GameObject(const GameObject& old) {
 	mNamed = old.mNamed;
 	mID = 0;
 	mParent = old.mParent;
+	active = old.active;
 	for (auto comp : old.mComponents) {
 		mComponents.emplace(comp.first, comp.second->Clone(this));
 	}
@@ -96,6 +97,10 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	}
 	catch(std::exception) {
 		std::cout << "Name not found" << std::endl;
+	}
+	auto& isActive = go.find("active");
+	if (isActive != go.end()) {
+		gameObject->active = isActive.value();
 	}
 	nlohmann::json components = go.at("components");
 	for (nlohmann::json componentJson : components) {

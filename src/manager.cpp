@@ -119,6 +119,8 @@ GameObject* Manager::GetGameObjectByName(std::string name) {
 
 void Manager::Update(float dt) {
 	for (SystemProgram* system : mSystems) {
-		system->Update(dt);
+		if (system->active) {
+			system->Update(dt);
+		}
 	}
 }

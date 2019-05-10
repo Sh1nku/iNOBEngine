@@ -23,7 +23,6 @@ int main(int argc, char **argv) {
 	});
 	while (!quit) {
 		manager->Update(0);
-		SDL_Delay(33);
 	}
 	return 0;
 }

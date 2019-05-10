@@ -65,52 +65,58 @@ void RenderSystem::Update(float dt) {
 		ShowFPS();
 	}
 	for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
-		UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
-		if (ui->type == UI_TYPE::LABEL) {
-			RenderLabel(*ui);
-		}
-		else {
-			RenderButton(*ui);
+		if (entry.first->active) {
+			UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
+			if (ui->type == UI_TYPE::LABEL) {
+				RenderLabel(*ui);
+			}
+			else {
+				RenderButton(*ui);
+			}
 		}
 	}
 	EndGUIDraw();
 
 	for (auto& entry : *GetEntries(Component::GetBitcode("Camera"))) {
-		Camera* camera = (Camera*)entry.second->at(Component::GetBitcode("Camera"));
-		Transform* transform = camera->GetParent()->transform;
-		b2Vec2 pos = transform->GetWorldPosition();
-		glPushMatrix();
-		if (camera->type == CAMERA_TYPE::PERSPECTIVE) {
-			gluLookAt(pos.x, pos.y, transform->GetZCoord(), pos.x, pos.y, 0, 0, 1, 0);
-		}
-		else {
-			glScalef(transform->GetZCoord() / 10, transform->GetZCoord() / 10, transform->GetZCoord() / 10);
-			glTranslatef(-pos.x, -pos.y, 0);
+		if (entry.first->active) {
+			Camera* camera = (Camera*)entry.second->at(Component::GetBitcode("Camera"));
+			Transform* transform = camera->GetParent()->transform;
+			b2Vec2 pos = transform->GetWorldPosition();
+			glPushMatrix();
+			if (camera->type == CAMERA_TYPE::PERSPECTIVE) {
+				gluLookAt(pos.x, pos.y, transform->GetZCoord(), pos.x, pos.y, 0, 0, 1, 0);
+			}
+			else {
+				glScalef(transform->GetZCoord() / 10, transform->GetZCoord() / 10, transform->GetZCoord() / 10);
+				glTranslatef(-pos.x, -pos.y, 0);
+			}
 		}
 	}
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
-		Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
-		Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
-		UI32 id = anim->currentClip->texture->GetID();
-		b2Vec2& worldPos = transform->GetWorldPosition();
-		Texture* tex = anim->currentClip->texture;
-		AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
+		if (entry.first->active) {
+			Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
+			Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
+			UI32 id = anim->currentClip->texture->GetID();
+			b2Vec2& worldPos = transform->GetWorldPosition();
+			Texture* tex = anim->currentClip->texture;
+			AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
 
-		glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, id);
-		glTranslatef(worldPos.x, worldPos.y, transform->GetZCoord());
-		glRotatef(transform->GetWorldRotation() , 0, 0, 1);
-		glBegin(GL_QUADS);
-		glTexCoord2f(coords.bottomLeft.x / tex->width,coords.bottomLeft.y / tex->height);
-		glVertex3f(-.5f, -.5f, 0);
-		glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
-		glVertex3f(.5f, -.5f, 0);
-		glTexCoord2f(coords.topRight.x / tex->width, coords.topRight.y / tex->height);
-		glVertex3f(.5f, .5f, 0);
-		glTexCoord2f(coords.topLeft.x / tex->width, coords.topLeft.y / tex->height);
-		glVertex3f(-.5f, .5f, 0);
-		glEnd();
-		glPopMatrix();
+			glPushMatrix();
+			glBindTexture(GL_TEXTURE_2D, id);
+			glTranslatef(worldPos.x, worldPos.y, transform->GetZCoord());
+			glRotatef(transform->GetWorldRotation(), 0, 0, 1);
+			glBegin(GL_QUADS);
+			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
+			glVertex3f(-.5f, -.5f, 0);
+			glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
+			glVertex3f(.5f, -.5f, 0);
+			glTexCoord2f(coords.topRight.x / tex->width, coords.topRight.y / tex->height);
+			glVertex3f(.5f, .5f, 0);
+			glTexCoord2f(coords.topLeft.x / tex->width, coords.topLeft.y / tex->height);
+			glVertex3f(-.5f, .5f, 0);
+			glEnd();
+			glPopMatrix();
+		}
 	}
 	glPopMatrix();
 	SDL_GL_SwapWindow(window->mWindow);

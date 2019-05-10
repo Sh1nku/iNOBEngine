@@ -49,13 +49,15 @@ class GameObject {
 
 		GameObject* GetParent() { return mParent; }
 		UI32 GetComponentEnum();
-
 		UI32 GetID();
 		std::string GetName();
-		Transform *transform;
+
 
 		static GameObject* Create();
 		static GameObject* LoadFromFile(std::string fileContents, GameObject* parent = nullptr);
+
+		bool active;
+		Transform *transform;
 	private:
 		std::unordered_map<UI32 ,Component*> mComponents;
 		std::vector<Script> mScripts;

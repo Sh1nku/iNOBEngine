@@ -1,5 +1,6 @@
 #include "testsystem.h"
 #include "../components/testcomponent.h"
+#include "../gameobject.h"
 
 
 TestSystem::TestSystem() {
@@ -13,18 +14,24 @@ TestSystem::~TestSystem() {
 
 void TestSystem::Update(float dt) {
 	for (auto& entry : *GetEntries(Component::GetBitcode("TestComponent"))) {
-		TestComponent* comp = (TestComponent*) entry.second->at(Component::GetBitcode("TestComponent"));
-		comp->value += 1;
+		if (entry.first->active) {
+			TestComponent* comp = (TestComponent*)entry.second->at(Component::GetBitcode("TestComponent"));
+			comp->value += 1;
+		}
 	}
 	for (auto& entry : *GetEntries(Component::GetBitcode("TestComponent") | Component::GetBitcode("Transform"))) {
-		TestComponent* comp = (TestComponent*)entry.second->at(Component::GetBitcode("TestComponent"));
-		comp->value += 1;
+		if (entry.first->active) {
+			TestComponent* comp = (TestComponent*)entry.second->at(Component::GetBitcode("TestComponent"));
+			comp->value += 1;
+		}
 	}
 	try {
 		for (auto& entry : *GetEntries(Component::GetBitcode("Transform"))) {
-			//Should not run
+			if (entry.first->active) {
+				//Should not run
 				TestComponent* comp = (TestComponent*)entry.second->at(Component::GetBitcode("TestComponent"));
 				comp->value += 1;
+			}
 		}
 	}
 	catch (const std::exception&) {

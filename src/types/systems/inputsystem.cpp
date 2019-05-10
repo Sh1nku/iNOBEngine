@@ -5,6 +5,7 @@
 #include "../../window/imgui/imgui_impl_sdl.h"
 #include "../../window/imgui/imgui_impl_opengl2.h"
 #include "../../window/window.h"
+#include "../gameobject.h"
 
 SDL_Event e;
 
@@ -33,10 +34,12 @@ void InputSystem::Update(float dt) {
 		std::get<1>(keys.second) = false;
 	}
 	for (auto& entry : *GetEntries(Component::GetBitcode("Input"))) {
-		Input* input = (Input*)entry.second->at(Component::GetBitcode("Input"));
-		for (auto& tuple : input->controllerButtons) {
-			std::get<0>(tuple) = false;
-			std::get<1>(tuple) = false;
+		if (entry.first->active) {
+			Input* input = (Input*)entry.second->at(Component::GetBitcode("Input"));
+			for (auto& tuple : input->controllerButtons) {
+				std::get<0>(tuple) = false;
+				std::get<1>(tuple) = false;
+			}
 		}
 	}
 	while (SDL_PollEvent(&e)) {
@@ -91,9 +94,11 @@ void InputSystem::Update(float dt) {
 			case SDL_CONTROLLERBUTTONDOWN:
 			{
 				for (auto& entry : *GetEntries(Component::GetBitcode("Input"))) {
-					Input* input = (Input*) entry.second->at(Component::GetBitcode("Input"));
-					if (input->id == -1 || input->id == e.cbutton.which) {
-						input->controllerButtons[e.cbutton.button] = std::make_tuple<bool, bool, bool>(true, false, true);
+					if (entry.first->active) {
+						Input* input = (Input*)entry.second->at(Component::GetBitcode("Input"));
+						if (input->id == -1 || input->id == e.cbutton.which) {
+							input->controllerButtons[e.cbutton.button] = std::make_tuple<bool, bool, bool>(true, false, true);
+						}
 					}
 				}
 				break;
@@ -102,9 +107,11 @@ void InputSystem::Update(float dt) {
 			case SDL_CONTROLLERBUTTONUP:
 			{
 				for (auto& entry : *GetEntries(Component::GetBitcode("Input"))) {
-					Input* input = (Input*)entry.second->at(Component::GetBitcode("Input"));
-					if (input->id == -1 || input->id == e.cbutton.which) {
-						input->controllerButtons[e.cbutton.button] = std::make_tuple<bool, bool, bool>(false, true, false);
+					if (entry.first->active) {
+						Input* input = (Input*)entry.second->at(Component::GetBitcode("Input"));
+						if (input->id == -1 || input->id == e.cbutton.which) {
+							input->controllerButtons[e.cbutton.button] = std::make_tuple<bool, bool, bool>(false, true, false);
+						}
 					}
 				}
 				break;

@@ -44,6 +44,7 @@ void Window::Create()
 		mWindow = SDL_CreateWindow("2DRPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	}
 	mContext = SDL_GL_CreateContext(mWindow);
+	SDL_GL_SetSwapInterval(0);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
