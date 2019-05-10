@@ -11,6 +11,7 @@ public:
 	void Update(float dt) override;
 	void SetBackgroundColor(float r, float g, float b, float a);
 	void SetShowFPS(bool active);
+	UI16 pixelsPerUnit = 32;
 private:
 	Window* window;
 	std::tuple<float, float, float, float> backgroundColor;

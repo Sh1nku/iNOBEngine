@@ -21,8 +21,17 @@ int main(int argc, char **argv) {
 	EventManager::Subscribe("QUIT", [&](void* data) {
 		quit = true; 
 	});
+
+	Uint64 now = SDL_GetPerformanceCounter();
+	Uint64 last = 0;
+	double deltaTime = 0;
+
 	while (!quit) {
-		manager->Update(0);
+		last = now;
+		now = SDL_GetPerformanceCounter();
+		deltaTime = (double)((now - last) * 1000 / (double)SDL_GetPerformanceFrequency());
+
+		manager->Update(deltaTime);
 	}
 	return 0;
 }

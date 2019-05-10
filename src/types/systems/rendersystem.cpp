@@ -107,13 +107,15 @@ void RenderSystem::Update(float dt) {
 			glRotatef(transform->GetWorldRotation(), 0, 0, 1);
 			glBegin(GL_QUADS);
 			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
-			glVertex3f(-.5f, -.5f, 0);
+			UI32 width = coords.bottomRight.x - coords.bottomLeft.x;
+			UI32 height = coords.bottomRight.y - coords.topRight.y;
+			glVertex3f(-.5f * width / pixelsPerUnit, -.5f * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
-			glVertex3f(.5f, -.5f, 0);
+			glVertex3f(.5f * width / pixelsPerUnit, -.5f * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.topRight.x / tex->width, coords.topRight.y / tex->height);
-			glVertex3f(.5f, .5f, 0);
+			glVertex3f(.5f * width / pixelsPerUnit, .5f * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.topLeft.x / tex->width, coords.topLeft.y / tex->height);
-			glVertex3f(-.5f, .5f, 0);
+			glVertex3f(-.5f * width / pixelsPerUnit, .5f * height / pixelsPerUnit, 0);
 			glEnd();
 			glPopMatrix();
 		}

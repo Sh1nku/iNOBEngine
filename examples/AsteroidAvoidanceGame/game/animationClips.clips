@@ -19,5 +19,14 @@
 			"length": 4,
 			"coords": [96, 0, 128, 32]
 		}]
+	},
+	{
+		"name": "background",
+			"texture": "background/bg.png",
+			"looping": true,
+			"frames": [{
+				"length": 1,
+				"coords": [0, 0, 512, 512]
+			}]
 	}]
 }

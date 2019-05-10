@@ -4,7 +4,8 @@
 			"name" : "Ship",
 			"components" : [{
 				"name": "Transform",
-				"position" : [0.0, 0.0]
+				"position" : [0.0, 0.0],
+				"z" : 0
 			},
 			{
 				"name": "Animation",
@@ -42,7 +43,7 @@
 		"components": [{
 				"name": "Transform",
 				"position": [0.0, 0.0],
-				"z": 5.0
+				"z": 2.0
 			},
 			{
 				"name": "Camera",
@@ -106,6 +107,20 @@
 			}
 			]
 		}
+	},
+	{
+	"GameObject": {
+		"name" : "Background",
+		"components" : [{
+			"name": "Transform",
+			"position" : [0.0, 0.0],
+			"z" : -5
+		},
+		{
+			"name": "Animation",
+			"default": "background"
+		}]
 	}
+}
 	
 ]
