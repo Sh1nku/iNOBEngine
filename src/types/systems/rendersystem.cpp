@@ -105,10 +105,10 @@ void RenderSystem::Update(float dt) {
 			glBindTexture(GL_TEXTURE_2D, id);
 			glTranslatef(worldPos.x, worldPos.y, transform->GetZCoord());
 			glRotatef(transform->GetWorldRotation(), 0, 0, 1);
-			glBegin(GL_QUADS);
-			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
 			UI32 width = coords.bottomRight.x - coords.bottomLeft.x;
 			UI32 height = coords.bottomRight.y - coords.topRight.y;
+			glBegin(GL_QUADS);
+			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
 			glVertex3f(-.5f * width / pixelsPerUnit, -.5f * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
 			glVertex3f(.5f * width / pixelsPerUnit, -.5f * height / pixelsPerUnit, 0);

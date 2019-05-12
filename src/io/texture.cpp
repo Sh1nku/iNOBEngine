@@ -99,6 +99,7 @@ void from_json(const nlohmann::json& j, AnimationClip& t) {
 	std::vector<AnimationFrame> frames;
 	j.at("frames").get_to(frames);
 	t.frames = frames;
+	t.name = j.at("name");
 	t.looping = j.at("looping");
 
 	Resources::clips.insert({ j.at("name"), std::make_unique<AnimationClip>(t) });

@@ -54,7 +54,9 @@ void loadClips(std::string& contents) {
 		std::string clipName = clip.at("name");
 		std::unique_ptr animationClip = std::make_unique<AnimationClip>();
 		clip.get_to(*animationClip.get());
+		animationClip.get()->name = clipName;
 		Resources::clips.emplace(clipName, std::move(animationClip));
+		Resources::clips;
 	}
 }
 

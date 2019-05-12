@@ -18,6 +18,7 @@
 #include "types/systems/rendersystem.h"
 #include "types/systems/scriptsystem.h"
 #include "types/systems/inputsystem.h"
+#include "types/systems/animationsystem.h"
 #include "types/vectors.h"
 #include "types/enginetypes.h"
 #include "window/window.h"

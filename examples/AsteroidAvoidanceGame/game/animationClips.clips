@@ -2,22 +2,22 @@
 	"AnimationClips": [{
 		"name": "ship_idle",
 		"texture": "ship/ship.png",
-		"looping": false,
+		"looping": true,
 		"frames": [{
 			"length": 4,
 			"coords": [0, 0, 32, 32]
 		},
 		{
 			"length": 4,
-			"coords": [32, 0, 64, 32]
+			"coords": [32, 0, 32, 32]
 		},
 		{
 			"length": 4,
-			"coords": [64, 0, 96, 32]
+			"coords": [64, 0, 32, 32]
 		},
 		{
 			"length": 4,
-			"coords": [96, 0, 128, 32]
+			"coords": [96, 0, 32, 32]
 		}]
 	},
 	{

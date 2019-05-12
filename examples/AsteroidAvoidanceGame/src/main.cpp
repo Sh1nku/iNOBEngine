@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
 		UIComponent uiComponent;
 	}
 	Manager* manager = Manager::GetInstance();
+	manager->AddSystem(new AnimationSystem());
 	manager->AddSystem(new RenderSystem());
 	manager->AddSystem(new ScriptSystem());
 	manager->AddSystem(new InputSystem());
@@ -29,8 +30,7 @@ int main(int argc, char **argv) {
 	while (!quit) {
 		last = now;
 		now = SDL_GetPerformanceCounter();
-		deltaTime = (double)((now - last) * 1000 / (double)SDL_GetPerformanceFrequency());
-
+		deltaTime = (double)((now - last)/ (double)SDL_GetPerformanceFrequency());
 		manager->Update(deltaTime);
 	}
 	return 0;

@@ -7,19 +7,19 @@ end
 function update(dt)
 	if input:isKeyPressed("W") then
 		local currentPos = localObject.transform:getLocalPosition()
-		localObject.transform:setPosition(Vec2(currentPos.x, currentPos.y + 0.01 * dt))
+		localObject.transform:setPosition(Vec2(currentPos.x, currentPos.y + 5 * dt))
 	end
 	if input:isKeyPressed("S") then
 		local currentPos = localObject.transform:getLocalPosition()
-		localObject.transform:setPosition(Vec2(currentPos.x, currentPos.y - 0.01 * dt))
+		localObject.transform:setPosition(Vec2(currentPos.x, currentPos.y - 5 * dt))
 	end
 	if input:isKeyPressed("A") then
 		local currentPos = localObject.transform:getLocalPosition()
-		localObject.transform:setPosition(Vec2(currentPos.x - 0.01 * dt, currentPos.y))
+		localObject.transform:setPosition(Vec2(currentPos.x - 5 * dt, currentPos.y))
 	end
 	if input:isKeyPressed("D") then
 		local currentPos = localObject.transform:getLocalPosition()
-		localObject.transform:setPosition(Vec2(currentPos.x + 0.01 * dt, currentPos.y))
+		localObject.transform:setPosition(Vec2(currentPos.x + 5 * dt, currentPos.y))
 	end
 	
 	if input:getControllerButtonDown("a") then

@@ -48,6 +48,7 @@ struct AnimationClip
 	std::vector<AnimationFrame> frames;
 	Texture* texture;
 	bool looping;
+	std::string name;
 	AnimationClip(bool looping, Texture* texture) :  looping(looping) {}
 	AnimationClip() : looping(false), texture(nullptr) {}
 };
