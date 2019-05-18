@@ -1,13 +1,63 @@
 local manager
 local renderSystem
+local timeSinceLastUpdate = 0.0
+local timePerSpawn = 0.1
+local PLAYAREA_X = 6.0
+local PLAYAREA_Y_TOP = 8.0
+local PLAYAREA_Y_BOT = -8.0
+local ROTATION_MAX = 3.0
+local SPEED_MAX = 4.0
+local SPEED_MIN = 2.5
+local SCALE_MIN = 1
+local SCALE_MAX = 1.5
+
+function randomFloat(low, high)
+    return low + math.random()  * (high - low);
+end
+
+function spawnAsteroid()
+	local asteroid
+	local asteroidString
+	if math.random(0, 1) == 0 then
+		asteroidString = "small_asteroid"
+	else
+		asteroidString = "big_asteroid"
+	end
+	local startPos = Vec2(randomFloat(-PLAYAREA_X, PLAYAREA_X), PLAYAREA_Y_TOP)
+	local endPos = Vec2(randomFloat(-PLAYAREA_X, PLAYAREA_X), PLAYAREA_Y_BOT)
+	local normalizedBetween = getVector(startPos, endPos);
+	normalizedBetween:normalize();
+	asteroid = manager:instantiate(getPrefab(asteroidString), "", startPos)
+	local transform = asteroid:getTransformComponent()
+	transform:setScale(randomFloat(SCALE_MIN, SCALE_MAX))
+	local collision = asteroid:getCollisionComponent()
+	local speed = randomFloat(SPEED_MIN, SPEED_MAX)
+	collision:setLinearVelocity(Vec2(normalizedBetween.x * speed, normalizedBetween.y * speed))
+	collision:setAngularVelocity(randomFloat(-ROTATION_MAX, ROTATION_MAX))
+	
+end
 
 function start()
 	manager = Manager:getInstance()
 	renderSystem = manager:getRenderSystem()
 	renderSystem:setBackgroundColor(0,0,0,1)
 	renderSystem:setShowFPS(true)
+	EventManager.subscribe("PAUSED", paused)
 end
 
-function update()
+function update(dt)
+	timeSinceLastUpdate = timeSinceLastUpdate + dt
+	if timeSinceLastUpdate >= timePerSpawn then
+	spawnAsteroid()
+	timeSinceLastUpdate = timeSinceLastUpdate - timePerSpawn
+	end
+end
 
+function paused(pausedBool)
+	if voidToBool(pausedBool) then
+		print("PAUSED")
+	else
+		print("UNPAUSED")
+	end
+	
 end

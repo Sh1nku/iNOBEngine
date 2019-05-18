@@ -20,6 +20,9 @@ void ScriptComponent::DoUpdate(float dt) {
 Component* ScriptComponent::Clone(GameObject* parent) {
 	ScriptComponent* component = new ScriptComponent();
 	component->mParent = parent;
+	for (auto& script : scripts) {
+		component->AddScript(script);
+	}
 	return component;
 }
 

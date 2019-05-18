@@ -1,5 +1,6 @@
 #pragma once
 #include "../systemprogram.h"
+#include "../collisiondebugdraw.h"
 
 class Window;
 class UIComponent;
@@ -11,6 +12,7 @@ public:
 	void Update(float dt) override;
 	void SetBackgroundColor(float r, float g, float b, float a);
 	void SetShowFPS(bool active);
+	void SetShowCollisions(bool active);
 	UI16 pixelsPerUnit = 32;
 private:
 	Window* window;
@@ -19,6 +21,11 @@ private:
 	void EndGUIDraw();
 	bool showFPS;
 	void ShowFPS();
+	bool showCollisions;
+	void ShowCollisions();
 	void RenderLabel(UIComponent& component);
 	void RenderButton(UIComponent& component);
+	CollisionDebugDraw collisionDrawer;
 };
+
+const static float RADIAN_IN_DEGREES = 57.3f;

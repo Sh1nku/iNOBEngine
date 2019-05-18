@@ -71,21 +71,10 @@ GameObject* Manager::Instantiate(GameObject* obj, std::string name, b2Vec2* pos)
 }
 
 void Manager::Destroy(GameObject* obj) {
-	for (GameObject* child : obj->mChildren) {
-		Destroy(child);
+	auto& key = objectsToBeDeleted.find(obj);
+	if (key == objectsToBeDeleted.end()) {
+		objectsToBeDeleted.emplace(obj);
 	}
-	if (obj->GetID() != 0) {
-		globalPoolIDS.push_back(obj->mID);
-		mGameObjects.erase(obj->GetID());
-
-		if (obj->mNamed) {
-			namedObjects.erase(std::remove(namedObjects.begin(), namedObjects.end(), obj), namedObjects.end());
-		}
-		for (auto& system : mSystems) {
-			system->RemoveFromSystem(obj->GetID());
-		}
-	}
-	delete obj;
 }
 
 SystemProgram* Manager::AddSystem(SystemProgram* system) {
@@ -123,4 +112,34 @@ void Manager::Update(float dt) {
 			system->Update(dt);
 		}
 	}
+	for (GameObject* obj : objectsToBeDeleted) {
+		RemoveGameObject(obj);
+	}
+	objectsToBeDeleted.clear();
+}
+
+void Manager::RemoveGameObject(GameObject* obj) {
+	std::set<GameObject*>* set = &objectsToBeDeleted;
+	for (GameObject* child : obj->mChildren) {
+		auto& childIt = objectsToBeDeleted.find(child);
+		if (childIt != objectsToBeDeleted.end()) {
+			objectsToBeDeleted.erase(childIt);
+		}
+		RemoveGameObject(child);
+	}
+	if (obj->GetID() != 0) {
+		globalPoolIDS.push_back(obj->mID);
+		mGameObjects.erase(obj->GetID());
+
+		if (obj->mNamed) {
+			namedObjects.erase(std::remove(namedObjects.begin(), namedObjects.end(), obj), namedObjects.end());
+		}
+		for (auto& system : mSystems) {
+			system->RemoveFromSystem(obj->GetID(), obj);
+		}
+	}
+	if (obj->mParent != nullptr) {
+		obj->mParent->mChildren.erase(std::remove(obj->mParent->mChildren.begin(), obj->mParent->mChildren.end(), obj), obj->mParent->mChildren.end());
+	}
+	delete obj;
 }

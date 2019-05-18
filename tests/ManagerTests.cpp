@@ -85,13 +85,49 @@ TEST(ManagerTest, GetGameObjectByName_Non_Existent) {
 	delete(manager);
 }
 
-///TODO Assert
 TEST(ManagerTest, Destroy_Chain_GameObjects) {
 	Manager* manager = Manager::GetInstance();
 	GameObject* obj = new GameObject();
 	GameObject* obj2 = new GameObject(obj);
 	GameObject* obj3 = new GameObject(obj2);
 	manager->Instantiate(obj);
+	ASSERT_EQ(obj, manager->GetGameObjectByID(obj->GetID()));
 	manager->Destroy(obj);
+	ASSERT_EQ(obj, manager->GetGameObjectByID(obj->GetID()));
+	UI32 id = obj->GetID();
+	manager->Update(0);
+	ASSERT_EQ(nullptr, manager->GetGameObjectByID(id));
+	delete(manager);
+}
+
+TEST(ManagerTest, Destroy_SameObjectMultipleTimes) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	manager->Instantiate(obj);
+	manager->Destroy(obj);
+	manager->Destroy(obj);
+	manager->Update(0);
+	delete(manager);
+}
+
+TEST(ManagerTest, Destroy_ParentThenChildren) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	GameObject* obj2 = new GameObject(obj);
+	manager->Instantiate(obj);
+	manager->Destroy(obj);
+	manager->Destroy(obj2);
+	manager->Update(0);
+	delete(manager);
+}
+
+TEST(ManagerTest, Destroy_ChildThenParent) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	GameObject* obj2 = new GameObject(obj);
+	manager->Instantiate(obj);
+	manager->Destroy(obj2);
+	manager->Destroy(obj);
+	manager->Update(0);
 	delete(manager);
 }

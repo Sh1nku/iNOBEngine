@@ -1,10 +1,8 @@
 #include "vectors.h"
-#include <cmath>
 
-float Vector2f::getLength(Vector3f* v) {
-	return sqrt(pow(v->x, 2) + pow(v->y, 2));
-}
-
-Vector3f toVector3(Vector2f* v) {
-	return Vector3f(v->x, v->y, 0);
+b2Vec2 GetVector(b2Vec2 v1, b2Vec2 v2) {
+	b2Vec2 retVec;
+	retVec.x = v2.x - v1.x;
+	retVec.y = v2.y - v1.x;
+	return retVec;
 }

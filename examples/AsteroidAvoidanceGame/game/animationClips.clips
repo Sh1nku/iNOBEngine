@@ -28,5 +28,46 @@
 				"length": 1,
 				"coords": [0, 0, 512, 512]
 			}]
+	},
+	{
+			"name": "big_asteroid",
+			"texture": "asteroids/asteroid2.png",
+			"looping": true,
+			"frames": [{
+				"length": 1,
+				"coords": [0, 0, 64, 64]
+			}]
+	},
+	{
+			"name": "bullet",
+			"texture": "ship/bullet.png",
+			"looping": true,
+			"frames": [
+			{
+				"length": 4,
+				"coords": [0, 0, 16, 16]
+			},
+			{
+				"length": 4,
+				"coords": [16, 0, 16, 16]
+			},
+			{
+				"length": 4,
+				"coords": [32, 0, 16, 16]
+			},
+			{
+				"length": 4,
+				"coords": [48, 0, 16, 16]
+			}]
+			
+	},
+	{
+			"name": "small_asteroid",
+			"texture": "asteroids/asteroid1.png",
+			"looping": true,
+			"frames": [{
+				"length": 1,
+				"coords": [0, 0, 32, 32]
+			}]
 	}]
 }

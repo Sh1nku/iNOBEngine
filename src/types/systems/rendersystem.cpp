@@ -1,3 +1,4 @@
+#include <Box2D/Box2D.h>
 #include "rendersystem.h"
 #include "../../io/resources.h"
 #include "../../window/window.h"
@@ -6,20 +7,23 @@
 #include "../components/transform.h"
 #include "../components/camera.h"
 #include "../components/uicomponent.h"
+#include "../components/collision.h"
 #include "../gameobject.h"
 #include "../../eventmanager.h"
 #include "imgui.h"
 #include "../../window/imgui/imgui_impl_opengl2.h"
 #include "../../window/imgui/imgui_impl_sdl.h"
+#include "../../manager.h"
+#include "collisionsystem.h"
 
-RenderSystem::RenderSystem() : showFPS(false) {
+RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("UIComponent"), std::make_unique<gameObject_map>() });
 
 	window = new Window();
 	window->Create();
-	backgroundColor = std::make_tuple(0, 1, 0, 1);
+	backgroundColor = std::make_tuple(0.f, 1.f, 0.f, 1.f);
 	//Load textures that could not be loaded because glContext did not exist
 	for (auto& texture : Resources::textureBacklog) {
 		Texture* tempTex = Texture::LoadTexture(texture.first);
@@ -49,6 +53,8 @@ RenderSystem::RenderSystem() : showFPS(false) {
 		glLoadIdentity();
 		delete data;
 	});
+
+
 }
 
 RenderSystem::~RenderSystem() {
@@ -59,23 +65,6 @@ void RenderSystem::Update(float dt) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), std::get<3>(backgroundColor));
 	glLoadIdentity();
-
-	StartGUIDraw();
-	if (showFPS) {
-		ShowFPS();
-	}
-	for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
-		if (entry.first->active) {
-			UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
-			if (ui->type == UI_TYPE::LABEL) {
-				RenderLabel(*ui);
-			}
-			else {
-				RenderButton(*ui);
-			}
-		}
-	}
-	EndGUIDraw();
 
 	for (auto& entry : *GetEntries(Component::GetBitcode("Camera"))) {
 		if (entry.first->active) {
@@ -104,22 +93,43 @@ void RenderSystem::Update(float dt) {
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
 			glTranslatef(worldPos.x, worldPos.y, transform->GetZCoord());
-			glRotatef(transform->GetWorldRotation(), 0, 0, 1);
+			glRotatef((transform->GetWorldRotation() * RADIAN_IN_DEGREES), 0, 0, 1);
 			UI32 width = coords.bottomRight.x - coords.bottomLeft.x;
 			UI32 height = coords.bottomRight.y - coords.topRight.y;
+			float scale = transform->GetScale();
 			glBegin(GL_QUADS);
+			glColor4f(1, 1, 1, 1);
 			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
-			glVertex3f(-.5f * width / pixelsPerUnit, -.5f * height / pixelsPerUnit, 0);
+			glVertex3f(-.5f * scale * width / pixelsPerUnit, -.5f * scale * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
-			glVertex3f(.5f * width / pixelsPerUnit, -.5f * height / pixelsPerUnit, 0);
+			glVertex3f(.5f * scale * width / pixelsPerUnit, -.5f * scale * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.topRight.x / tex->width, coords.topRight.y / tex->height);
-			glVertex3f(.5f * width / pixelsPerUnit, .5f * height / pixelsPerUnit, 0);
+			glVertex3f(.5f * scale * width / pixelsPerUnit, .5f * scale * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.topLeft.x / tex->width, coords.topLeft.y / tex->height);
-			glVertex3f(-.5f * width / pixelsPerUnit, .5f * height / pixelsPerUnit, 0);
+			glVertex3f(-.5f * scale * width / pixelsPerUnit, .5f * scale * height / pixelsPerUnit, 0);
 			glEnd();
 			glPopMatrix();
 		}
 	}
+	if (showCollisions) {
+		ShowCollisions();
+	}
+	StartGUIDraw();
+	if (showFPS) {
+		ShowFPS();
+	}
+	for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
+		if (entry.first->active) {
+			UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
+			if (ui->type == UI_TYPE::LABEL) {
+				RenderLabel(*ui);
+			}
+			else {
+				RenderButton(*ui);
+			}
+		}
+	}
+	EndGUIDraw();
 	glPopMatrix();
 	SDL_GL_SwapWindow(window->mWindow);
 	
@@ -142,6 +152,19 @@ void RenderSystem::EndGUIDraw() {
 
 void RenderSystem::SetShowFPS(bool active) {
 	showFPS = active;
+}
+
+void RenderSystem::SetShowCollisions(bool active) {
+	showCollisions = active;
+}
+
+void RenderSystem::ShowCollisions() {
+	CollisionSystem* collisionSystem = Manager::GetInstance()->GetSystem<CollisionSystem>();
+	if (collisionSystem != nullptr) {
+		collisionSystem->world.SetDebugDraw(&collisionDrawer);
+		collisionDrawer.SetFlags(b2Draw::e_shapeBit);
+		collisionSystem->world.DrawDebugData();
+	}
 }
 
 void RenderSystem::ShowFPS() {

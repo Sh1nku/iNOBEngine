@@ -4,8 +4,7 @@
 			"name" : "Ship",
 			"components" : [{
 				"name": "Transform",
-				"position" : [0.0, 0.0],
-				"z" : 0
+				"position" : [0.0, 0.0]
 			},
 			{
 				"name": "Animation",
@@ -19,6 +18,26 @@
 			},
 			{
 				"name": "Input"
+			},
+			{
+				"name" : "Collision",
+				"type" : "dynamic",
+				"bullet" : false,
+				"fixedrotation" : true,
+				"bodydef" : [
+				{
+					"type" : "polygon",
+					"categorybits" : "0010",
+					"maskbits" : "0100",
+					"coords" : [
+					[-0.40625, -0.375],
+					[0.40625, -0.375],
+					[0.40625, -0.1875],
+					[0, 0.375],
+					[-0.40625, -0.1875]
+					]
+				}
+				]
 			}]
 		}
 	},
@@ -99,7 +118,7 @@
 						{
 							"name": "ScriptComponent",
 							"scripts" : [
-								"ui/testbutton.lua"
+								"manager/ui/testbutton.lua"
 							]
 						}
 					]
@@ -109,18 +128,17 @@
 		}
 	},
 	{
-	"GameObject": {
-		"name" : "Background",
-		"components" : [{
-			"name": "Transform",
-			"position" : [0.0, 0.0],
-			"z" : -5
-		},
-		{
-			"name": "Animation",
-			"default": "background"
-		}]
-	}
-}
-	
+		"GameObject": {
+			"name" : "Background",
+			"components" : [{
+				"name": "Transform",
+				"position" : [0.0, 0.0],
+				"z" : -5
+			},
+			{
+				"name": "Animation",
+				"default": "background"
+			}]
+		}
+	}	
 ]

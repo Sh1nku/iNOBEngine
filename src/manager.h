@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include "types/enginetypes.h"
 #include "Box2D/Box2D.h"
 
@@ -35,8 +36,10 @@ public:
 private:
 	Manager();
 	GameObject* AddGameObject(GameObject *gameObject);
+	void RemoveGameObject(GameObject* gameObject);
 
 	std::map<UI32, GameObject*> mGameObjects;
+	std::set<GameObject*> objectsToBeDeleted;
 	std::vector<GameObject*> namedObjects;
 	std::vector<SystemProgram*> mSystems;
 

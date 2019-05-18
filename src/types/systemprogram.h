@@ -20,7 +20,7 @@ public:
 	bool active = true;
 	virtual void Update(float dt);
 	void AddToSystem(GameObject* obj);
-	void RemoveFromSystem(UI32 id);
+	virtual void RemoveFromSystem(UI32 id, GameObject* obj);
 	gameObject_map* GetEntries(UI32 bitcode);
 protected:
 	std::unordered_map<UI32, std::unique_ptr<gameObject_map>> mMap;

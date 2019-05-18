@@ -1,0 +1,25 @@
+{
+	"GameObject": {
+		"name" : "Ship",
+		"components" : [{
+			"name": "Transform",
+			"position" : [0.0, 0.0]
+		},
+		{
+			"name": "Animation",
+			"default": "bullet"
+		},
+		{
+			"name" : "Collision",
+			"type" : "dynamic",
+			"bullet" : true,
+			"fixedrotation" : true,
+			"bodydef" : [
+			{
+				"type" : "circle",
+				"radius" : 0.07
+			}
+			]
+		}]
+	}
+}

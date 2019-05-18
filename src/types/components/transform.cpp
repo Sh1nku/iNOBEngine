@@ -1,6 +1,7 @@
 #include "transform.h"
 #include "../gameobject.h"
 #include "../component.h"
+#include "collision.h"
 
 Component* Transform::Clone(GameObject* parent) {
 	Transform* component = new Transform();
@@ -82,12 +83,32 @@ void Transform::SetWorldPosition(b2Vec2* position) {
 	}
 }
 
+void Transform::SetWorldRotation(float rotation) {
+	mWorldRotation = rotation;
+}
+
 void Transform::SetZCoord(float zCoord) {
 	this->zCoord = zCoord;
 }
 
+void Transform::SetScale(float scale)
+{
+	if (mParent != nullptr) {
+		Collision* collision = (Collision*)mParent->GetComponent("Collision");
+		if (collision != nullptr) {
+			collision->SetScale(scale);
+		}
+	}
+	mScale = scale;
+}
+
 float Transform::GetZCoord() const{
 	return this->zCoord;
+}
+
+float Transform::GetScale() const
+{
+	return mScale;
 }
 
 void to_json(nlohmann::json& j, const Transform& t) {

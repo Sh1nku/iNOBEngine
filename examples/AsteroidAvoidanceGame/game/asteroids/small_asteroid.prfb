@@ -1,0 +1,34 @@
+{
+	"GameObject": {
+		"components" : [{
+			"name": "Transform",
+			"position" : [0.0, 3.0]
+		},
+		{
+			"name": "Animation",
+			"default": "small_asteroid"
+		},
+		{
+			"name": "ScriptComponent",
+			"scripts" : [
+				"asteroids/asteroid.lua"
+			]
+		},
+		{
+			"name" : "Collision",
+			"type" : "dynamic",
+			"bodydef" : [
+			{
+				"type" : "polygon",
+				"categorybits" : "0100",
+				"maskbits" : "1010",
+				"coords" : [
+				[-0.3125, -0.21875], [0.125,  -0.3125],
+				[0.3125, -0.15625], [-0.0625, 0.1875],
+				[-0.21875, 0.09375], [-0.3125, -0.0625]
+				]
+			}
+			]
+		}]
+	}
+}

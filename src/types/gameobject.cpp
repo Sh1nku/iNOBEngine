@@ -48,7 +48,7 @@ GameObject::~GameObject()
 		}
 		mChildren.clear();
 	}
-	}
+}
 
 UI32 GameObject::GetID() {
 	return mID;

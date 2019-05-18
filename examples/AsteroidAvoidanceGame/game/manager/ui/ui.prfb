@@ -45,7 +45,7 @@
 					{
 						"name": "ScriptComponent",
 						"scripts" : [
-							"ui/testbutton.lua"
+							"manager/ui/testbutton.lua"
 						]
 					}
 				]

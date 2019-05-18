@@ -30,8 +30,10 @@ void SystemProgram::AddToSystem(GameObject* obj) {
 	}
 }
 
-void SystemProgram::RemoveFromSystem(UI32 id) {
-	mMap.erase(id);
+void SystemProgram::RemoveFromSystem(UI32 id, GameObject* obj) {
+	for (auto& ref : mMap) {
+		ref.second->erase(obj);
+	}
 }
 
 gameObject_map* SystemProgram::GetEntries(UI32 bitcode) {

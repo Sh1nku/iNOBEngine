@@ -66,6 +66,19 @@ TEST(ResourceTest, InstantiateDestroyAndReinstantiatePrefab) {
 	delete manager;
 }
 
+TEST(ResourceTest, InstantiatePrefabTwice) {
+	Manager* manager = Manager::GetInstance();
+	GameObject *tempObj = GameObject::LoadFromFile(testGameObjectJson);
+	Resources::prefabs.emplace("test_prefab", std::make_unique<GameObject>(*tempObj));
+	GameObject* obj = Resources::GetPrefab((std::string)"test_prefab");
+	GameObject* obj2 = Resources::GetPrefab((std::string)"test_prefab");
+	manager->Instantiate(obj);
+	manager->Instantiate(obj2);
+	manager->Destroy(obj);
+	manager->Destroy(obj2);
+	delete manager;
+}
+
 TEST(RenderSystemTest, ShowTexture) {
 	RenderSystem renderSystem;
 	GameObject obj;
