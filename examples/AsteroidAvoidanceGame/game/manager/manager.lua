@@ -1,5 +1,8 @@
 local manager
 local renderSystem
+local collisionSystem
+local animationSystem
+local scriptSystem;
 local timeSinceLastUpdate = 0.0
 local timePerSpawn = 0.1
 local PLAYAREA_X = 6.0
@@ -40,24 +43,25 @@ end
 function start()
 	manager = Manager:getInstance()
 	renderSystem = manager:getRenderSystem()
+	animationSystem = manager:getAnimationSystem()
+	collisionSystem = manager:getCollisionSystem()
+	scriptSystem = manager:getScriptSystem()
 	renderSystem:setBackgroundColor(0,0,0,1)
 	renderSystem:setShowFPS(true)
 	EventManager.subscribe("PAUSED", paused)
 end
 
 function update(dt)
-	timeSinceLastUpdate = timeSinceLastUpdate + dt
-	if timeSinceLastUpdate >= timePerSpawn then
-	spawnAsteroid()
-	timeSinceLastUpdate = timeSinceLastUpdate - timePerSpawn
+	if not _G.paused then
+		timeSinceLastUpdate = timeSinceLastUpdate + dt
+		if timeSinceLastUpdate >= timePerSpawn then
+		spawnAsteroid()
+		timeSinceLastUpdate = timeSinceLastUpdate - timePerSpawn
+		end
 	end
 end
 
 function paused(pausedBool)
-	if voidToBool(pausedBool) then
-		print("PAUSED")
-	else
-		print("UNPAUSED")
-	end
-	
+		renderSystem.active = not voidToBool(pausedBool)
+		collisionSystem.active = not voidToBool(pausedBool)
 end

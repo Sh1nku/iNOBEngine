@@ -1,6 +1,6 @@
 {
 	"GameObject": {
-		"name" : "Ship",
+		"name" : "Bullet",
 		"components" : [{
 			"name": "Transform",
 			"position" : [0.0, 0.0]
@@ -10,6 +10,12 @@
 			"default": "bullet"
 		},
 		{
+			"name": "ScriptComponent",
+			"scripts" : [
+				"ship/bullet.lua"
+			]
+		},
+		{
 			"name" : "Collision",
 			"type" : "dynamic",
 			"bullet" : true,
@@ -17,6 +23,8 @@
 			"bodydef" : [
 			{
 				"type" : "circle",
+				"categorybits" : "1000",
+				"maskbits" : "0100",
 				"radius" : 0.07
 			}
 			]

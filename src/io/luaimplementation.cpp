@@ -4,6 +4,9 @@
 #include "../types/components/transform.h"
 #include "../types/components/collision.h"
 #include "../types/systems/rendersystem.h"
+#include "../types/systems/collisionsystem.h"
+#include "../types/systems/animationsystem.h"
+#include "../types/systems/scriptsystem.h"
 #include "../manager.h"
 #include "../eventmanager.h"
 #include "resources.h"
@@ -40,7 +43,8 @@ void LuaImplementation::CreateBindings() {
 
 	//// Components
 	lua->new_usertype<Component>("Component",
-		"new", sol::no_constructor);
+		"new", sol::no_constructor,
+		"getParent", &Component::GetParent);
 
 	lua->new_usertype<Transform>("Transform",
 		sol::base_classes, sol::bases<Component>(),
@@ -75,7 +79,8 @@ void LuaImplementation::CreateBindings() {
 
 	//// Systems
 	lua->new_usertype<SystemProgram>("SystemProgram",
-		"new", sol::no_constructor);
+		"new", sol::no_constructor,
+		"active", &SystemProgram::active);
 
 	lua->new_usertype<RenderSystem>("RenderSystem",
 		sol::base_classes, sol::bases<SystemProgram>(),
@@ -84,10 +89,25 @@ void LuaImplementation::CreateBindings() {
 		"setShowFPS", &RenderSystem::SetShowFPS,
 		"setShowCollisions", &RenderSystem::SetShowCollisions);
 
+	lua->new_usertype<AnimationSystem>("AnimationSystem",
+		sol::base_classes, sol::bases<SystemProgram>(),
+		"new", sol::no_constructor);
+
+	lua->new_usertype<ScriptSystem>("ScriptSystem",
+		sol::base_classes, sol::bases<SystemProgram>(),
+		"new", sol::no_constructor);
+
+	lua->new_usertype<CollisionSystem>("CollisionSystem",
+		sol::base_classes, sol::bases<SystemProgram>(),
+		"new", sol::no_constructor);
+
 	lua->new_usertype<Manager>("Manager",
 		"new", sol::no_constructor,
 		"getGameObjectByID", &Manager::GetGameObjectByID,
 		"getRenderSystem", &Manager::GetSystem<RenderSystem>,
+		"getAnimationSystem", &Manager::GetSystem<AnimationSystem>,
+		"getCollisionSystem", &Manager::GetSystem<CollisionSystem>,
+		"getScriptSystem", &Manager::GetSystem<ScriptSystem>,
 		"getInstance", &Manager::GetInstance);
 	//Error when using other method ^ for extended periods of time, change to this if error in wrapper.hpp : 149 where pointer to function gets garbage address
 	//Also, getInstance will crash with top method, with bottom method it will say not existing, using both will work for some reason

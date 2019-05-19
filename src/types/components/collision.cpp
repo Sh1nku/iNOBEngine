@@ -58,7 +58,7 @@ void Collision::SetAngularVelocity(float vel)
 	}
 }
 
-void Collision::SetCollisionFunc(void (*func)(Collision *other))
+void Collision::SetCollisionFunc(std::function<void(Collision*)> func)
 {
 	collisionFunc = func;
 }

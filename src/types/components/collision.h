@@ -15,13 +15,13 @@ public:
 	UI32 GetBitcode() override;
 	void SetLinearVelocity(b2Vec2 vel);
 	void SetAngularVelocity(float vel);
-	void SetCollisionFunc(void (*func)(Collision* other));
+	void SetCollisionFunc(std::function<void(Collision*)> func);
 	b2Body *body;
 	b2Shape* cloneB2Shape(b2Shape* shape);
 protected:
 	b2BodyDef bodyDef;
 	std::vector<b2FixtureDef> fixtures;
-	void(*collisionFunc)(Collision* other);
+	std::function<void(Collision*)> collisionFunc;
 	void SetScale(float scale);
 	float mScale;
 };
