@@ -62,6 +62,6 @@ function update(dt)
 end
 
 function paused(pausedBool)
-		renderSystem.active = not voidToBool(pausedBool)
+		animationSystem.active = not voidToBool(pausedBool)
 		collisionSystem.active = not voidToBool(pausedBool)
 end
