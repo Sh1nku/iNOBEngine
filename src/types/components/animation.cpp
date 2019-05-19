@@ -35,7 +35,13 @@ void from_json(const nlohmann::json& j, Animation& t) {
 	t.SetClip(clip);
 }
 
-void Animation::SetClip(std::string& clip) {
+void Animation::SetClip(std::string& clip, bool restartIfAlready) {
+	AnimationClip* newClip = Resources::GetClip(clip);
+	if (currentClip != nullptr) {
+		if (currentClip->name == newClip->name && !restartIfAlready) {
+			return;
+		}
+	}
 	currentClip = Resources::GetClip(clip);
 	currentFrame = 0;
 }

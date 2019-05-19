@@ -50,7 +50,8 @@ void CollisionSystem::Update(float dt) {
 		if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData())->collisionFunc != nullptr) {
 			((Collision*)c->GetFixtureB()->GetBody()->GetUserData())->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData()));
 		}
-	}
+	}
+
 }
 
 void CollisionSystem::RemoveFromSystem(UI32 id, GameObject* obj) {

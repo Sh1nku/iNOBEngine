@@ -8,12 +8,14 @@ local BULLET_POS = Vec2(0.35, -0.2);
 local lastShot
 local manager
 local transform
+local animation
 
 function start()
 	manager = Manager:getInstance()
 	input = localObject:getInputComponent()
 	collision = localObject:getCollisionComponent()
 	transform = localObject:getTransformComponent()
+	animation = localObject:getAnimationComponent()
 	renderSystem = Manager.getInstance():getRenderSystem()
 	_G.paused = false
 	drawCollisionData = false
@@ -29,11 +31,19 @@ function update(dt)
 		if input:isKeyPressed("S") then
 			velocity.y = velocity.y - 1
 		end
+		local moved = false
 		if input:isKeyPressed("A") then
 			velocity.x  = velocity.x - 1
+			animation:setClip("ship_left", false)
+			moved = true
 		end
 		if input:isKeyPressed("D") then
 			velocity.x  = velocity.x + 1
+			animation:setClip("ship_right", false)
+			moved = true
+		end
+		if not moved then
+			animation:setClip("ship_idle", false)
 		end
 		
 		local length = velocity:length()

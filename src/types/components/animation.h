@@ -16,7 +16,7 @@ public:
 	Animation(GameObject *parent = nullptr);
 	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
-	void SetClip(std::string& name);
+	void SetClip(std::string& name, bool restartIfAlready = true);
 	AnimationClip* currentClip;
 	int currentFrame;
 	void Subscribe(std::string clip, ANIMATION_STATES state, void (*function)());

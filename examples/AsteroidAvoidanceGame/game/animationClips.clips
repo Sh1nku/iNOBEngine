@@ -21,6 +21,48 @@
 		}]
 	},
 	{
+		"name": "ship_left",
+		"texture": "ship/ship.png",
+		"looping": true,
+		"frames": [{
+			"length": 4,
+			"coords": [0, 32, 32, 32]
+		},
+		{
+			"length": 4,
+			"coords": [32, 32, 32, 32]
+		},
+		{
+			"length": 4,
+			"coords": [64, 32, 32, 32]
+		},
+		{
+			"length": 4,
+			"coords": [96, 32, 32, 32]
+		}]
+	},
+	{
+		"name": "ship_right",
+		"texture": "ship/ship.png",
+		"looping": true,
+		"frames": [{
+			"length": 4,
+			"coords": [0, 64, 32, 32]
+		},
+		{
+			"length": 4,
+			"coords": [32, 64, 32, 32]
+		},
+		{
+			"length": 4,
+			"coords": [64, 64, 32, 32]
+		},
+		{
+			"length": 4,
+			"coords": [96, 64, 32, 32]
+		}]
+	},
+	{
 		"name": "background",
 			"texture": "background/bg.png",
 			"looping": true,

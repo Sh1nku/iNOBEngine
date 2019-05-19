@@ -3,6 +3,7 @@
 #include "../types/components/input.h"
 #include "../types/components/transform.h"
 #include "../types/components/collision.h"
+#include "../types/components/animation.h"
 #include "../types/systems/rendersystem.h"
 #include "../types/systems/collisionsystem.h"
 #include "../types/systems/animationsystem.h"
@@ -39,7 +40,8 @@ void LuaImplementation::CreateBindings() {
 		"transform", sol::readonly(&GameObject::transform),
 		"getTransformComponent", &GameObject::GetComponent<Transform>,
 		"getInputComponent", &GameObject::GetComponent<Input>,
-		"getCollisionComponent", &GameObject::GetComponent<Collision>);
+		"getCollisionComponent", &GameObject::GetComponent<Collision>,
+		"getAnimationComponent", &GameObject::GetComponent<Animation>);
 
 	//// Components
 	lua->new_usertype<Component>("Component",
@@ -76,6 +78,11 @@ void LuaImplementation::CreateBindings() {
 		"setLinearVelocity", &Collision::SetLinearVelocity,
 		"setAngularVelocity", &Collision::SetAngularVelocity,
 		"setCollisionFunc", &Collision::SetCollisionFunc);
+
+	lua->new_usertype<Animation>("Animation",
+		sol::base_classes, sol::bases<Component>(),
+		"new", sol::no_constructor,
+		"setClip", &Animation::SetClip);
 
 	//// Systems
 	lua->new_usertype<SystemProgram>("SystemProgram",
