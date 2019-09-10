@@ -18,8 +18,7 @@ UI32 Camera::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("Camera");
-	jsonComponentList.emplace("Camera", &CreateComponent<Camera>);
+	AddComponentToList<Camera>("Camera");
 	return true;
 }();
 

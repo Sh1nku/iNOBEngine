@@ -18,6 +18,10 @@ public:
 	static Texture* GetTexture(std::string& name);
 	static Script* GetScript(std::string& name);
 	static void LoadScene(std::string& name);
+
+	static std::unordered_map<std::string, std::unique_ptr<AnimationClip>>* GetClips();
+	static std::unordered_map<std::string, std::unique_ptr<GameObject>>* GetPrefabs();
+
 	static std::unordered_map<std::string, std::unique_ptr<GameObject>> prefabs;
 	static std::unordered_map<std::string, std::unique_ptr<Sound>> sounds;
 	static std::unordered_map<std::string, std::unique_ptr<AnimationClip>> clips;

@@ -34,8 +34,7 @@ UI32 Collision::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("Collision");
-	jsonComponentList.emplace("Collision", &CreateComponent<Collision>);
+	AddComponentToList<Collision>("Collision");
 	return true;
 }();
 

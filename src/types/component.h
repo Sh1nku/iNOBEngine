@@ -27,6 +27,11 @@ protected:
 	virtual Component* Clone(GameObject* parent = nullptr) = 0;
 };
 
+template<typename T> void AddComponentToList(std::string name) {
+	Component::AddBitcode(name);
+	jsonComponentList.emplace(name, &CreateComponent<T>);
+}
+
 template<typename T> Component* CreateComponent(nlohmann::json json) {
 	T *t = new T();
 	from_json(json, *t);

@@ -4,16 +4,6 @@ int main(int argc, char **argv) {
 	bool quit = false;
 	LuaImplementation::Init();
 	Resources::Load("../examples/AsteroidAvoidanceGame/game");
-	{
-		Animation anim;
-		Transform transform;
-		Camera camera;
-		TestComponent component;
-		ScriptComponent scriptComponent;
-		Input input;
-		UIComponent uiComponent;
-		Collision collision;
-	}
 	Manager* manager = Manager::GetInstance();
 	manager->AddSystem(new AnimationSystem());
 	manager->AddSystem(new RenderSystem());

@@ -21,8 +21,7 @@ UI32 Animation::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("Animation");
-	jsonComponentList.emplace("Animation", &CreateComponent<Animation>);
+	AddComponentToList<Animation>("Animation");
 	return true;
 }();
 

@@ -154,3 +154,7 @@ void LuaImplementation::CreateBindings() {
 	lua->set_function("boolToVoid", [](bool data) {return ((void*)data); });
 	//lua["Manager"]["getInstance"] = &Manager::GetManager;
 }
+
+sol::state* LuaImplementation::GetState() {
+	return lua;
+}

@@ -57,8 +57,8 @@ Manager *Manager::GetInstance(){
 
 GameObject* Manager::Instantiate(GameObject* obj, std::string name, b2Vec2* pos) {
 	AddGameObject(obj);
-	obj->mName = name;
 	if (name != "") {
+		obj->mName = name;
 		obj->mNamed = true;
 		std::remove_if(namedObjects.begin(), namedObjects.end(), [&](GameObject* obj2) {return obj2 == obj; });
 		namedObjects.emplace_back(obj);

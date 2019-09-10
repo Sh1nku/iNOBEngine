@@ -3,16 +3,16 @@
 
 TEST(LuaTest, CreateGameObject) {
 	LuaImplementation::Init();
-	LuaImplementation::lua->script("object = GameObject.create()");
-	LuaImplementation::lua->script("x = object:getID()");
-	UI32 id = LuaImplementation::lua->get<UI32>("x");
+	LuaImplementation::GetState()->script("object = GameObject.create()");
+	LuaImplementation::GetState()->script("x = object:getID()");
+	UI32 id = LuaImplementation::GetState()->get<UI32>("x");
 	ASSERT_EQ(id, 0);
 	LuaImplementation::Destroy();
 }
 
 TEST(LuaTest, AddGameObjectToManager) {
 	LuaImplementation::Init();
-	LuaImplementation::lua->script(R"(
+	LuaImplementation::GetState()->script(R"(
 object = GameObject.create()
 manager = Manager.getInstance()
 manager:instantiate(object, "", Vec2(0,0)))");

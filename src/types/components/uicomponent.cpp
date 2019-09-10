@@ -29,8 +29,7 @@ UI32 UIComponent::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("UIComponent");
-	jsonComponentList.emplace("UIComponent", &CreateComponent<UIComponent>);
+	AddComponentToList<UIComponent>("UIComponent");
 	return true;
 }();
 

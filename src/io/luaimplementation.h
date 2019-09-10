@@ -9,6 +9,7 @@ public:
 	static sol::state *lua;
 	static void Init();
 	static void Destroy();
+	static sol::state* GetState();
 private:
 	static void CreateBindings();
 };

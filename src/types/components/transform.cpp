@@ -18,8 +18,7 @@ UI32 Transform::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("Transform");
-	jsonComponentList.emplace("Transform", &CreateComponent<Transform>);
+	AddComponentToList<Transform>("Transform");
 	return true;
 }();
 

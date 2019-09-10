@@ -109,3 +109,11 @@ const auto loadErrorClip = [&] {
 AnimationClip* Resources::GetClip(std::string& clip) {
 	return clips.at(clip).get();
 }
+
+std::unordered_map<std::string, std::unique_ptr<AnimationClip>>* Resources::GetClips() {
+	return &clips;
+}
+
+std::unordered_map<std::string, std::unique_ptr<GameObject>>* Resources::GetPrefabs() {
+	return &prefabs;
+}

@@ -16,8 +16,7 @@ UI32 TestComponent::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("TestComponent");
-	jsonComponentList.emplace("TestComponent", &CreateComponent<TestComponent>);
+	AddComponentToList<TestComponent>("TestComponent");
 	return true;
 }();
 

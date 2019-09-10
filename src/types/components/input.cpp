@@ -110,8 +110,7 @@ UI32 Input::GetBitcode() {
 }
 
 const auto x = [&] {
-	Component::AddBitcode("Input");
-	jsonComponentList.emplace("Input", &CreateComponent<Input>);
+	AddComponentToList<Input>("Input");
 	return true;
 }();
 

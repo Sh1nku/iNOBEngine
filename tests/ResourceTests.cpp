@@ -55,10 +55,11 @@ TEST(ResourceTest, LoadPNG) {
 TEST(ResourceTest, InstantiateDestroyAndReinstantiatePrefab) {
 	Manager* manager = Manager::GetInstance();
 	GameObject *tempObj = GameObject::LoadFromFile(testGameObjectJson);
-	Resources::prefabs.emplace("test_prefab", std::make_unique<GameObject>(*tempObj));
+	Resources::GetPrefabs()->emplace("test_prefab", std::make_unique<GameObject>(*tempObj));
 	GameObject* obj = Resources::GetPrefab((std::string)"test_prefab");
 	manager->Instantiate(obj);
 	manager->Destroy(obj);
+	manager->Update(0);
 	GameObject* obj2 = Resources::GetPrefab((std::string)"test_prefab");
 	manager->Instantiate(obj2);
 	ASSERT_EQ(obj2->GetName(), "Ship");
@@ -69,7 +70,7 @@ TEST(ResourceTest, InstantiateDestroyAndReinstantiatePrefab) {
 TEST(ResourceTest, InstantiatePrefabTwice) {
 	Manager* manager = Manager::GetInstance();
 	GameObject *tempObj = GameObject::LoadFromFile(testGameObjectJson);
-	Resources::prefabs.emplace("test_prefab", std::make_unique<GameObject>(*tempObj));
+	Resources::GetPrefabs()->emplace("test_prefab", std::make_unique<GameObject>(*tempObj));
 	GameObject* obj = Resources::GetPrefab((std::string)"test_prefab");
 	GameObject* obj2 = Resources::GetPrefab((std::string)"test_prefab");
 	manager->Instantiate(obj);
@@ -90,7 +91,7 @@ TEST(RenderSystemTest, ShowTexture) {
 	file.close();
 	std::unique_ptr<AnimationClip> clip = std::make_unique<AnimationClip>();
 	from_json(nlohmann::json::parse(clipJson), *clip.get());
-	Resources::clips.insert({ "TestClip", std::move(clip) });
+	Resources::GetClips()->insert({ "TestClip", std::move(clip) });
 	anim->SetClip(std::string("TestClip"));
 	obj.AddComponent(anim);
 	obj.AddComponent(new Transform());
