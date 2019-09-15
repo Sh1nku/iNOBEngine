@@ -14,6 +14,8 @@ public:
 	float GetZCoord() const;
 	float GetScale() const;
 	void SetLocalPosition(b2Vec2* position);
+	///TODO Implement, and make sure works with child objects like in SetLocalPosition
+	//void SetLocalRotation(float rotation);
 	void SetWorldPosition(b2Vec2* position);
 	void SetWorldRotation(float rotation);
 	void SetZCoord(float zCoord);
@@ -21,6 +23,8 @@ public:
 	UI32 GetBitcode() override;
 
 private:
+	void UpdatePosition(b2Vec2* oldPos);
+
 	b2Vec2 mWorldPosition;
 	float mWorldRotation;
 	float zCoord;

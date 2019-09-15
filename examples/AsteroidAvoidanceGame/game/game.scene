@@ -153,16 +153,47 @@
 		}
 	},
 	{
-		"GameObject": {
-			"name" : "Background",
+		"GameObject" : {
+			"name" : "Backgrounds",
 			"components" : [{
 				"name": "Transform",
-				"position" : [0.0, 0.0],
+				"position" : [0.0, 8.0],
 				"z" : -5
 			},
 			{
-				"name": "Animation",
-				"default": "background"
+				"name": "ScriptComponent",
+				"scripts" : [
+					"background/scrollingBackground.lua"
+				]
+			}],
+			"children" : [
+			{
+				"GameObject" : {
+					"name" : "Background1",
+					"components" : [{
+						"name": "Transform",
+						"position" : [0.0, 8.0],
+						"z" : 0
+					},
+					{
+						"name": "Animation",
+						"default": "background"
+					}]
+				}
+			},
+			{
+				"GameObject" : {
+					"name" : "Background2",
+					"components" : [{
+						"name": "Transform",
+						"position" : [0.0, -8.0],
+						"z" : 0
+					},
+					{
+						"name": "Animation",
+						"default": "background"
+					}]
+				}
 			}]
 		}
 	}	
