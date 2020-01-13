@@ -134,6 +134,8 @@ void LuaImplementation::CreateBindings() {
 		"x", &b2Vec2::x,
 		"y", &b2Vec2::y,
 		"length", &b2Vec2::Length,
+		//Example capture object
+		//"set", [](b2Vec2& obj, float newX, float newY) {obj.x = newX; obj.y = newY; },
 		"set", &b2Vec2::Set,
 		"normalize", &b2Vec2::Normalize);
 	lua->set_function("Vec2", 

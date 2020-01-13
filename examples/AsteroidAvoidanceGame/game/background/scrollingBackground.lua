@@ -8,10 +8,12 @@ function start()
 end
 
 function update(dt)
-	local position = transform:getWorldPosition()
-	if position.y < SCROLL_END then
-		transform:setPosition(Vec2(position.x, SCROLL_START))
-	else
-	transform:setPosition(Vec2(position.x, position.y - (SPEED * dt)))
+	if not _G.paused then
+		local position = transform:getWorldPosition()
+		if position.y < SCROLL_END then
+			transform:setPosition(Vec2(position.x, SCROLL_START))
+		else
+		transform:setPosition(Vec2(position.x, position.y - (SPEED * dt)))
+		end
 	end
 end
