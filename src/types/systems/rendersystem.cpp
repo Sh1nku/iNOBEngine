@@ -70,13 +70,13 @@ void RenderSystem::Update(float dt) {
 		if (entry.first->active) {
 			Camera* camera = (Camera*)entry.second->at(Component::GetBitcode("Camera"));
 			Transform* transform = camera->GetParent()->transform;
-			b2Vec2 pos = transform->GetWorldPosition();
+			auto pos = transform->GetWorldPosition();
 			glPushMatrix();
 			if (camera->type == CAMERA_TYPE::PERSPECTIVE) {
-				gluLookAt(pos.x, pos.y, transform->GetZCoord(), pos.x, pos.y, 0, 0, 1, 0);
+				gluLookAt(pos.x, pos.y, pos.z, pos.x, pos.y, 0, 0, 1, 0);
 			}
 			else {
-				glScalef(transform->GetZCoord() / 10, transform->GetZCoord() / 10, transform->GetZCoord() / 10);
+				glScalef(pos.z / 10, pos.z / 10, pos.z / 10);
 				glTranslatef(-pos.x, -pos.y, 0);
 			}
 		}
@@ -86,13 +86,13 @@ void RenderSystem::Update(float dt) {
 			Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
 			Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
 			UI32 id = anim->currentClip->texture->GetID();
-			b2Vec2& worldPos = transform->GetWorldPosition();
+			auto& worldPos = transform->GetWorldPosition();
 			Texture* tex = anim->currentClip->texture;
 			AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
 
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
-			glTranslatef(worldPos.x, worldPos.y, transform->GetZCoord());
+			glTranslatef(worldPos.x, worldPos.y, worldPos.z);
 			glRotatef((transform->GetWorldRotation() * RADIAN_IN_DEGREES), 0, 0, 1);
 			UI32 width = coords.bottomRight.x - coords.bottomLeft.x;
 			UI32 height = coords.bottomRight.y - coords.topRight.y;

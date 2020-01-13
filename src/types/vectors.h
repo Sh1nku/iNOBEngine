@@ -12,4 +12,5 @@ b2Vec2 Vec2fToB2Vec2(Vec2f vec);
 b2Vec2 Vec3fToB2Vec2(Vec3f vec);
 
 
-b2Vec2 GetVector(b2Vec2 v1, b2Vec2 v2);
+Vec2f GetVector2f(Vec2f v1, Vec2f v2);
+Vec2f GetVector3f(Vec3f v1, Vec3f v2);

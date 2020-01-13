@@ -69,7 +69,7 @@ R"(
 
 TEST(JsonTest, LoadPrefab_MultipleChildren) {
 	GameObject* obj = GameObject::LoadFromFile(prefabMultipleChildren);
-	ASSERT_EQ(obj->transform->GetLocalPosition(), b2Vec2(0, 0));
+	ASSERT_EQ(obj->transform->GetLocalPosition(), Vec3f(0, 0, 0));
 }
 
 std::string b2Vec2String = 

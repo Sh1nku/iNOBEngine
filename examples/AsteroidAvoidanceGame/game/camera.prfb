@@ -3,8 +3,7 @@
 		"name": "Camera",
 		"components": [{
 				"name": "Transform",
-				"position": [0.0, 0.0],
-				"z": 2.0
+				"position": [0.0, 0.0, 2.0]
 			},
 			{
 				"name": "Camera",

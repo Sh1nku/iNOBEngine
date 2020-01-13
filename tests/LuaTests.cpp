@@ -15,7 +15,7 @@ TEST(LuaTest, AddGameObjectToManager) {
 	LuaImplementation::GetState()->script(R"(
 object = GameObject.create()
 manager = Manager.getInstance()
-manager:instantiate(object, "", Vec2(0,0)))");
+manager:instantiate(object, "", Vec3(0,0,0)))");
 	GameObject* obj = Manager::GetInstance()->GetGameObjectByID(1);
 	ASSERT_NE(obj, nullptr);
 	Manager* manager = Manager::GetInstance();
@@ -28,7 +28,7 @@ manager:instantiate(object, "", Vec2(0,0)))");
 	LuaImplementation::lua->script(R"(
 object = GameObject.create()
 manager = Manager.getInstance()
-manager:instantiate(object, "", Vec2(1,0)))");
+manager:instantiate(object, "", Vec3(1,0,0)))");
 	Manager* managers = Manager::GetInstance();
 	GameObject* obj = Manager::GetInstance()->GetGameObjectByID(1);
 	ASSERT_EQ(obj->GetComponent<Transform>()->position.x, 1);

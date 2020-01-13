@@ -19,8 +19,9 @@ void CollisionSystem::Update(float dt) {
 				}
 			}
 			collision->body->SetActive(true);
-			if (collision->body->GetPosition() != transform->GetWorldPosition() || collision->body->GetAngle() != transform->GetWorldRotation()) {
-				collision->body->SetTransform(transform->GetWorldPosition(), transform->GetWorldRotation());
+			auto worldPosition = Vec3fToB2Vec2(transform->GetWorldPosition());
+			if (collision->body->GetPosition() != worldPosition || collision->body->GetAngle() != transform->GetWorldRotation()) {
+				collision->body->SetTransform(worldPosition, transform->GetWorldRotation());
 			}
 		}
 		else {
@@ -36,8 +37,9 @@ void CollisionSystem::Update(float dt) {
 			Collision* collision = (Collision*)entry.second->at(Component::GetBitcode("Collision"));
 			Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
 			if (collision->body != nullptr) {
-				if (collision->body->GetPosition() != transform->GetWorldPosition() || collision->body->GetAngle() != transform->GetWorldRotation()) {
-					transform->SetWorldPosition((b2Vec2*)&collision->body->GetPosition()); 
+				auto worldPosition = Vec3fToB2Vec2(transform->GetWorldPosition());
+				if (collision->body->GetPosition() != worldPosition || collision->body->GetAngle() != transform->GetWorldRotation()) {
+					transform->SetWorldPosition((Vec3f*)&b2Vec2ToVec3f(collision->body->GetPosition())); 
 					transform->SetWorldRotation(collision->body->GetAngle());
 				}
 			}

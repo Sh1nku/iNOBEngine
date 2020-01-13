@@ -76,7 +76,7 @@ void LuaImplementation::CreateBindings() {
 		sol::base_classes, sol::bases<Component>(),
 		"new", sol::no_constructor,
 		"body", &Collision::body,
-		"setLinearVelocity", &Collision::SetLinearVelocity,
+		"setLinearVelocity", [](Collision& obj, Vec2f& vel) {obj.SetLinearVelocity(Vec2fToB2Vec2(vel)); },
 		"setAngularVelocity", &Collision::SetAngularVelocity,
 		"setCollisionFunc", &Collision::SetCollisionFunc);
 
@@ -129,19 +129,35 @@ void LuaImplementation::CreateBindings() {
 		"subscribe", &EventManager::Subscribe,
 		"fireEvent", &EventManager::FireEvent);
 
-	lua->new_usertype<b2Vec2>("Vec2",
-		sol::constructors<b2Vec2(), b2Vec2(float, float)>(),
-		"x", &b2Vec2::x,
-		"y", &b2Vec2::y,
-		"length", &b2Vec2::Length,
+	lua->new_usertype<Vec2f>("Vec2",
+		sol::constructors<Vec2f(), Vec2f(float, float)>(),
+		"x", &Vec2f::x,
+		"y", &Vec2f::y,
+		"length", &Vec2f::length,
 		//Example capture object
 		//"set", [](b2Vec2& obj, float newX, float newY) {obj.x = newX; obj.y = newY; },
-		"set", &b2Vec2::Set,
-		"normalize", &b2Vec2::Normalize);
+		"set", [](Vec2f &obj, float x, float y) {obj.x = x; obj.y = y; },
+		"normalize", [](Vec2f &obj) {obj = glm::normalize(obj); });
 	lua->set_function("Vec2", 
-		[](float x, float y) {return b2Vec2(x, y); }
+		[](float x, float y) {return Vec2f(x, y); }
 	);
-	lua->set_function("getVector", &GetVector);
+
+	lua->new_usertype<Vec3f>("Vec3",
+		sol::constructors<Vec3f(), Vec3f(float, float, float)>(),
+		"x", &Vec3f::x,
+		"y", &Vec3f::y,
+		"z", &Vec3f::z,
+		"length", &Vec3f::length,
+		//Example capture object
+		//"set", [](b2Vec2& obj, float newX, float newY) {obj.x = newX; obj.y = newY; },
+		"set", [](Vec3f &obj, float x, float y, float z) {obj.x = x; obj.y = y; obj.z = z; },
+		"normalize", [](Vec3f &obj) {obj = glm::normalize(obj);});
+	lua->set_function("Vec3",
+		[](float x, float y, float z) {return Vec3f(x, y, z); }
+	);
+
+	lua->set_function("getVector2f", &GetVector2f);
+	lua->set_function("getVector3f", &GetVector3f);
 
 	//Resources
 	lua->set_function("getPrefab", &Resources::GetPrefab);

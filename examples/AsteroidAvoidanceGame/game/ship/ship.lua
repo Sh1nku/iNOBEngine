@@ -59,8 +59,8 @@ function update(dt)
 		if input:isKeyPressed("Space") and lastShot >= TIME_BETWEEN_SHOTS then
 			local position = transform:getWorldPosition()
 			lastShot = 0
-			manager:instantiate(getPrefab("bullet"), "", Vec2(position.x - BULLET_POS.x,position.y + BULLET_POS.y))
-			manager:instantiate(getPrefab("bullet"), "", Vec2(position.x + BULLET_POS.x,position.y + BULLET_POS.y))
+			manager:instantiate(getPrefab("bullet"), "", Vec3(position.x - BULLET_POS.x,position.y + BULLET_POS.y, 0))
+			manager:instantiate(getPrefab("bullet"), "", Vec3(position.x + BULLET_POS.x,position.y + BULLET_POS.y, 0))
 		end
 	end
 

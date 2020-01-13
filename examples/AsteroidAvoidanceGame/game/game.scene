@@ -61,8 +61,7 @@
 		"name": "Camera",
 		"components": [{
 				"name": "Transform",
-				"position": [0.0, 0.0],
-				"z": 2.0
+				"position": [0.0, 0.0, 2.0]
 			},
 			{
 				"name": "Camera",
@@ -76,8 +75,7 @@
 			"name": "UI",
 			"components": [{
 					"name": "Transform",
-					"position": [0.0, 0.0],
-					"z": 5.0
+					"position": [0.0, 0.0, 5.0]
 				},
 				{
 						"name": "ScriptComponent",
@@ -92,8 +90,7 @@
 					"name": "Label",
 					"components": [{
 							"name": "Transform",
-							"position": [0.0, 0.0],
-							"z": 5.0
+							"position": [0.0, 0.0, 5.0]
 						},
 						{
 							"name": "UIComponent",
@@ -110,8 +107,7 @@
 					"name": "Button",
 					"components": [{
 							"name": "Transform",
-							"position": [0.0, 0.0],
-							"z": 5.0
+							"position": [0.0, 0.0, 5.0]
 						},
 						{
 							"name": "UIComponent",
@@ -136,8 +132,7 @@
 					"active": false,
 					"components": [{
 							"name": "Transform",
-							"position": [0.0, 0.0],
-							"z": 5.0
+							"position": [0.0, 0.0, 5.0]
 						},
 						{
 							"name": "UIComponent",

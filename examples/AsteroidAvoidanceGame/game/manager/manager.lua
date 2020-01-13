@@ -28,9 +28,9 @@ function spawnAsteroid()
 	end
 	local startPos = Vec2(randomFloat(-PLAYAREA_X, PLAYAREA_X), PLAYAREA_Y_TOP)
 	local endPos = Vec2(randomFloat(-PLAYAREA_X, PLAYAREA_X), PLAYAREA_Y_BOT)
-	local normalizedBetween = getVector(startPos, endPos);
+	local normalizedBetween = getVector2f(startPos, endPos);
 	normalizedBetween:normalize();
-	asteroid = manager:instantiate(getPrefab(asteroidString), "", startPos)
+	asteroid = manager:instantiate(getPrefab(asteroidString), "", Vec3(startPos.x, startPos.y, 0))
 	local transform = asteroid:getTransformComponent()
 	transform:setScale(randomFloat(SCALE_MIN, SCALE_MAX))
 	local collision = asteroid:getCollisionComponent()

@@ -8,7 +8,6 @@ Component* Transform::Clone(GameObject* parent) {
 	component->mParent = parent;
 	component->mWorldPosition = mWorldPosition;
 	component->mWorldRotation = mWorldRotation;
-	component->zCoord = zCoord;
 	return component;
 }
 
@@ -22,7 +21,7 @@ const auto x = [&] {
 	return true;
 }();
 
-b2Vec2 Transform::GetLocalPosition() const{
+Vec3f Transform::GetLocalPosition() const{
 	if (mParent != nullptr) {
 		if (mParent->mParent != nullptr) {
 			return mParent->mParent->transform->mWorldPosition - mWorldPosition;
@@ -50,12 +49,12 @@ float Transform::GetLocalRotation() const {
 	}
 }
 
-b2Vec2 Transform::GetWorldPosition() const {
+Vec3f Transform::GetWorldPosition() const {
 	return mWorldPosition;
 }
 
-void Transform::SetLocalPosition(b2Vec2* position) {
-	b2Vec2 oldPos = mWorldPosition;
+void Transform::SetLocalPosition(Vec3f* position) {
+	auto oldPos = mWorldPosition;
 	if (mParent != nullptr) {
 		if (mParent->mParent != nullptr) {
 			mWorldPosition = mParent->mParent->transform->mWorldPosition + *position;
@@ -74,8 +73,8 @@ void Transform::SetLocalPosition(b2Vec2* position) {
 	}
 }
 
-void Transform::SetWorldPosition(b2Vec2* position) {
-	b2Vec2 oldPos = mWorldPosition;
+void Transform::SetWorldPosition(Vec3f* position) {
+	auto oldPos = mWorldPosition;
 	mWorldPosition = *position;
 	if (mParent != nullptr) {
 		for (GameObject* go : mParent->mChildren) {
@@ -86,10 +85,6 @@ void Transform::SetWorldPosition(b2Vec2* position) {
 
 void Transform::SetWorldRotation(float rotation) {
 	mWorldRotation = rotation;
-}
-
-void Transform::SetZCoord(float zCoord) {
-	this->zCoord = zCoord;
 }
 
 void Transform::SetScale(float scale)
@@ -103,22 +98,13 @@ void Transform::SetScale(float scale)
 	mScale = scale;
 }
 
-float Transform::GetZCoord() const{
-	if (this->mParent != nullptr) {
-		if (this->mParent->mParent != nullptr) {
-			return this->mParent->mParent->transform->GetZCoord() + zCoord;
-		}
-	}
-	return zCoord;
-}
-
 float Transform::GetScale() const
 {
 	return mScale;
 }
 
-void Transform::UpdatePosition(b2Vec2* oldPos) {
-	b2Vec2 oldPos2 = mWorldPosition;
+void Transform::UpdatePosition(Vec3f* oldPos) {
+	auto oldPos2 = mWorldPosition;
 	mWorldPosition = mParent->mParent->transform->mWorldPosition - (*oldPos - mWorldPosition);
 	for (GameObject* go : mParent->mChildren) {
 		go->transform->UpdatePosition(&oldPos2);
@@ -126,16 +112,16 @@ void Transform::UpdatePosition(b2Vec2* oldPos) {
 }
 
 void to_json(nlohmann::json& j, const Transform& t) {
-	b2Vec2 position = t.GetLocalPosition();
-	j = nlohmann::json{ {"name", "Transform"}, {"position", std::vector<float>{position.x, position.y} }, {"z", t.GetZCoord()} };
+	auto position = t.GetLocalPosition();
+	j = nlohmann::json{ {"name", "Transform"}, {"position", std::vector<float>{position.x, position.y, position.z} } };
 }
 
 void from_json(const nlohmann::json& j, Transform& t) {
 	std::vector<float> positionVector;
 	j.at("position").get_to(positionVector);
-	t.SetLocalPosition(&b2Vec2(positionVector[0], positionVector[1]));
-	auto& it = j.find("z");
-	if (it != j.end()) {
-		t.SetZCoord(it.value());
+	if (positionVector.size() == 2) {
+		positionVector.emplace_back(0);
 	}
+	t.SetLocalPosition(&Vec3f(positionVector[0], positionVector[1], positionVector[2]));
+	return;
 }

@@ -5,6 +5,7 @@
 #include <set>
 #include "types/enginetypes.h"
 #include "Box2D/Box2D.h"
+#include "types/vectors.h"
 
 class GameObject;
 class SystemProgram;
@@ -15,7 +16,7 @@ public:
 	virtual ~Manager();
 	static Manager* GetInstance();
 	SystemProgram* AddSystem(SystemProgram *system);
-	GameObject* Instantiate(GameObject* obj, std::string name = "", b2Vec2* pos = nullptr);
+	GameObject* Instantiate(GameObject* obj, std::string name = "", Vec3f* pos = nullptr);
 	void Destroy(GameObject* obj);
 	void Update(float dt);
 
