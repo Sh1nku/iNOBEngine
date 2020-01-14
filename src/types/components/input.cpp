@@ -52,7 +52,7 @@ bool Input::IsControllerButtonPressed(std::string button) {
 	return std::get<2>(controllerButtons[id]);
 }
 
-b2Vec2 Input::GetControllerLeftAxis() {
+Vec2f Input::GetControllerLeftAxis() {
 	float x = 0, y = 0;
 	if (controllerAxes[SDL_CONTROLLER_AXIS_LEFTX] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_LEFTX] < -DEAD_ZONE) {
 		x = controllerAxes[SDL_CONTROLLER_AXIS_LEFTX] / ((float)INT16_MAX);
@@ -60,13 +60,14 @@ b2Vec2 Input::GetControllerLeftAxis() {
 	if (controllerAxes[SDL_CONTROLLER_AXIS_LEFTY] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_LEFTY] < -DEAD_ZONE) {
 		y = controllerAxes[SDL_CONTROLLER_AXIS_LEFTY] / ((float)INT16_MAX);
 	}
-	b2Vec2 vec(x,y);
-	float length = vec.Length();
-	vec.Set(x / length, y / length);
+	Vec2f vec(x,y);
+	float length = glm::length(vec);
+	vec.x = vec.x / length;
+	vec.y = vec.y / length;
 	return vec;
 }
 
-b2Vec2 Input::GetControllerRightAxis() {
+Vec2f Input::GetControllerRightAxis() {
 	float x = 0, y = 0;
 	if (controllerAxes[SDL_CONTROLLER_AXIS_RIGHTX] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_RIGHTX] < -DEAD_ZONE) {
 		x = controllerAxes[SDL_CONTROLLER_AXIS_RIGHTX] / ((float)INT16_MAX);
@@ -74,9 +75,10 @@ b2Vec2 Input::GetControllerRightAxis() {
 	if (controllerAxes[SDL_CONTROLLER_AXIS_RIGHTY] > DEAD_ZONE || controllerAxes[SDL_CONTROLLER_AXIS_RIGHTY] < -DEAD_ZONE) {
 		y = controllerAxes[SDL_CONTROLLER_AXIS_RIGHTY] / ((float)INT16_MAX);
 	}
-	b2Vec2 vec(x, y);
-	float length = vec.Length();
-	vec.Set(x / length, y / length);
+	Vec2f vec(x, y);
+	float length = glm::length(vec);
+	vec.x = vec.x / length;
+	vec.y = vec.y / length;
 	return vec;
 }
 

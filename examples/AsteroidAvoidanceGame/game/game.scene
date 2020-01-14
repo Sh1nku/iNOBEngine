@@ -4,7 +4,7 @@
 			"name" : "Ship",
 			"components" : [{
 				"name": "Transform",
-				"position" : [0.0, 0.0]
+				"position" : [0.0, 0.0, 0.0]
 			},
 			{
 				"name": "Animation",
@@ -152,8 +152,7 @@
 			"name" : "Backgrounds",
 			"components" : [{
 				"name": "Transform",
-				"position" : [0.0, 8.0],
-				"z" : -5
+				"position" : [0.0, 8.0, -5.0]
 			},
 			{
 				"name": "ScriptComponent",
@@ -167,8 +166,7 @@
 					"name" : "Background1",
 					"components" : [{
 						"name": "Transform",
-						"position" : [0.0, 8.0],
-						"z" : 0
+						"position" : [0.0, 8.0, 0.0]
 					},
 					{
 						"name": "Animation",
@@ -181,8 +179,7 @@
 					"name" : "Background2",
 					"components" : [{
 						"name": "Transform",
-						"position" : [0.0, -8.0],
-						"z" : 0
+						"position" : [0.0, -8.0, 0.0]
 					},
 					{
 						"name": "Animation",

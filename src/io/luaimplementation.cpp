@@ -133,7 +133,7 @@ void LuaImplementation::CreateBindings() {
 		sol::constructors<Vec2f(), Vec2f(float, float)>(),
 		"x", &Vec2f::x,
 		"y", &Vec2f::y,
-		"length", &Vec2f::length,
+		"length", [](Vec2f& obj) {return glm::length(obj); },
 		//Example capture object
 		//"set", [](b2Vec2& obj, float newX, float newY) {obj.x = newX; obj.y = newY; },
 		"set", [](Vec2f &obj, float x, float y) {obj.x = x; obj.y = y; },
@@ -147,7 +147,7 @@ void LuaImplementation::CreateBindings() {
 		"x", &Vec3f::x,
 		"y", &Vec3f::y,
 		"z", &Vec3f::z,
-		"length", &Vec3f::length,
+		"length", [](Vec3f& obj) {return glm::length(obj); },
 		//Example capture object
 		//"set", [](b2Vec2& obj, float newX, float newY) {obj.x = newX; obj.y = newY; },
 		"set", [](Vec3f &obj, float x, float y, float z) {obj.x = x; obj.y = y; obj.z = z; },

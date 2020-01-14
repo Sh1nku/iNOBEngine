@@ -2,7 +2,7 @@
 #include "../component.h"
 #include <unordered_map>
 #include "SDL.h"
-#include "Box2D/Box2D.h"
+#include "../vectors.h"
 
 class InputSystem;
 
@@ -17,8 +17,8 @@ public:
 	bool IsKeyPressed(std::string key);
 	///TODO Implement multiple controllers
 	void SetController(I8 id);
-	b2Vec2 GetControllerLeftAxis();
-	b2Vec2 GetControllerRightAxis();
+	Vec2f GetControllerLeftAxis();
+	Vec2f GetControllerRightAxis();
 	float GetControllerLeftTrigger();
 	float GetControllerRightTrigger();
 	bool GetControllerButtonDown(std::string button);

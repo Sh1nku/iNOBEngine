@@ -39,7 +39,8 @@ void CollisionSystem::Update(float dt) {
 			if (collision->body != nullptr) {
 				auto worldPosition = Vec3fToB2Vec2(transform->GetWorldPosition());
 				if (collision->body->GetPosition() != worldPosition || collision->body->GetAngle() != transform->GetWorldRotation()) {
-					transform->SetWorldPosition((Vec3f*)&b2Vec2ToVec3f(collision->body->GetPosition())); 
+					auto newPos = Vec3f(collision->body->GetPosition().x, collision->body->GetPosition().y, transform->GetWorldPosition().z);
+					transform->SetWorldPosition((Vec3f*)&newPos); 
 					transform->SetWorldRotation(collision->body->GetAngle());
 				}
 			}
