@@ -24,7 +24,6 @@ end
 
 function update(dt)
 	if not _G.paused then
-		print(input:getControllerLeftAxis().x)
 		local velocity = Vec2(0,0)
 		if input:isKeyPressed("W") then
 			velocity.y = velocity.y + 1
