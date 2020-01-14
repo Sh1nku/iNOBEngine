@@ -93,7 +93,6 @@ void RenderSystem::Update(float dt) {
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
 			glTranslatef(worldPos.x, worldPos.y, worldPos.z);
-			//std::cout << transform->GetParent()->GetName() << ": " << worldPos.z << std::endl;
 			glRotatef((transform->GetWorldRotation() * RADIAN_IN_DEGREES), 0, 0, 1);
 			UI32 width = coords.bottomRight.x - coords.bottomLeft.x;
 			UI32 height = coords.bottomRight.y - coords.topRight.y;

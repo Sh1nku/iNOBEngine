@@ -108,6 +108,12 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 		component->SetParent(gameObject);
 		gameObject->AddComponent(component);
 
+		//Add parent's position to child
+		if (component->GetBitcode() == bitcodes.at("Transform") && parent != nullptr) {
+			((Transform*)component)->SetWorldPosition( &(((Transform*)component)->GetWorldPosition() +
+				parent->transform->GetWorldPosition()));
+		}
+
 	}
 	auto& children = go.find("children");
 	if (children != go.end()) {
