@@ -76,7 +76,7 @@ void LuaImplementation::CreateBindings() {
 		sol::base_classes, sol::bases<Component>(),
 		"new", sol::no_constructor,
 		"body", &Collision::body,
-		"setLinearVelocity", [](Collision& obj, Vec2f& vel) {obj.SetLinearVelocity(Vec2fToB2Vec2(vel)); },
+		"setLinearVelocity", [](Collision& obj, Vec2f& vel) {obj.SetLinearVelocity(vel); },
 		"setAngularVelocity", &Collision::SetAngularVelocity,
 		"setCollisionFunc", &Collision::SetCollisionFunc);
 

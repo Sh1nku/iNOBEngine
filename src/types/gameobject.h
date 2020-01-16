@@ -12,7 +12,6 @@
 extern UI32 globalID;
 extern std::vector<UI32> globalPoolIDS;
 
-struct b2Vec2;
 class Transform;
 class SystemProgram;
 class Script;

@@ -3,7 +3,7 @@
 #include "../gameobject.h"
 #include "../../manager.h"
 
-CollisionSystem::CollisionSystem(b2Vec2 gravity) : world(gravity) {
+CollisionSystem::CollisionSystem(Vec2f gravity) : world(Vec2fToB2Vec2(gravity)) {
 	mMap.insert({ Component::GetBitcode("Collision") | Component::GetBitcode("Transform"), std::make_unique<gameObject_map>() });
 };
 
@@ -67,10 +67,10 @@ void CollisionSystem::RemoveFromSystem(UI32 id, GameObject* obj) {
 	}
 }
 
-void CollisionSystem::SetGravity(b2Vec2 gravity) {
-	world.SetGravity(gravity);
+void CollisionSystem::SetGravity(Vec2f gravity) {
+	world.SetGravity(Vec2fToB2Vec2(gravity));
 }
 
-b2Vec2 CollisionSystem::GetGravity() {
-	return world.GetGravity();
+Vec2f CollisionSystem::GetGravity() {
+	return b2Vec2ToVec2f(world.GetGravity());
 }

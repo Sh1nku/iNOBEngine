@@ -38,9 +38,9 @@ const auto x = [&] {
 	return true;
 }();
 
-void Collision::SetLinearVelocity(b2Vec2 vel) {
+void Collision::SetLinearVelocity(Vec2f vel) {
 	if (body != nullptr) {
-		body->SetLinearVelocity(vel);
+		body->SetLinearVelocity(Vec2fToB2Vec2(vel));
 	}
 	else {
 		bodyDef.linearVelocity.Set(vel.x, vel.y);

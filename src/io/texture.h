@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <nlohmann/json.hpp>
-#include <Box2D/Box2D.h>
+#include "../types/vectors.h"
 
 class Texture {
 public:
@@ -30,7 +30,7 @@ struct AnimationCoords
 		topRight(topLeftX + bottomRightX, topLeftY),
 		bottomRight(topLeftX + bottomRightX, topLeftY + bottomRightY),
 		bottomLeft(topLeftX, topLeftY + bottomRightY) {}
-	b2Vec2 topLeft, topRight, bottomRight, bottomLeft;
+	Vec2f topLeft, topRight, bottomRight, bottomLeft;
 };
 
 struct AnimationFrame

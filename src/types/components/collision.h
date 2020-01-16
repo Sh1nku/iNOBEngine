@@ -2,6 +2,7 @@
 
 #include "../component.h"
 #include "Box2D/Box2D.h"
+#include "../vectors.h"
 
 class Collision : public Component {
 public:
@@ -13,7 +14,7 @@ public:
 	~Collision();
 	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
-	void SetLinearVelocity(b2Vec2 vel);
+	void SetLinearVelocity(Vec2f vel);
 	void SetAngularVelocity(float vel);
 	void SetCollisionFunc(std::function<void(Collision*)> func);
 	b2Body *body;
