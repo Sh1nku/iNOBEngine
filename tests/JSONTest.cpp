@@ -31,6 +31,8 @@ R"(
 {
 	"GameObject": {
 		"name": "Ship",
+		"active" : false,
+		"retainOnLoad" : true,
 		"components": [{
 			"name": "Transform",
 			"position": [0.0, 0.0]
@@ -94,6 +96,12 @@ TEST(JsonTest, Loadb2Vec2_Array) {
 	vecJSON.get_to(vecs);
 	std::vector<b2Vec2> answer = { b2Vec2(0, 0), b2Vec2(1, 0), b2Vec2(0, 1) };
 	ASSERT_EQ(vecs, answer);
+}
+
+TEST(JsonTest, GameObjectValues_AreCorrect) {
+	GameObject* obj = GameObject::LoadFromFile(prefabMultipleChildren);
+	ASSERT_EQ(obj->active, false);
+	ASSERT_EQ(obj->retainOnLoad,true);
 }
 
 std::string collisionJSON = R"(

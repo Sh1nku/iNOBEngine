@@ -102,6 +102,10 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	if (isActive != go.end()) {
 		gameObject->active = isActive.value();
 	}
+	auto& retainOnLoad = go.find("retainOnLoad");
+	if (retainOnLoad != go.end()) {
+		gameObject->retainOnLoad = retainOnLoad.value();
+	}
 	nlohmann::json components = go.at("components");
 	for (nlohmann::json componentJson : components) {
 		Component* component = jsonComponentList.at(componentJson.at("name"))(componentJson);

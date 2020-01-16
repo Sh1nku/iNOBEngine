@@ -56,6 +56,7 @@ class GameObject {
 		static GameObject* LoadFromFile(std::string fileContents, GameObject* parent = nullptr);
 
 		bool active = true;
+		bool retainOnLoad = false;
 		Transform *transform;
 	private:
 		std::unordered_map<UI32 ,Component*> mComponents;
