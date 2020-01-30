@@ -1,4 +1,5 @@
 #include "manager.h"
+#include "io/resources.h"
 #include "types/gameobject.h"
 #include <typeindex>
 #include <vector>
@@ -69,6 +70,25 @@ GameObject* Manager::Instantiate(GameObject* obj, std::string name, Vec3f* pos) 
 	return obj;
 }
 
+void Manager::LoadScene(std::string& name) {
+	sceneToLoad = name;
+}
+
+void Manager::RemoveChildrenIfDontRetain(std::map<UI32, GameObject*>& map, GameObject* obj, bool retain) {
+	for (auto& child : obj->mChildren) {
+		RemoveChildrenIfDontRetain(map, child, retain);
+		map.erase(child->GetID());
+		if (!retain) {
+			RemoveGameObject(child);
+		}
+	}
+}
+
+void Manager::LoadNewScene() {
+	Resources::LoadScene(sceneToLoad);
+	sceneToLoad = "";
+}
+
 void Manager::Destroy(GameObject* obj) {
 	auto& key = objectsToBeDeleted.find(obj);
 	if (key == objectsToBeDeleted.end()) {
@@ -115,6 +135,10 @@ void Manager::Update(float dt) {
 		RemoveGameObject(obj);
 	}
 	objectsToBeDeleted.clear();
+
+	if (sceneToLoad != "") {
+		LoadNewScene();
+	}
 }
 
 void Manager::RemoveGameObject(GameObject* obj) {
@@ -141,4 +165,8 @@ void Manager::RemoveGameObject(GameObject* obj) {
 		obj->mParent->mChildren.erase(std::remove(obj->mParent->mChildren.begin(), obj->mParent->mChildren.end(), obj), obj->mParent->mChildren.end());
 	}
 	delete obj;
+}
+
+std::map<UI32, GameObject*>& Manager::GetGameObjects(){
+	return mGameObjects;
 }

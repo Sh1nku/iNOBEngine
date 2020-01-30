@@ -90,12 +90,29 @@ void Resources::Load(std::string directory) {
 
 ///TODO Implement with proper copy constructors for gameobjects and all subobjects
 void Resources::LoadScene(std::string& name) {
-	Scene* scene = Scene::LoadFromFile(FileUtils::GetFileToString(scenes.at((std::string)name)));
-	Manager* manager = Manager::GetInstance();
-	for (GameObject* obj : scene->mSceneObjects) {
-		manager->Instantiate(obj);
+	if (name == "__TEST_FILE__") {
+		Manager* manager = Manager::GetInstance();
+		auto tempGameObjecs = manager->GetGameObjects();
+		for (auto& obj : tempGameObjecs) {
+			if (obj.second->GetParent() == nullptr) {
+				manager->RemoveChildrenIfDontRetain(tempGameObjecs, obj.second, obj.second->retainOnLoad);
+			}
+		}
 	}
-	delete scene;
+	else {
+		Scene* scene = Scene::LoadFromFile(FileUtils::GetFileToString(scenes.at((std::string)name)));
+		Manager* manager = Manager::GetInstance();
+		auto tempGameObjecs = manager->GetGameObjects();
+		for (auto& obj : tempGameObjecs) {
+			if (obj.second->GetParent() == nullptr) {
+				manager->RemoveChildrenIfDontRetain(tempGameObjecs, obj.second, obj.second->retainOnLoad);
+			}
+		}
+		for (GameObject* obj : scene->mSceneObjects) {
+			manager->Instantiate(obj);
+		}
+		delete scene;
+	}
 }
 
 const auto loadErrorClip = [&] {

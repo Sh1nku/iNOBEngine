@@ -131,3 +131,27 @@ TEST(ManagerTest, Destroy_ChildThenParent) {
 	manager->Update(0);
 	delete(manager);
 }
+
+TEST(ManagerTest, DontDestroyChildrenOnNewSceneWhenRetain) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	obj->retainOnLoad = true;
+	GameObject* obj2 = new GameObject(obj);
+	manager->Instantiate(obj);
+	manager->LoadScene(std::string("__TEST_FILE__"));
+	manager->Update(0);
+	ASSERT_EQ(2, manager->GetGameObjects().size());
+	delete(manager);
+}
+
+TEST(ManagerTest, RetainOnlyChildrenIfTheyAreRetain) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	GameObject* obj2 = new GameObject(obj);
+	obj2->retainOnLoad = true;
+	manager->Instantiate(obj);
+	manager->LoadScene(std::string("__TEST_FILE__"));
+	manager->Update(0);
+	ASSERT_EQ(1, manager->GetGameObjects().size());
+	delete(manager);
+}

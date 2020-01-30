@@ -9,14 +9,17 @@
 
 class GameObject;
 class SystemProgram;
+class Resources;
 
 class Manager
 {
 public:
+	friend class Resources;
 	virtual ~Manager();
 	static Manager* GetInstance();
 	SystemProgram* AddSystem(SystemProgram *system);
 	GameObject* Instantiate(GameObject* obj, std::string name = "", Vec3f* pos = nullptr);
+	void LoadScene(std::string& name);
 	void Destroy(GameObject* obj);
 	void Update(float dt);
 
@@ -33,6 +36,9 @@ public:
 	}
 	GameObject* GetGameObjectByName(std::string name);
 	GameObject* GetGameObjectByID(UI32 id);
+	std::map<UI32, GameObject*>& GetGameObjects();
+
+protected:
 
 private:
 	Manager();
@@ -43,6 +49,10 @@ private:
 	std::set<GameObject*> objectsToBeDeleted;
 	std::vector<GameObject*> namedObjects;
 	std::vector<SystemProgram*> mSystems;
+
+	void LoadNewScene();
+	std::string sceneToLoad = "";
+	void RemoveChildrenIfDontRetain(std::map<UI32, GameObject*>& map, GameObject* obj, bool retain);
 
 	static Manager* manager;
 };
