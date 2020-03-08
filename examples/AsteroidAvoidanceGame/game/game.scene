@@ -1,73 +1,58 @@
-[
+[{
+		"GameObject": {
+			"name": "Ship",
+			"components": [{
+					"name": "Transform",
+					"position": [0.0, 0.0, 0.0]
+				},
+				{
+					"name": "Animation",
+					"default": "ship_idle"
+				},
+				{
+					"name": "ScriptComponent",
+					"scripts": [
+						"ship/ship.lua"
+					]
+				},
+				{
+					"name": "Input"
+				},
+				{
+					"name": "Collision",
+					"type": "dynamic",
+					"bullet": false,
+					"fixedrotation": true,
+					"bodydef": [{
+						"type": "polygon",
+						"categorybits": "0010",
+						"maskbits": "0100",
+						"coords": [
+							[-0.40625, -0.375],
+							[0.40625, -0.375],
+							[0.40625, -0.1875],
+							[0, 0.375],
+							[-0.40625, -0.1875]
+						]
+					}]
+				}
+			]
+		}
+	},
 	{
 		"GameObject": {
-			"name" : "Ship",
-			"components" : [{
-				"name": "Transform",
-				"position" : [0.0, 0.0, 0.0]
-			},
-			{
-				"name": "Animation",
-				"default": "ship_idle"
-			},
-			{
-				"name": "ScriptComponent",
-				"scripts" : [
-					"ship/ship.lua"
-				]
-			},
-			{
-				"name": "Input"
-			},
-			{
-				"name" : "Collision",
-				"type" : "dynamic",
-				"bullet" : false,
-				"fixedrotation" : true,
-				"bodydef" : [
+			"name": "Manager",
+			"components": [{
+					"name": "Transform",
+					"position": [0.0, 0.0]
+				},
 				{
-					"type" : "polygon",
-					"categorybits" : "0010",
-					"maskbits" : "0100",
-					"coords" : [
-					[-0.40625, -0.375],
-					[0.40625, -0.375],
-					[0.40625, -0.1875],
-					[0, 0.375],
-					[-0.40625, -0.1875]
+					"name": "ScriptComponent",
+					"scripts": [
+						"manager/manager.lua"
 					]
 				}
-				]
-			}]
-		}
-	},
-	{
-		"GameObject": {
-			"name" : "Manager",
-			"components" : [{
-				"name": "Transform",
-				"position" : [0.0, 0.0]
-			},
-			{
-				"name": "ScriptComponent",
-				"scripts" : [
-					"manager/manager.lua"
-				]
-			}]
-		}
-	},
-	{
-		"GameObject": {
-		"name": "Camera",
-		"components": [{
-				"name": "Transform",
-				"position": [0.0, 0.0, 2.0]
-			},
-			{
-				"name": "Camera",
-				"type": "orthographic"
-
-			}]
+			]
 		}
 	},
 	{
@@ -78,115 +63,72 @@
 					"position": [0.0, 0.0, 5.0]
 				},
 				{
-						"name": "ScriptComponent",
-						"scripts" : [
+					"name": "ScriptComponent",
+					"scripts": [
 						"manager/ui/pausedlabel.lua"
 					]
 				}
 			],
-			"children" : [
-			{
-				"GameObject": {
-					"name": "Label",
-					"components": [{
-							"name": "Transform",
-							"position": [0.0, 0.0, 5.0]
-						},
-						{
-							"name": "UIComponent",
-							"type": "label",
-							"position": ["90%", "0"],
-							"size": ["10%", "20px"],
-							"text": "Test"
-						}
-					]
+			"children": [{
+					"GameObject": {
+						"name": "Label",
+						"components": [{
+								"name": "Transform",
+								"position": [0.0, 0.0, 5.0]
+							},
+							{
+								"name": "UIComponent",
+								"type": "label",
+								"position": ["90%", "0"],
+								"size": ["10%", "20px"],
+								"text": "Test"
+							}
+						]
+					}
+				},
+				{
+					"GameObject": {
+						"name": "Button",
+						"components": [{
+								"name": "Transform",
+								"position": [0.0, 0.0, 5.0]
+							},
+							{
+								"name": "UIComponent",
+								"type": "button",
+								"position": ["40%", "0"],
+								"size": ["20%", "20px"],
+								"text": "Test",
+								"buttonevent": "TEST_BUTTON"
+							},
+							{
+								"name": "ScriptComponent",
+								"scripts": [
+									"manager/ui/testbutton.lua"
+								]
+							}
+						]
+					}
+				},
+				{
+					"GameObject": {
+						"name": "PausedLabel",
+						"active": false,
+						"components": [{
+								"name": "Transform",
+								"position": [0.0, 0.0, 5.0]
+							},
+							{
+								"name": "UIComponent",
+								"type": "label",
+								"position": ["40%", "40%"],
+								"size": ["20%", "20%"],
+								"text": "PAUSED"
+							}
+						]
+					}
 				}
-			},
-			{
-				"GameObject": {
-					"name": "Button",
-					"components": [{
-							"name": "Transform",
-							"position": [0.0, 0.0, 5.0]
-						},
-						{
-							"name": "UIComponent",
-							"type": "button",
-							"position": ["40%", "0"],
-							"size": ["20%", "20px"],
-							"text": "Test",
-							"buttonevent": "TEST_BUTTON"
-						},
-						{
-							"name": "ScriptComponent",
-							"scripts" : [
-								"manager/ui/testbutton.lua"
-							]
-						}
-					]
-				}
-			},
-			{
-				"GameObject": {
-					"name": "PausedLabel",
-					"active": false,
-					"components": [{
-							"name": "Transform",
-							"position": [0.0, 0.0, 5.0]
-						},
-						{
-							"name": "UIComponent",
-							"type": "label",
-							"position": ["40%", "40%"],
-							"size": ["20%", "20%"],
-							"text": "PAUSED"
-						}
-					]
-				}
-			}
 			]
 		}
-	},
-	{
-		"GameObject" : {
-			"name" : "Backgrounds",
-			"components" : [{
-				"name": "Transform",
-				"position" : [0.0, 8.0, -5.0]
-			},
-			{
-				"name": "ScriptComponent",
-				"scripts" : [
-					"background/scrollingBackground.lua"
-				]
-			}],
-			"children" : [
-			{
-				"GameObject" : {
-					"name" : "Background1",
-					"components" : [{
-						"name": "Transform",
-						"position" : [0.0, 8.0, 0.0]
-					},
-					{
-						"name": "Animation",
-						"default": "background"
-					}]
-				}
-			},
-			{
-				"GameObject" : {
-					"name" : "Background2",
-					"components" : [{
-						"name": "Transform",
-						"position" : [0.0, -8.0, 0.0]
-					},
-					{
-						"name": "Animation",
-						"default": "background"
-					}]
-				}
-			}]
-		}
-	}	
+	}
 ]

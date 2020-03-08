@@ -117,7 +117,8 @@ void LuaImplementation::CreateBindings() {
 		"getAnimationSystem", &Manager::GetSystem<AnimationSystem>,
 		"getCollisionSystem", &Manager::GetSystem<CollisionSystem>,
 		"getScriptSystem", &Manager::GetSystem<ScriptSystem>,
-		"getInstance", &Manager::GetInstance);
+		"getInstance", &Manager::GetInstance,
+		"loadScene", &Manager::LoadScene);
 	//Error when using other method ^ for extended periods of time, change to this if error in wrapper.hpp : 149 where pointer to function gets garbage address
 	//Also, getInstance will crash with top method, with bottom method it will say not existing, using both will work for some reason
 	(*lua)["Manager"]["instantiate"] = &Manager::Instantiate;

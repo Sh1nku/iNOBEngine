@@ -46,9 +46,10 @@ void InputSystem::Update(float dt) {
 		if (Window::mWindow != nullptr) {
 			ImGui_ImplSDL2_ProcessEvent(&e);
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
-			if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+			//Interferes with button up/down, if hovering over imgui element
+			/*if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
 				continue;
-			}
+			}*/
 		}
 		switch (e.type) {
 			case SDL_KEYDOWN:
