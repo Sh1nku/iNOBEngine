@@ -124,7 +124,7 @@ void LuaImplementation::CreateBindings() {
 	(*lua)["Manager"]["destroy"] = &Manager::Destroy;
 	(*lua)["Manager"]["getInstance"] = &Manager::GetInstance;
 
-	lua->new_usertype<Manager>("EventManager",
+	lua->new_usertype<EventManager>("EventManager",
 		"new", sol::no_constructor,
 		"subscribe", &EventManager::Subscribe,
 		"fireEvent", &EventManager::FireEvent);

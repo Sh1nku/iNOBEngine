@@ -148,10 +148,11 @@ TEST(ManagerTest, RetainOnlyChildrenIfTheyAreRetain) {
 	Manager* manager = Manager::GetInstance();
 	GameObject* obj = new GameObject();
 	GameObject* obj2 = new GameObject(obj);
+	GameObject* obj3 = new GameObject(obj2);
 	obj2->retainOnLoad = true;
 	manager->Instantiate(obj);
 	manager->LoadScene(std::string("__TEST_FILE__"));
 	manager->Update(0);
-	ASSERT_EQ(1, manager->GetGameObjects().size());
+	ASSERT_EQ(2, manager->GetGameObjects().size());
 	delete(manager);
 }

@@ -1,7 +1,7 @@
 //Handles the implementation of lua through a static sol::state object
 
 #pragma once
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 
 class LuaImplementation {

@@ -90,24 +90,21 @@ void Resources::Load(std::string directory) {
 
 ///TODO Implement with proper copy constructors for gameobjects and all subobjects
 void Resources::LoadScene(std::string& name) {
-	if (name == "__TEST_FILE__") {
-		Manager* manager = Manager::GetInstance();
-		auto tempGameObjecs = manager->GetGameObjects();
-		for (auto& obj : tempGameObjecs) {
-			if (obj.second->GetParent() == nullptr) {
-				manager->RemoveChildrenIfDontRetain(tempGameObjecs, obj.second, obj.second->retainOnLoad);
-			}
+
+	Manager* manager = Manager::GetInstance();
+	auto tempGameObjecs = manager->GetGameObjects();
+	std::map<UI32, GameObject*> topObjects;
+	for (auto& obj : tempGameObjecs) {
+		if (obj.second->GetParent() == nullptr) {
+			topObjects.emplace(obj);
 		}
 	}
-	else {
+	for (auto& obj : topObjects) {
+		manager->RemoveChildrenIfDontRetain(obj.second);
+	}
+	
+	if (name != "__TEST_FILE__") {
 		Scene* scene = Scene::LoadFromFile(FileUtils::GetFileToString(scenes.at((std::string)name)));
-		Manager* manager = Manager::GetInstance();
-		auto tempGameObjecs = manager->GetGameObjects();
-		for (auto& obj : tempGameObjecs) {
-			if (obj.second->GetParent() == nullptr) {
-				manager->RemoveChildrenIfDontRetain(tempGameObjecs, obj.second, obj.second->retainOnLoad);
-			}
-		}
 		for (GameObject* obj : scene->mSceneObjects) {
 			manager->Instantiate(obj);
 		}

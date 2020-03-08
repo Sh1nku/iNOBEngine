@@ -28,12 +28,12 @@ void CollisionDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexC
 	glPopMatrix();
 }
 
-void CollisionDebugDraw::DrawCircle(const b2Vec2 & center, float32 radius, const b2Color & color)
+void CollisionDebugDraw::DrawCircle(const b2Vec2 & center, float radius, const b2Color & color)
 {
 	int i = 0;
 }
 
-void CollisionDebugDraw::DrawSolidCircle(const b2Vec2 & center, float32 radius, const b2Vec2 & axis, const b2Color & color)
+void CollisionDebugDraw::DrawSolidCircle(const b2Vec2 & center, float radius, const b2Vec2 & axis, const b2Color & color)
 {
 	int i = 0;
 }
@@ -48,7 +48,7 @@ void CollisionDebugDraw::DrawTransform(const b2Transform & xf)
 	int i = 0;
 }
 
-void CollisionDebugDraw::DrawPoint(const b2Vec2 & p, float32 size, const b2Color & color)
+void CollisionDebugDraw::DrawPoint(const b2Vec2 & p, float size, const b2Color & color)
 {
 	int i = 0;
 }

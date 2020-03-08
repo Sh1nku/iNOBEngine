@@ -52,7 +52,7 @@ private:
 
 	void LoadNewScene();
 	std::string sceneToLoad = "";
-	void RemoveChildrenIfDontRetain(std::map<UI32, GameObject*>& map, GameObject* obj, bool retain);
+	void RemoveChildrenIfDontRetain(GameObject* obj);
 
 	static Manager* manager;
 };

@@ -74,13 +74,16 @@ void Manager::LoadScene(std::string& name) {
 	sceneToLoad = name;
 }
 
-void Manager::RemoveChildrenIfDontRetain(std::map<UI32, GameObject*>& map, GameObject* obj, bool retain) {
-	for (auto& child : obj->mChildren) {
-		RemoveChildrenIfDontRetain(map, child, retain);
-		map.erase(child->GetID());
-		if (!retain) {
-			RemoveGameObject(child);
+void Manager::RemoveChildrenIfDontRetain(GameObject* obj) {
+	if (!obj->retainOnLoad) {
+		for (auto child : obj->mChildren) {
+			RemoveChildrenIfDontRetain(child);
 		}
+		obj->mChildren.clear();
+		RemoveGameObject(obj);
+	}
+	else {
+		obj->mParent = nullptr;
 	}
 }
 
