@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 		if (!changed) {
 			changeTime += deltaTime;
 			if (changeTime > 3) {
-				manager->LoadScene((std::string)"menu.scene");
+				manager->LoadScene((std::string)"game.scene");
 				changed = true;
 			}
 		}
