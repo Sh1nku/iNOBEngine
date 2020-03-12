@@ -76,7 +76,8 @@ void Manager::LoadScene(std::string& name) {
 
 void Manager::RemoveChildrenIfDontRetain(GameObject* obj) {
 	if (!obj->retainOnLoad) {
-		for (auto child : obj->mChildren) {
+		auto tempChildren = obj->mChildren;
+		for (auto& child : tempChildren) {
 			RemoveChildrenIfDontRetain(child);
 		}
 		obj->mChildren.clear();

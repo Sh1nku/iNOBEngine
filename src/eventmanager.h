@@ -4,8 +4,13 @@
 
 class EventManager {
 public:
-	static void Subscribe(std::string ev, std::function<void(void*)> func);
-	static void FireEvent(std::string ev, void* data);
+	EventManager();
+	int Subscribe(std::string ev, std::function<void(void*)> func);
+	void FireEvent(std::string ev, void* data);
+	void Unsubscribe(int ev);
 private:
-	static std::unordered_map<std::string, std::vector<std::function<void(void*)>>> events;
+	std::unordered_map<std::string, std::unordered_map<int, std::function<void(void*)>>> events;
+	long counter;
+	std::vector<int> unused;
+	std::unordered_map<int, std::string> references;
 };

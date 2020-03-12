@@ -42,7 +42,8 @@ void LuaImplementation::CreateBindings() {
 		"getTransformComponent", &GameObject::GetComponent<Transform>,
 		"getInputComponent", &GameObject::GetComponent<Input>,
 		"getCollisionComponent", &GameObject::GetComponent<Collision>,
-		"getAnimationComponent", &GameObject::GetComponent<Animation>);
+		"getAnimationComponent", &GameObject::GetComponent<Animation>,
+		"subscribe", &GameObject::Subscribe);
 
 	//// Components
 	lua->new_usertype<Component>("Component",
@@ -109,7 +110,7 @@ void LuaImplementation::CreateBindings() {
 		sol::base_classes, sol::bases<SystemProgram>(),
 		"new", sol::no_constructor);
 
-	lua->new_usertype<Manager>("Manager",
+	auto manager = lua->new_usertype<Manager>("Manager",
 		"new", sol::no_constructor,
 		"getGameObjectByID", &Manager::GetGameObjectByID,
 		"getGameObjectByName", &Manager::GetGameObjectByName,
@@ -125,9 +126,10 @@ void LuaImplementation::CreateBindings() {
 	(*lua)["Manager"]["destroy"] = &Manager::Destroy;
 	(*lua)["Manager"]["getInstance"] = &Manager::GetInstance;
 
+	manager["eventManager"] = &Manager::eventManager;
+
 	lua->new_usertype<EventManager>("EventManager",
 		"new", sol::no_constructor,
-		"subscribe", &EventManager::Subscribe,
 		"fireEvent", &EventManager::FireEvent);
 
 	lua->new_usertype<Vec2f>("Vec2",

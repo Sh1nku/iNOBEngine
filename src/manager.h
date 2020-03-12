@@ -6,6 +6,7 @@
 #include "types/enginetypes.h"
 #include "Box2D/Box2D.h"
 #include "types/vectors.h"
+#include "eventmanager.h"
 
 class GameObject;
 class SystemProgram;
@@ -36,6 +37,7 @@ public:
 	}
 	GameObject* GetGameObjectByName(std::string name);
 	GameObject* GetGameObjectByID(UI32 id);
+	EventManager eventManager;
 	std::map<UI32, GameObject*>& GetGameObjects();
 
 protected:

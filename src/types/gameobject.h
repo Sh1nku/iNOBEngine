@@ -51,6 +51,7 @@ class GameObject {
 		UI32 GetID();
 		std::string GetName();
 
+		void Subscribe(std::string ev, std::function<void(void*)> func);
 
 		static GameObject* Create();
 		static GameObject* LoadFromFile(std::string fileContents, GameObject* parent = nullptr);
@@ -62,6 +63,7 @@ class GameObject {
 		std::unordered_map<UI32 ,Component*> mComponents;
 		std::vector<Script> mScripts;
 		std::vector<GameObject*> mChildren;
+		std::vector<int> subscribedEvents;
 		std::string mName;
 		bool mNamed;
 		UI32 mID;

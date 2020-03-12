@@ -6,6 +6,7 @@
 #include "../../window/imgui/imgui_impl_opengl2.h"
 #include "../../window/window.h"
 #include "../gameobject.h"
+#include "../../manager.h"
 
 SDL_Event e;
 
@@ -131,7 +132,7 @@ void InputSystem::Update(float dt) {
 
 			case SDL_QUIT:
 			{
-				EventManager::FireEvent("QUIT", nullptr);
+				Manager::GetInstance()->eventManager.FireEvent("QUIT", nullptr);
 			}
 		}
 

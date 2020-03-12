@@ -2,8 +2,8 @@ local manager
 local pausedLabel
 
 function start()
-	EventManager.subscribe("PAUSED", changed)
 	manager = Manager:getInstance()
+	localObject:subscribe("PAUSED", changed)
 	pausedLabel = manager:getGameObjectByName("PausedLabel")
 end
 
