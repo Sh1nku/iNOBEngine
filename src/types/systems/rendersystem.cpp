@@ -58,6 +58,9 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 }
 
 RenderSystem::~RenderSystem() {
+	ImGui_ImplOpenGL2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 	delete window;
 }
 

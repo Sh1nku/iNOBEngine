@@ -7,6 +7,7 @@
 #include "../../window/window.h"
 #include "../gameobject.h"
 #include "../../manager.h"
+#include <iostream>
 
 SDL_Event e;
 
@@ -47,6 +48,7 @@ void InputSystem::Update(float dt) {
 		if (Window::mWindow != nullptr) {
 			ImGui_ImplSDL2_ProcessEvent(&e);
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			//std::cout << io.DisplayFramebufferScale.x << " " << io.DisplayFramebufferScale.y << std::endl;
 			//Interferes with button up/down, if hovering over imgui element
 			/*if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
 				continue;
