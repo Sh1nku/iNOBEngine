@@ -132,7 +132,7 @@ void InputSystem::Update(float dt) {
 
 			case SDL_QUIT:
 			{
-				Manager::GetInstance()->eventManager.FireEvent("QUIT", nullptr);
+				Manager::GetInstance()->FireEvent(nullptr,"QUIT", nullptr);
 			}
 		}
 

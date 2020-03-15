@@ -156,3 +156,51 @@ TEST(ManagerTest, RetainOnlyChildrenIfTheyAreRetain) {
 	ASSERT_EQ(2, manager->GetGameObjects().size());
 	delete(manager);
 }
+
+TEST(ManagerTest, EventManager_Works_LocalObject) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	int i = 0;
+	manager->Instantiate(obj);
+	obj->Subscribe(obj,"EVENT", [&](void* data) {
+		i = 10;
+	});
+	obj->FireEvent("EVENT", nullptr);
+	ASSERT_EQ(10, i);
+
+	delete(manager);
+}
+
+TEST(ManagerTest, EventManager_Works_DifferentObject) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	int i = 0;
+	manager->Instantiate(obj);
+	obj->Subscribe(nullptr, "EVENT", [&](void* data) {
+		i = 10;
+	});
+	manager->FireEvent(nullptr, "EVENT", nullptr);
+	ASSERT_EQ(10, i);
+
+	delete(manager);
+}
+
+TEST(ManagerTest, EventManager_Unsubscibe) {
+	Manager* manager = Manager::GetInstance();
+	GameObject* obj = new GameObject();
+	int i = 0;
+	manager->Instantiate(obj);
+	obj->Subscribe(nullptr, "EVENT", [&](void* data) {
+		i = 10;
+	});
+	obj->Subscribe(obj, "EVENT", [&](void* data) {
+		i = 10;
+	});
+	manager->Destroy(obj);
+	manager->Update(0);
+	manager->FireEvent(nullptr, "EVENT", nullptr);
+	manager->FireEvent(obj, "EVENT", nullptr);
+	ASSERT_EQ(0, i);
+
+	delete(manager);
+}

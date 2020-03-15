@@ -3,7 +3,7 @@ function testButtonPressed(data)
 end
 
 function start()
-	localObject:subscribe("TEST_BUTTON", testButtonPressed)
+	localObject:subscribe(localObject,"TEST_BUTTON", testButtonPressed)
 end
 
 function update()

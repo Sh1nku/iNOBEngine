@@ -7,7 +7,9 @@
 #include "../types/components/transform.h"
 #include "../types/components/input.h"
 #include <typeindex>
+#include <string>
 #include "enginetypes.h"
+#include "../eventmanager.h"
 
 extern UI32 globalID;
 extern std::vector<UI32> globalPoolIDS;
@@ -16,14 +18,14 @@ class Transform;
 class SystemProgram;
 class Script;
 
-class GameObject {
+class GameObject : public EventManager{
 	friend class Manager;
 	friend class Transform;
 	friend class SystemProgram;
 	public:
 		GameObject(GameObject* parent = nullptr);
 		GameObject(const GameObject&);
-		~GameObject();
+		virtual ~GameObject();
 
 		template <class T>
 		T *GetComponent() {
@@ -51,8 +53,6 @@ class GameObject {
 		UI32 GetID();
 		std::string GetName();
 
-		void Subscribe(std::string ev, std::function<void(void*)> func);
-
 		static GameObject* Create();
 		static GameObject* LoadFromFile(std::string fileContents, GameObject* parent = nullptr);
 
@@ -63,7 +63,6 @@ class GameObject {
 		std::unordered_map<UI32 ,Component*> mComponents;
 		std::vector<Script> mScripts;
 		std::vector<GameObject*> mChildren;
-		std::vector<int> subscribedEvents;
 		std::string mName;
 		bool mNamed;
 		UI32 mID;

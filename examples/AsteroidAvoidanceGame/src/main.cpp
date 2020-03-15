@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
 	manager->AddSystem(new InputSystem());
 	manager->AddSystem(new CollisionSystem());
 	Resources::LoadScene((std::string)"menu.scene");
-	manager->eventManager.Subscribe("QUIT", [&](void* data) {
+	manager->Subscribe(nullptr,"QUIT",nullptr, [&](void* data) {
 		quit = true; 
 	});
 

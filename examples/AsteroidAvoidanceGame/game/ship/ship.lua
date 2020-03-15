@@ -67,7 +67,7 @@ function update(dt)
 	
 	if input:getKeyDown("Escape") then
 		_G.paused = not _G.paused
-		manager.eventManager:fireEvent("PAUSED", boolToVoid(paused))
+		manager:fireEvent(nil,"PAUSED", boolToVoid(paused))
 	end
 	if input:getKeyDown("F1") then
 		drawCollisionData = not drawCollisionData

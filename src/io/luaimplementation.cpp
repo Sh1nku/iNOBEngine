@@ -33,7 +33,7 @@ void func() {
 }
 
 void LuaImplementation::CreateBindings() {
-	lua->new_usertype<GameObject>("GameObject",
+	auto gameObject = lua->new_usertype<GameObject>("GameObject",
 		"new", sol::no_constructor,
 		"create", &GameObject::Create,
 		"getID", &GameObject::GetID,
@@ -43,7 +43,11 @@ void LuaImplementation::CreateBindings() {
 		"getInputComponent", &GameObject::GetComponent<Input>,
 		"getCollisionComponent", &GameObject::GetComponent<Collision>,
 		"getAnimationComponent", &GameObject::GetComponent<Animation>,
-		"subscribe", &GameObject::Subscribe);
+		"subscribe", &GameObject::Subscribe,
+		sol::base_classes, sol::bases<EventManager>());
+	gameObject["subscribe"] = &EventManager::Subscribe;
+	gameObject["unsubscibe"] = &EventManager::Unsubscribe;
+	gameObject["fireEvent"] = &EventManager::FireEvent;
 
 	//// Components
 	lua->new_usertype<Component>("Component",
@@ -126,7 +130,9 @@ void LuaImplementation::CreateBindings() {
 	(*lua)["Manager"]["destroy"] = &Manager::Destroy;
 	(*lua)["Manager"]["getInstance"] = &Manager::GetInstance;
 
-	manager["eventManager"] = &Manager::eventManager;
+	manager["fireEvent"] = &Manager::FireEvent;
+
+	auto eventManager = lua->new_usertype<EventManager>("EventManager");
 
 	lua->new_usertype<EventManager>("EventManager",
 		"new", sol::no_constructor,

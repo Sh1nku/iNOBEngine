@@ -3,7 +3,7 @@ function startButtonPressed(data)
 end
 
 function start()
-	localObject:subscribe("START_BUTTON", startButtonPressed)
+	localObject:subscribe(localObject,"START_BUTTON", startButtonPressed)
 end
 
 function update()

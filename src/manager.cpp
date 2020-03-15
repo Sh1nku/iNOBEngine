@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "types/components/transform.h"
 #include "Box2D/Box2D.h"
+#include "eventmanager.h"
 
 Manager* Manager::manager = nullptr;
 
@@ -173,4 +174,50 @@ void Manager::RemoveGameObject(GameObject* obj) {
 
 std::map<UI32, GameObject*>& Manager::GetGameObjects(){
 	return mGameObjects;
+}
+
+void Manager::FireEvent(EventManager* ptr, std::string ev, void* data) {
+	auto& i = mEvents.find(ptr);
+	if (i != mEvents.end()) {
+		auto& j = i->second.find(ev);
+		if (j != i->second.end()) {
+			for (auto& func : j->second) {
+				std::bind(func.second, data)();
+			}
+		}
+	}
+}
+
+void Manager::Subscribe(EventManager* ptr, std::string ev, EventManager* ref, std::function<void(void*)> func) {
+	auto& i = mEvents.find(ptr);
+	if (i == mEvents.end()) {
+		mEvents.emplace(ptr, std::unordered_map < std::string, std::unordered_map<EventManager*, std::function<void(void*)>>>());
+		i = mEvents.find(ptr);
+	}
+	auto& j = i->second.find(ev);
+	if (j == i->second.end()) {
+		i->second.emplace(ev, std::unordered_map < EventManager*, std::function<void(void*)>>());
+		j = i->second.find(ev);
+	}
+	j->second.emplace(ref, func);
+}
+
+void Manager::Unsubscribe(EventManager* ptr, std::string ev, EventManager* obj) {
+	auto& i = mEvents.find(ptr);
+	if (i != mEvents.end()) {
+		auto& j = i->second.find(ev);
+		if (j != i->second.end()) {
+			auto& k = j->second.find(obj);
+			if (k != j->second.end()) {
+				j->second.erase(k);
+			}
+		}
+	}
+}
+
+void Manager::RemoveFromEvent(EventManager* ev) {
+	auto& i = mEvents.find(ev);
+	if (i != mEvents.end()) {
+		mEvents.erase(i);
+	}
 }

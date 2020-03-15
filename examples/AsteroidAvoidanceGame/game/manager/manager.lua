@@ -48,7 +48,7 @@ function start()
 	scriptSystem = manager:getScriptSystem()
 	renderSystem:setBackgroundColor(0,0,0,1)
 	renderSystem:setShowFPS(true)
-	localObject:subscribe("PAUSED", paused)
+	localObject:subscribe(nil,"PAUSED", paused)
 end
 
 function update(dt)

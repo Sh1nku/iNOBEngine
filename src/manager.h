@@ -7,15 +7,20 @@
 #include "Box2D/Box2D.h"
 #include "types/vectors.h"
 #include "eventmanager.h"
+#include <functional>
 
 class GameObject;
 class SystemProgram;
 class Resources;
+class EventManager;
 
 class Manager
 {
 public:
+	friend class EventManager;
 	friend class Resources;
+	friend class SystemProgram;
+	friend class RenderSystem;
 	virtual ~Manager();
 	static Manager* GetInstance();
 	SystemProgram* AddSystem(SystemProgram *system);
@@ -37,10 +42,15 @@ public:
 	}
 	GameObject* GetGameObjectByName(std::string name);
 	GameObject* GetGameObjectByID(UI32 id);
-	EventManager eventManager;
 	std::map<UI32, GameObject*>& GetGameObjects();
 
+	void Subscribe(EventManager* ptr, std::string ev, EventManager* ref, std::function<void(void*)> func);
+	void FireEvent(EventManager* ptr, std::string ev, void* data);
+
 protected:
+	void Unsubscribe(EventManager* ptr, std::string ev, EventManager* obj);
+	void RemoveFromEvent(EventManager* ev);
+
 
 private:
 	Manager();
@@ -51,6 +61,7 @@ private:
 	std::set<GameObject*> objectsToBeDeleted;
 	std::vector<GameObject*> namedObjects;
 	std::vector<SystemProgram*> mSystems;
+	std::unordered_map < EventManager*, std::unordered_map < std::string, std::unordered_map<EventManager*, std::function<void(void*)>>>> mEvents;
 
 	void LoadNewScene();
 	std::string sceneToLoad = "";

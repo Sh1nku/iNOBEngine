@@ -49,10 +49,6 @@ GameObject::~GameObject()
 		}
 		mChildren.clear();
 	}
-	for (auto& it : subscribedEvents) {
-		Manager::GetInstance()->eventManager.Unsubscribe(it);
-	}
-	subscribedEvents.clear();
 }
 
 UI32 GameObject::GetID() {
@@ -140,8 +136,4 @@ Component* GameObject::GetComponent(std::string type) {
 	catch (std::exception) {
 		return nullptr;
 	}
-}
-
-void GameObject::Subscribe(std::string ev, std::function<void(void*)> func) {
-	subscribedEvents.push_back(Manager::GetInstance()->eventManager.Subscribe(ev, func));
 }

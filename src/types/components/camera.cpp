@@ -9,7 +9,7 @@ Component* Camera::Clone(GameObject* parent) {
 	camera->fov = fov;
 	camera->zNear = zNear;
 	camera->zFar = zFar;
-	Manager::GetInstance()->eventManager.FireEvent("CHANGE_PERSPECTIVE", new std::tuple(std::make_tuple(type, fov, zNear, zFar)));
+	Manager::GetInstance()->FireEvent(nullptr,"CHANGE_PERSPECTIVE", new std::tuple(std::make_tuple(type, fov, zNear, zFar)));
 	return camera;
 }
 
@@ -53,5 +53,5 @@ void from_json(const nlohmann::json& j, Camera& t) {
 	if (zFar != j.end()) {
 		t.zFar = zFar.value();
 	}
-	Manager::GetInstance()->eventManager.FireEvent("CHANGE_PERSPECTIVE", new std::tuple(std::make_tuple(t.type, t.fov, t.zNear, t.zFar)));
+	Manager::GetInstance()->FireEvent(nullptr,"CHANGE_PERSPECTIVE", new std::tuple(std::make_tuple(t.type, t.fov, t.zNear, t.zFar)));
 }

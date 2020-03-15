@@ -13,6 +13,7 @@
 #include "types/components/input.h"
 #include "types/components/uicomponent.h"
 #include "types/components/collision.h"
+#include "eventmanager.h"
 #include "types/gameobject.h"
 #include "types/systemprogram.h"
 #include "types/systems/testsystem.h"

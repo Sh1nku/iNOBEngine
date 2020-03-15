@@ -3,7 +3,7 @@ local pausedLabel
 
 function start()
 	manager = Manager:getInstance()
-	localObject:subscribe("PAUSED", changed)
+	localObject:subscribe(nil,"PAUSED", changed)
 	pausedLabel = manager:getGameObjectByName("PausedLabel")
 end
 

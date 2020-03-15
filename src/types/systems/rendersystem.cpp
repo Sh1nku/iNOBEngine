@@ -39,7 +39,7 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 		}
 	}
 	Resources::textureBacklog.clear();
-	Manager::GetInstance()->eventManager.Subscribe("CHANGE_PERSPECTIVE", [&](void* data) {
+	Manager::GetInstance()->Subscribe(nullptr,"CHANGE_PERSPECTIVE", nullptr, [&](void* data) {
 		auto& tuple = *(std::tuple <CAMERA_TYPE, UI16, float, float >*) data;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -197,7 +197,7 @@ void RenderSystem::RenderButton(UIComponent& component) {
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
 		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 	if (ImGui::Button(component.GetText().c_str(), ImGui::GetContentRegionAvail())) {
-		Manager::GetInstance()->eventManager.FireEvent(component.buttonEvent,(void*)"Test text");
+		Manager::GetInstance()->FireEvent(component.GetParent(),component.buttonEvent,(void*)"Test text");
 	}
 	ImGui::End();
 }
