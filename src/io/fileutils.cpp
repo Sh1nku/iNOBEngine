@@ -11,3 +11,10 @@ std::string FileUtils::GetFileToString(std::string filename) {
 	std::string str = strStream.str();
 	return str;
 }
+
+void FileUtils::WriteStringToFile(std::string filename, std::string string) {
+	std::ofstream file;
+	file.open(filename);
+
+	file.write(string.c_str(),string.length());
+}

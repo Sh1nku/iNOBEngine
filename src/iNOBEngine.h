@@ -4,6 +4,7 @@
 #include "io/settings.h"
 #include "io/texture.h"
 #include "io/resources.h"
+#include "io/fileutils.h"
 #include "types/component.h"
 #include "types/components/testcomponent.h"
 #include "types/components/transform.h"
