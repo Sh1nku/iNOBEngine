@@ -18,3 +18,7 @@ void FileUtils::WriteStringToFile(std::string filename, std::string string) {
 
 	file.write(string.c_str(),string.length());
 }
+
+void FileUtils::RemoveFile(std::string filename) {
+	remove(filename.c_str());
+}
