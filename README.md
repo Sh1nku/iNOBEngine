@@ -9,4 +9,4 @@ A c++17 based engine, using an entity-component-system structure. Capable of dis
  - UI using [Dear Imgui](https://github.com/ocornut/imgui) with support for text and buttons.
 ## Demonstration
 An asteroid avoidance game, written using the Lua scripting system to access engine features
-![AsteroidAvoidanceGame](https://i.imgur.com/1FuR6J7.gif)
+![AsteroidAvoidanceGame](https://i.imgur.com/8yT1eZm.gif)
