@@ -8,5 +8,5 @@ A c++17 based engine, using an entity-component-system structure. Capable of dis
  - Event-Subscriber model for having different gameobjects react to events
  - UI using [Dear Imgui](https://github.com/ocornut/imgui) with support for text and buttons.
 ## Demonstration
-An asteroid avoidance game, written using the Lua scripting system to access engine features
+An asteroid avoidance game, written entirely using the Lua scripting system
 ![AsteroidAvoidanceGame](https://i.imgur.com/8yT1eZm.gif)
