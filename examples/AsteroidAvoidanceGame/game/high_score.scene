@@ -1,0 +1,16 @@
+[{
+	"GameObject": {
+		"name": "Ship",
+		"components": [{
+				"name": "Transform",
+				"position": [0.0, 0.0, 0.0]
+			},
+			{
+				"name": "ScriptComponent",
+				"scripts": [
+					"high_score/showHighScores.lua"
+				]
+			}
+		]
+	}
+}]

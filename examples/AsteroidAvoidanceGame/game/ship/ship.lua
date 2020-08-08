@@ -20,6 +20,7 @@ function start()
 	_G.paused = false
 	drawCollisionData = false
 	lastShot = 0
+	collision:setCollisionFunc(collisionFunc)
 end
 
 function update(dt)
@@ -76,4 +77,11 @@ function update(dt)
 	if input:getKeyDown("F2") then
 		manager:loadScene("game.scene")
 	end
+end
+
+function collisionFunc(otherCollision)
+	manager:destroy(localObject)
+	manager:destroy(manager:getGameObjectByName("Backgrounds"))
+	manager:destroy(manager:getGameObjectByName("Camera"))
+	manager:loadScene("menu.scene")
 end
