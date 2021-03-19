@@ -13,6 +13,8 @@ file(GLOB_RECURSE TEST_SOURCES "tests/*.cpp")
 file(GLOB_RECURSE TEST_HEADERS "tests/*.h")
 file(GLOB_RECURSE EXAMPLES_ASTEROID_SOURCES "examples/AsteroidAvoidanceGame/src/*.cpp")
 file(GLOB_RECURSE EXAMPLES_ASTEROID_HEADERS "examples/AsteroidAvoidanceGame/src/*.h")
+file(GLOB_RECURSE EXAMPLES_PATHFINDING_SOURCES "examples/Pathfinding/src/*.cpp")
+file(GLOB_RECURSE EXAMPLES_PATHFINDING_HEADERS "examples/Pathfinding/src/*.h")
 
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/ PREFIX "Source Files" FILES ${SOURCES} ${HEADERS})
@@ -46,6 +48,11 @@ add_executable(AsteroidAvoidanceGame ${EXAMPLES_ASTEROID_SOURCES} ${EXAMPLES_AST
 target_include_directories(AsteroidAvoidanceGame PRIVATE src/ ${LUA_INCULDE_DIR})
 target_link_libraries(AsteroidAvoidanceGame PRIVATE ${PROJECT_LINK_LIBS} iNOBEngine)
 
+add_executable(Pathfinding ${EXAMPLES_PATHFINDING_SOURCES} ${EXAMPLES_PATHFINDING_HEADERS})
+target_include_directories(Pathfinding PRIVATE src/ ${LUA_INCULDE_DIR})
+target_link_libraries(Pathfinding PRIVATE ${PROJECT_LINK_LIBS} iNOBEngine)
+
 set_property(TARGET iNOBEngine PROPERTY CXX_STANDARD 17)
 set_property(TARGET Tests PROPERTY CXX_STANDARD 17)
 set_property(TARGET AsteroidAvoidanceGame PROPERTY CXX_STANDARD 17)
+set_property(TARGET Pathfinding PROPERTY CXX_STANDARD 17)
