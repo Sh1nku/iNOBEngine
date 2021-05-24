@@ -1,4 +1,5 @@
 # iNOB Engine
+![](https://img.shields.io/endpoint?url=https://inobstudios.com/LOCCounterBadge/iNOBEngine/responses/shields_v1) <br>
 A c++17 based engine, using an entity-component-system structure. Capable of displaying 2d sprites in a 3d environment with either orthographic, or perspective projections.
 ## Features
  - Entities can have components, and can be manipulated by systems
