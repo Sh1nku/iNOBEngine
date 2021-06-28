@@ -1,3 +1,4 @@
+
 # iNOB Engine
 ![](https://img.shields.io/endpoint?url=https://inobstudios.com/LOCCounterBadge/iNOBEngine/responses/shields_v1) <br>
 A c++17 based engine, using an entity-component-system structure. Capable of displaying 2d sprites in a 3d environment with either orthographic, or perspective projections.
@@ -11,3 +12,13 @@ A c++17 based engine, using an entity-component-system structure. Capable of dis
 ## Demonstration
 An asteroid avoidance game, written entirely using the Lua scripting system
 ![AsteroidAvoidanceGame](https://i.imgur.com/8yT1eZm.gif)
+
+## Build
+You will need the [conan](https://conan.io/) package manager and the remote repository for bincrafters
+```
+conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
+mkdir build
+cd build
+conan install .. --build=missing
+cmake ..
+```
