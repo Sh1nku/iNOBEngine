@@ -166,7 +166,7 @@ void RenderSystem::ShowCollisions() {
 	if (collisionSystem != nullptr) {
 		collisionSystem->world.SetDebugDraw(&collisionDrawer);
 		collisionDrawer.SetFlags(b2Draw::e_shapeBit);
-		collisionSystem->world.DrawDebugData();
+		collisionSystem->world.DebugDraw();
 	}
 }
 

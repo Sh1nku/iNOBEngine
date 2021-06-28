@@ -5,7 +5,9 @@
 #include <iostream>
 
 Collision::Collision(GameObject *parent) : Component(parent), body(nullptr), collisionFunc(nullptr), mScale(1) {
-	bodyDef.userData = this;
+	b2BodyUserData data;
+	data.pointer = (uintptr_t)this;
+	bodyDef.userData = data;
 }
 
 Collision::~Collision() {
@@ -24,7 +26,9 @@ Component* Collision::Clone(GameObject* parent) {
 		collision->fixtures.emplace_back(def);
 	}
 	collision->mScale = mScale;
-	collision->bodyDef.userData = collision;
+	b2BodyUserData userData;
+	userData.pointer = (uintptr_t)collision;
+	collision->bodyDef.userData = userData;
 	return collision;
 }
 
@@ -170,7 +174,9 @@ void from_json(const nlohmann::json& j, Collision& t) {
 		}
 		t.fixtures.emplace_back(fixtureDef);
 	}
-	t.bodyDef.userData = &t;
+	b2BodyUserData userData;
+	userData.pointer = (uintptr_t)&t;
+	t.bodyDef.userData = userData;
 	t.fixtures;
 }
 

@@ -18,16 +18,16 @@ void CollisionSystem::Update(float dt) {
 					collision->body->CreateFixture(&fixture);
 				}
 			}
-			collision->body->SetActive(true);
+			collision->body->SetEnabled(true);
 			auto worldPosition = Vec3fToB2Vec2(transform->GetWorldPosition());
-			if (collision->body->GetPosition() != worldPosition || collision->body->GetAngle() != transform->GetWorldRotation()) {
+			if ((b2Vec2)collision->body->GetPosition() != worldPosition || collision->body->GetAngle() != transform->GetWorldRotation()) {
 				collision->body->SetTransform(worldPosition, transform->GetWorldRotation());
 			}
 		}
 		else {
 			Collision* collision = (Collision*)entry.second->at(Component::GetBitcode("Collision"));
 			if (collision->body != nullptr) {
-				collision->body->SetActive(false);
+				collision->body->SetEnabled(false);
 			}
 		}
 	}
@@ -47,11 +47,11 @@ void CollisionSystem::Update(float dt) {
 		}
 	}
 	for (b2Contact* c = world.GetContactList(); c; c = c->GetNext()) {
-		if (((Collision*)c->GetFixtureA()->GetBody()->GetUserData())->collisionFunc != nullptr) {
-			((Collision*)c->GetFixtureA()->GetBody()->GetUserData())->collisionFunc(((Collision*)c->GetFixtureB()->GetBody()->GetUserData()));
+		if (((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
+			((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer));
 		}
-		if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData())->collisionFunc != nullptr) {
-			((Collision*)c->GetFixtureB()->GetBody()->GetUserData())->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData()));
+		if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
+			((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer));
 		}
 	}
 
