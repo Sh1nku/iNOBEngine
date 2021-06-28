@@ -11,6 +11,12 @@
 				"name": "Camera",
 				"type": "orthographic"
 
+			},
+			{
+				"name": "ScriptComponent",
+				"scripts": [
+					"camera.lua"
+				]
 			}]
 		}
 	},
