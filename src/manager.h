@@ -8,6 +8,7 @@
 #include "types/vectors.h"
 #include "eventmanager.h"
 #include <functional>
+#include <typeindex>
 
 class GameObject;
 class SystemProgram;
