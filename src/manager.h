@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 #include "types/enginetypes.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 #include "types/vectors.h"
 #include "eventmanager.h"
 #include <functional>

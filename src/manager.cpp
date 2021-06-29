@@ -6,7 +6,7 @@
 #include "types/systemprogram.h"
 #include <algorithm>
 #include "types/components/transform.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 #include "eventmanager.h"
 
 Manager* Manager::manager = nullptr;

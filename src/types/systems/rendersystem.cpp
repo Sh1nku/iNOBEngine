@@ -1,4 +1,4 @@
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 #include "rendersystem.h"
 #include "../../io/resources.h"
 #include "../../window/window.h"
