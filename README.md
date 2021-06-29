@@ -16,6 +16,7 @@ An asteroid avoidance game, written entirely using the Lua scripting system
 ## Build
 You will need the [conan](https://conan.io/) package manager and the remote repository for bincrafters
 ```
+conan config set general.revisions_enabled=1
 conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
 mkdir build
 cd build

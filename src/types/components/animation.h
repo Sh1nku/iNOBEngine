@@ -1,7 +1,7 @@
 #pragma once
 #include "../component.h"
 #include "../../io/texture.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 
 enum ANIMATION_STATES {
 	STARTED,
