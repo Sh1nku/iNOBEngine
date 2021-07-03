@@ -17,7 +17,7 @@ TEST(ManagerTest, GetSystem_Non_Existent) {
 	delete(manager);
 }
 
-TEST(ManagerTest, GetSystem_From_Multiple) {
+TEST(ManagerTest, GetSystem_From_Multiple_DEPENDS_UI) {
 	Manager* manager = Manager::GetInstance();
 	TestSystem* testSystem = new TestSystem();
 	manager->AddSystem((SystemProgram*)testSystem);

@@ -40,12 +40,12 @@ R"(
 }
 )";
 
-TEST(ResourceTest, LoadPNG) {
+TEST(ResourceTest, LoadPNG_DEPENDS_UI) {
 	std::ofstream file;
 	file.open("TEMP_FILE_PNG.png", std::ios::binary | std::ios::out);
 	file.write((char*)pngImage, sizeof(pngImage));
 	file.close();
-	Texture* tex = Texture::LoadTexture(std::string("TEMP_FILE_PNG.png"));
+	Texture* tex = Texture::LoadTexture("TEMP_FILE_PNG.png");
 	ASSERT_EQ(tex->GetWidth(), 10);
 	ASSERT_EQ(tex->GetComp(), 4);
 	delete tex;
@@ -80,7 +80,7 @@ TEST(ResourceTest, InstantiatePrefabTwice) {
 	delete manager;
 }
 
-TEST(RenderSystemTest, ShowTexture) {
+TEST(RenderSystemTest, ShowTexture_DEPENDS_UI) {
 	RenderSystem renderSystem;
 	GameObject obj;
 	Animation* anim = new Animation();
