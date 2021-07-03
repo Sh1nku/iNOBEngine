@@ -99,11 +99,11 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	catch(std::exception) {
 		std::cout << "Name not found" << std::endl;
 	}
-	auto& isActive = go.find("active");
+	const auto& isActive = go.find("active");
 	if (isActive != go.end()) {
 		gameObject->active = isActive.value();
 	}
-	auto& retainOnLoad = go.find("retainOnLoad");
+	const auto& retainOnLoad = go.find("retainOnLoad");
 	if (retainOnLoad != go.end()) {
 		gameObject->retainOnLoad = retainOnLoad.value();
 	}
@@ -115,12 +115,12 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 
 		//Add parent's position to child
 		if (component->GetBitcode() == bitcodes.at("Transform") && parent != nullptr) {
-			((Transform*)component)->SetWorldPosition( &(((Transform*)component)->GetWorldPosition() +
+			((Transform*)component)->SetWorldPosition( (((Transform*)component)->GetWorldPosition() +
 				parent->transform->GetWorldPosition()));
 		}
 
 	}
-	auto& children = go.find("children");
+	const auto& children = go.find("children");
 	if (children != go.end()) {
 		for (nlohmann::json childJson : children.value()) {
 			GameObject* child = LoadFromFile(childJson.dump(), gameObject);

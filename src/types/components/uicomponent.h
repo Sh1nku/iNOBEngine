@@ -17,7 +17,7 @@ public:
 	std::string& GetText();
 	static UI_TYPE GetTypeFromString(std::string text);
 	static std::string GetNewWindowID();
-	void SetText(std::string& text);
+	void SetText(const std::string& text);
 	float positionX, positionY;
 	float positionPercentX, positionPercentY;
 	float sizeX, sizeY;

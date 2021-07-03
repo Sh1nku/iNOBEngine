@@ -20,12 +20,12 @@ std::vector<std::pair<std::string, Texture*>> Resources::textureBacklog;
 std::vector<std::filesystem::directory_entry> Resources::prefabBacklog;
 std::string Resources::gameDir = "";
 
-GameObject* Resources::GetPrefab(std::string& name) {
+GameObject* Resources::GetPrefab(const std::string& name) {
 	GameObject* obj = new GameObject(*(prefabs.at(name).get()));
 	return obj;
 }
 
-Texture* Resources::GetTexture(std::string& name) {
+Texture* Resources::GetTexture(const std::string& name) {
 	Texture* tex = nullptr;
 	try {
 		Texture* tex = textures.at(name).get();
@@ -35,18 +35,18 @@ Texture* Resources::GetTexture(std::string& name) {
 			tex = textures.at("error_texture").get();
 		}
 		catch (std::exception) {
-			Resources::textures.emplace("error_texture", std::move(Texture::LoadTexture(std::string("THIS_FILE_SHOULD_NOT_EXIST"))));
+			Resources::textures.emplace("error_texture", std::move(Texture::LoadTexture("THIS_FILE_SHOULD_NOT_EXIST")));
 			tex = textures.at("error_texture").get();
 		}
 	}
 	return tex;
 }
 
-Script* Resources::GetScript(std::string& name) {
+Script* Resources::GetScript(const std::string& name) {
 	return scripts.at(name).get();
 }
 
-void loadClips(std::string& contents) {
+void loadClips(const std::string& contents) {
 	nlohmann::json jsonAll = nlohmann::json::parse(contents);
 	std::vector<nlohmann::json> clips;
 	jsonAll.at("AnimationClips").get_to(clips);
@@ -89,7 +89,7 @@ void Resources::Load(std::string directory) {
 }
 
 ///TODO Implement with proper copy constructors for gameobjects and all subobjects
-void Resources::LoadScene(std::string& name) {
+void Resources::LoadScene(const std::string& name) {
 
 	Manager* manager = Manager::GetInstance();
 	auto tempGameObjecs = manager->GetGameObjects();
@@ -104,7 +104,7 @@ void Resources::LoadScene(std::string& name) {
 	}
 	
 	if (name != "__TEST_FILE__") {
-		Scene* scene = Scene::LoadFromFile(FileUtils::GetFileToString(scenes.at((std::string)name)));
+		Scene* scene = Scene::LoadFromFile(FileUtils::GetFileToString(scenes.at(name)));
 		for (GameObject* obj : scene->mSceneObjects) {
 			manager->Instantiate(obj);
 		}
@@ -112,7 +112,7 @@ void Resources::LoadScene(std::string& name) {
 	}
 }
 
-const auto loadErrorClip = [&] {
+const auto loadErrorClip = [] {
 	std::unique_ptr errorClip = std::make_unique<AnimationClip>();
 	errorClip.get()->AddFrame(AnimationFrame(AnimationCoords(0, 0, 2, 2), 0));
 	errorClip.get()->texture = Resources::GetTexture(std::string("error_texture"));
@@ -120,7 +120,7 @@ const auto loadErrorClip = [&] {
 	return true;
 }();
 
-AnimationClip* Resources::GetClip(std::string& clip) {
+AnimationClip* Resources::GetClip(const std::string& clip) {
 	return clips.at(clip).get();
 }
 

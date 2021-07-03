@@ -16,7 +16,7 @@ UI32 Transform::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<Transform>("Transform");
 	return true;
 }();
@@ -53,18 +53,18 @@ Vec3f Transform::GetWorldPosition() const {
 	return mWorldPosition;
 }
 
-void Transform::SetLocalPosition(Vec3f* position) {
+void Transform::SetLocalPosition(const Vec3f& position) {
 	auto oldPos = mWorldPosition;
 	if (mParent != nullptr) {
 		if (mParent->mParent != nullptr) {
-			mWorldPosition = mParent->mParent->transform->mWorldPosition + *position;
+			mWorldPosition = mParent->mParent->transform->mWorldPosition + position;
 		}
 		else {
-			mWorldPosition = *position;
+			mWorldPosition = position;
 		}
 	}
 	else {
-		mWorldPosition = *position;
+		mWorldPosition = position;
 	}
 	if (mParent != nullptr) {
 		for (GameObject* go : mParent->mChildren) {
@@ -73,9 +73,9 @@ void Transform::SetLocalPosition(Vec3f* position) {
 	}
 }
 
-void Transform::SetWorldPosition(Vec3f* position) {
+void Transform::SetWorldPosition(const Vec3f& position) {
 	auto oldPos = mWorldPosition;
-	mWorldPosition = *position;
+	mWorldPosition = position;
 	if (mParent != nullptr) {
 		for (GameObject* go : mParent->mChildren) {
 			go->transform->UpdatePosition(&oldPos);
@@ -122,6 +122,6 @@ void from_json(const nlohmann::json& j, Transform& t) {
 	if (positionVector.size() == 2) {
 		positionVector.emplace_back(0);
 	}
-	t.SetLocalPosition(&Vec3f(positionVector[0], positionVector[1], positionVector[2]));
+	t.SetLocalPosition(Vec3f(positionVector[0], positionVector[1], positionVector[2]));
 	return;
 }

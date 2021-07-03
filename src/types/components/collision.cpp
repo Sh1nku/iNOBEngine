@@ -37,7 +37,7 @@ UI32 Collision::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<Collision>("Collision");
 	return true;
 }();
@@ -78,7 +78,7 @@ b2Shape * Collision::cloneB2Shape(b2Shape * shape)
 		return polygon;
 	}
 	else {
-		throw new std::exception("The collision structure is not supported");
+		throw new std::runtime_error("The collision structure is not supported");
 	}
 }
 
@@ -104,7 +104,7 @@ void Collision::SetScale(float scale) {
 			((b2CircleShape*)fixture.shape)->m_radius *= scale;
 		}
 		else {
-			throw new std::exception("Fixture shape is not defined");
+			throw new std::runtime_error("Fixture shape is not defined");
 		}
 	}
 	mScale = scale;
@@ -115,7 +115,7 @@ void to_json(nlohmann::json& j, const Collision& t) {
 }
 
 void from_json(const nlohmann::json& j, Collision& t) {
-	auto& bodyType = j.find("type");
+	const auto& bodyType = j.find("type");
 	if (bodyType != j.end()) {
 		if (bodyType.value() == "dynamic") {
 			t.bodyDef.type = b2_dynamicBody;
@@ -130,11 +130,11 @@ void from_json(const nlohmann::json& j, Collision& t) {
 	else {
 		t.bodyDef.type = b2_staticBody;
 	}
-	auto& bullet = j.find("bullet");
+	const auto& bullet = j.find("bullet");
 	if (bullet != j.end()) {
 		t.bodyDef.bullet = bullet.value();
 	}
-	auto& preventRotation = j.find("fixedrotation");
+	const auto& preventRotation = j.find("fixedrotation");
 	if (preventRotation != j.end()) {
 		t.bodyDef.fixedRotation =	preventRotation.value();
 	}
@@ -157,18 +157,18 @@ void from_json(const nlohmann::json& j, Collision& t) {
 			circle->m_radius = radius;
 			fixtureDef.shape = circle;
 		}
-		auto& density = def.find("density");
+		const auto& density = def.find("density");
 		if (density != def.end()) {
 			fixtureDef.density = def.at("density");
 		}
 		else {
 			fixtureDef.density = 1.0;
 		}
-		auto& categoryBits = def.find("categorybits");
+		const auto& categoryBits = def.find("categorybits");
 		if (categoryBits != def.end()) {
 			fixtureDef.filter.categoryBits = stringToBin(categoryBits.value());
 		}
-		auto& maskBits = def.find("maskbits");
+		const auto& maskBits = def.find("maskbits");
 		if (maskBits != def.end()) {
 			fixtureDef.filter.maskBits = stringToBin(maskBits.value());
 		}

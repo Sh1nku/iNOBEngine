@@ -1,8 +1,8 @@
 [requires]
 sdl2_image/2.0.5@bincrafters/stable
-sdl2/2.0.10@bincrafters/stable
+sdl2/2.0.14@bincrafters/stable
 lua/5.3.5
-sol2/3.2.3
+sol2/3.2.2
 nlohmann_json/3.9.1
 opengl/system
 glu/system

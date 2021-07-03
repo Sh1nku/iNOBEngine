@@ -175,8 +175,8 @@ void LuaImplementation::CreateBindings() {
 
 	lua->set_function("voidToString", [](void* data) {return (const char*)data; });
 	lua->set_function("stringToVoid", [](const char* data) {return (void*)data; });
-	lua->set_function("voidToInt", [](void* data) {return ((int)data); });
-	lua->set_function("intToVoid", [](I32 data) {return ((void*)data); });
+	lua->set_function("voidToInt", [](void* data) {return ((intptr_t)data); });
+	lua->set_function("intToVoid", [](intptr_t data) {return ((void*)data); });
 	lua->set_function("voidToBool", [](void* data) {return ((bool)data); });
 	lua->set_function("boolToVoid", [](bool data) {return ((void*)data); });
 	//lua["Manager"]["getInstance"] = &Manager::GetManager;

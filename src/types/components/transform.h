@@ -13,10 +13,10 @@ public:
 	float GetWorldRotation() const;
 	float GetLocalRotation() const;
 	float GetScale() const;
-	void SetLocalPosition(Vec3f* position);
+	void SetLocalPosition(const Vec3f& position);
 	///TODO Implement, and make sure works with child objects like in SetLocalPosition
 	//void SetLocalRotation(float rotation);
-	void SetWorldPosition(Vec3f* position);
+	void SetWorldPosition(const Vec3f& position);
 	void SetWorldRotation(float rotation);
 	void SetScale(float scale);
 	UI32 GetBitcode() override;

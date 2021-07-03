@@ -15,7 +15,7 @@ UI32 TestComponent::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<TestComponent>("TestComponent");
 	return true;
 }();

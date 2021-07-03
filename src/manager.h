@@ -26,7 +26,7 @@ public:
 	static Manager* GetInstance();
 	SystemProgram* AddSystem(SystemProgram *system);
 	GameObject* Instantiate(GameObject* obj, std::string name = "", Vec3f* pos = nullptr);
-	void LoadScene(std::string& name);
+	void LoadScene(const std::string& name);
 	void Destroy(GameObject* obj);
 	void Update(float dt);
 

@@ -18,7 +18,7 @@ UI32 Camera::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<Camera>("Camera");
 	return true;
 }();
@@ -37,19 +37,19 @@ void to_json(nlohmann::json& j, const Camera& t) {
 }
 
 void from_json(const nlohmann::json& j, Camera& t) {
-	auto& type = j.find("type");
+	const auto& type = j.find("type");
 	if (type != j.end()) {
 		t.type = Camera::GetTypeFromString(type.value());
 	}
-	auto& fov = j.find("fov");
+	const auto& fov = j.find("fov");
 	if (fov != j.end()) {
 		t.fov = fov.value();
 	}
-	auto& zNear = j.find("zNear");
+	const auto& zNear = j.find("zNear");
 	if (zNear != j.end()) {
 		t.zNear = zNear.value();
 	}
-	auto& zFar = j.find("zFar");
+	const auto& zFar = j.find("zFar");
 	if (zFar != j.end()) {
 		t.zFar = zFar.value();
 	}

@@ -89,7 +89,7 @@ void RenderSystem::Update(float dt) {
 			Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
 			Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
 			UI32 id = anim->currentClip->texture->GetID();
-			auto& worldPos = transform->GetWorldPosition();
+			const auto& worldPos = transform->GetWorldPosition();
 			Texture* tex = anim->currentClip->texture;
 			AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
 

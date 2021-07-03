@@ -1,6 +1,6 @@
 #include "collisiondebugdraw.h"
 #include <SDL_opengl.h>
-#include <gl\GLU.h>
+#include <GL/glu.h>
 
 void CollisionDebugDraw::DrawPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color & color)
 {
