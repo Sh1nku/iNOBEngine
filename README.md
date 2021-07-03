@@ -1,6 +1,7 @@
 
 # iNOB Engine
-![](https://img.shields.io/endpoint?url=https://inobstudios.com/LOCCounterBadge/iNOBEngine/responses/shields_v1) <br>
+![Tests](https://github.com/Sh1nku/iNOBEngine/actions/workflows/tests.yml/badge.svg)
+![](https://inobstudios.com/LOCCounterBadge/iNOBEngine/responses/pybadges) <br>
 A c++17 based engine, using an entity-component-system structure. Capable of displaying 2d sprites in a 3d environment with either orthographic, or perspective projections.
 ## Features
  - Entities can have components, and can be manipulated by systems
@@ -15,8 +16,8 @@ An asteroid avoidance game, written entirely using the Lua scripting system
 
 ## Build
 You will need the [conan](https://conan.io/) package manager and the remote repository for bincrafters
-Note: If on linux using GCC you should run this to use the new GCC abi `conan profile update settings.compiler.libcxx=libstdc++11 default`
-this requires the profile `default` to already exist if not use `conan profile new default --detect`
+- Note: If on linux using GCC you should run this to use the new GCC abi `conan profile update settings.compiler.libcxx=libstdc++11 default`
+this requires the profile `default` to already exist, if not use `conan profile new default --detect`
 ```
 conan config set general.revisions_enabled=1
 conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
