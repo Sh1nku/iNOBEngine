@@ -6,7 +6,7 @@
 #include "types/systemprogram.h"
 #include <algorithm>
 #include "types/components/transform.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 #include "eventmanager.h"
 
 Manager* Manager::manager = nullptr;
@@ -66,12 +66,12 @@ GameObject* Manager::Instantiate(GameObject* obj, std::string name, Vec3f* pos) 
 		namedObjects.emplace_back(obj);
 	}
 	if (pos != nullptr) {
-		obj->transform->SetLocalPosition(pos);
+		obj->transform->SetLocalPosition(*pos);
 	}
 	return obj;
 }
 
-void Manager::LoadScene(std::string& name) {
+void Manager::LoadScene(const std::string& name) {
 	sceneToLoad = name;
 }
 
@@ -95,7 +95,7 @@ void Manager::LoadNewScene() {
 }
 
 void Manager::Destroy(GameObject* obj) {
-	auto& key = objectsToBeDeleted.find(obj);
+	const auto& key = objectsToBeDeleted.find(obj);
 	if (key == objectsToBeDeleted.end()) {
 		objectsToBeDeleted.emplace(obj);
 	}
@@ -149,7 +149,7 @@ void Manager::Update(float dt) {
 void Manager::RemoveGameObject(GameObject* obj) {
 	std::set<GameObject*>* set = &objectsToBeDeleted;
 	for (GameObject* child : obj->mChildren) {
-		auto& childIt = objectsToBeDeleted.find(child);
+		const auto& childIt = objectsToBeDeleted.find(child);
 		if (childIt != objectsToBeDeleted.end()) {
 			objectsToBeDeleted.erase(childIt);
 		}
@@ -177,9 +177,9 @@ std::map<UI32, GameObject*>& Manager::GetGameObjects(){
 }
 
 void Manager::FireEvent(EventManager* ptr, std::string ev, void* data) {
-	auto& i = mEvents.find(ptr);
+	const auto& i = mEvents.find(ptr);
 	if (i != mEvents.end()) {
-		auto& j = i->second.find(ev);
+		const auto& j = i->second.find(ev);
 		if (j != i->second.end()) {
 			for (auto& func : j->second) {
 				std::bind(func.second, data)();
@@ -189,12 +189,12 @@ void Manager::FireEvent(EventManager* ptr, std::string ev, void* data) {
 }
 
 void Manager::Subscribe(EventManager* ptr, std::string ev, EventManager* ref, std::function<void(void*)> func) {
-	auto& i = mEvents.find(ptr);
+	auto i = mEvents.find(ptr);
 	if (i == mEvents.end()) {
 		mEvents.emplace(ptr, std::unordered_map < std::string, std::unordered_map<EventManager*, std::function<void(void*)>>>());
 		i = mEvents.find(ptr);
 	}
-	auto& j = i->second.find(ev);
+	auto j = i->second.find(ev);
 	if (j == i->second.end()) {
 		i->second.emplace(ev, std::unordered_map < EventManager*, std::function<void(void*)>>());
 		j = i->second.find(ev);
@@ -203,11 +203,11 @@ void Manager::Subscribe(EventManager* ptr, std::string ev, EventManager* ref, st
 }
 
 void Manager::Unsubscribe(EventManager* ptr, std::string ev, EventManager* obj) {
-	auto& i = mEvents.find(ptr);
+	const auto& i = mEvents.find(ptr);
 	if (i != mEvents.end()) {
-		auto& j = i->second.find(ev);
+		const auto& j = i->second.find(ev);
 		if (j != i->second.end()) {
-			auto& k = j->second.find(obj);
+			const auto& k = j->second.find(obj);
 			if (k != j->second.end()) {
 				j->second.erase(k);
 			}
@@ -216,7 +216,7 @@ void Manager::Unsubscribe(EventManager* ptr, std::string ev, EventManager* obj) 
 }
 
 void Manager::RemoveFromEvent(EventManager* ev) {
-	auto& i = mEvents.find(ev);
+	const auto& i = mEvents.find(ev);
 	if (i != mEvents.end()) {
 		mEvents.erase(i);
 	}

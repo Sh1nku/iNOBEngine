@@ -1,16 +1,16 @@
 #include <gtest/gtest.h>
 #include "iNOBEngine.h"
 
-TEST(RenderSystemTest, CreateRenderSystem) {
+TEST(RenderSystemTest, CreateRenderSystem_DEPENDS_UI) {
 	Manager* manager = Manager::GetInstance();
 	RenderSystem* renderSystem = new RenderSystem();
-	manager->AddSystem((SystemProgram*) renderSystem);
+	manager->AddSystem((SystemProgram*)renderSystem);
 	RenderSystem* renderSystem2 = manager->GetSystem<RenderSystem>();
-	ASSERT_EQ(renderSystem,renderSystem2);
+	ASSERT_EQ(renderSystem, renderSystem2);
 	delete manager;
 }
 
-TEST(RenderSystemTest, ShowFromComponent) {
+TEST(RenderSystemTest, ShowFromComponent_DEPENDS_UI) {
 	RenderSystem renderSystem;
 	GameObject obj;
 	obj.AddComponent(new Animation());

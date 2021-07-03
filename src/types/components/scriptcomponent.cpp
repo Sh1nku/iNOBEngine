@@ -31,7 +31,7 @@ UI32 ScriptComponent::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<ScriptComponent>("ScriptComponent");
 	return true;
 }();

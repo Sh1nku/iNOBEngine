@@ -7,6 +7,8 @@ class Component;
 class GameObject;
 
 typedef std::unordered_map<std::string, Component*(*)(nlohmann::json json)> mapType;
+extern std::unordered_map< std::string, UI32> bitcodes;
+extern mapType jsonComponentList;
 
 class Component
 {
@@ -27,17 +29,13 @@ protected:
 	virtual Component* Clone(GameObject* parent = nullptr) = 0;
 };
 
-template<typename T> void AddComponentToList(std::string name) {
-	Component::AddBitcode(name);
-	jsonComponentList.emplace(name, &CreateComponent<T>);
-}
-
 template<typename T> Component* CreateComponent(nlohmann::json json) {
 	T *t = new T();
 	from_json(json, *t);
 	return t;
 }
 
-
-extern std::unordered_map< std::string, UI32> bitcodes;
-extern mapType jsonComponentList;
+template<typename T> void AddComponentToList(std::string name) {
+	Component::AddBitcode(name);
+	jsonComponentList.emplace(name, &CreateComponent<T>);
+}

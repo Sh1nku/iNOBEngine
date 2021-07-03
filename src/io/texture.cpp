@@ -29,7 +29,7 @@ UI32 Texture::GetComp() {
 	return comp;
 }
 
-Texture* Texture::LoadTexture(std::string& file) {
+Texture* Texture::LoadTexture(const std::string& file) {
 	if (Window::mWindow == nullptr) {
 		Texture* retTex = new Texture();
 		Resources::textureBacklog.emplace_back(std::make_pair(file, retTex));
@@ -92,7 +92,7 @@ void from_json(const nlohmann::json& j, AnimationClip& t) {
 		tex = Resources::textures.at(j.at("texture")).get();
 	}
 	catch (std::exception) {
-		tex = Texture::LoadTexture((std::string) j.at("texture"));
+		tex = Texture::LoadTexture((const std::string) j.at("texture"));
 		Resources::textures.insert({ j.at("texture"), std::make_unique<Texture>(*tex) });
 	}
 	t.texture = tex;

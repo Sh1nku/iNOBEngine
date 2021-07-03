@@ -111,7 +111,7 @@ UI32 Input::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<Input>("Input");
 	return true;
 }();

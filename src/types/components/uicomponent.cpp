@@ -28,7 +28,7 @@ UI32 UIComponent::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<UIComponent>("UIComponent");
 	return true;
 }();
@@ -47,7 +47,7 @@ std::string& UIComponent::GetText() {
 	return text;
 }
 
-void UIComponent::SetText(std::string& text) {
+void UIComponent::SetText(const std::string& text) {
 	this->text = text.c_str();
 }
 
@@ -77,16 +77,16 @@ UI_TYPE UIComponent::GetTypeFromString(std::string type) {
 }
 
 void from_json(const nlohmann::json& j, UIComponent& t) {
-	auto& text = j.find("text");
+	const auto& text = j.find("text");
 	if (text != j.end()) {
-		t.SetText((std::string)text.value());
+		t.SetText(text.value());
 	}
 
 	std::vector<std::string> position;
 	j.at("position").get_to(position);
 	std::vector<std::string> size;
 	j.at("size").get_to(size);
-	auto& posX = GetCoordsFromString(position[0]);
+	const auto& posX = GetCoordsFromString(position[0]);
 	if (posX.first == false) {
 		t.positionX = posX.second;
 	}
@@ -94,7 +94,7 @@ void from_json(const nlohmann::json& j, UIComponent& t) {
 		t.positionPercentX = posX.second;
 	}
 
-	auto& posY = GetCoordsFromString(position[1]);
+	const auto& posY = GetCoordsFromString(position[1]);
 	if (posY.first == false) {
 		t.positionY = posY.second;
 	}
@@ -102,7 +102,7 @@ void from_json(const nlohmann::json& j, UIComponent& t) {
 		t.positionPercentY = posY.second;
 	}
 
-	auto& sizeX = GetCoordsFromString(size[0]);
+	const auto& sizeX = GetCoordsFromString(size[0]);
 	if (sizeX.first == false) {
 		t.sizeX = sizeX.second;
 	}
@@ -110,7 +110,7 @@ void from_json(const nlohmann::json& j, UIComponent& t) {
 		t.sizePercentX = sizeX.second;
 	}
 
-	auto& sizeY = GetCoordsFromString(size[1]);
+	const auto& sizeY = GetCoordsFromString(size[1]);
 	if (sizeY.first == false) {
 		t.sizeY = sizeY.second;
 	}
@@ -121,7 +121,7 @@ void from_json(const nlohmann::json& j, UIComponent& t) {
 	t.type = UIComponent::GetTypeFromString(j.at("type"));
 	t.windowID = UIComponent::GetNewWindowID();
 
-	auto& buttonListener = j.find("buttonevent");
+	const auto& buttonListener = j.find("buttonevent");
 	if (buttonListener != j.end()) {
 		t.buttonEvent = buttonListener.value();
 	}

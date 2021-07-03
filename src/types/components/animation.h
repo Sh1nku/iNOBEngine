@@ -1,7 +1,7 @@
 #pragma once
 #include "../component.h"
 #include "../../io/texture.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 
 enum ANIMATION_STATES {
 	STARTED,
@@ -16,7 +16,7 @@ public:
 	Animation(GameObject *parent = nullptr);
 	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
-	void SetClip(std::string& name, bool restartIfAlready = true);
+	void SetClip(const std::string& name, bool restartIfAlready = true);
 	AnimationClip* currentClip;
 	int currentFrame;
 	void Subscribe(std::string clip, ANIMATION_STATES state, void (*function)());

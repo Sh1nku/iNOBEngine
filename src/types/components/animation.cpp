@@ -4,7 +4,7 @@
 #include "../../io/resources.h"
 
 Animation::Animation(GameObject *parent) : Component(parent), currentFrame(0) {
-	currentClip = Resources::GetClip(std::string("error_clip"));
+	currentClip = Resources::GetClip("error_clip");
 }
 
 Component* Animation::Clone(GameObject* parent) {
@@ -20,7 +20,7 @@ UI32 Animation::GetBitcode() {
 	return bitcode;
 }
 
-const auto x = [&] {
+const auto x = [] {
 	AddComponentToList<Animation>("Animation");
 	return true;
 }();
@@ -34,7 +34,7 @@ void from_json(const nlohmann::json& j, Animation& t) {
 	t.SetClip(clip);
 }
 
-void Animation::SetClip(std::string& clip, bool restartIfAlready) {
+void Animation::SetClip(const std::string& clip, bool restartIfAlready) {
 	AnimationClip* newClip = Resources::GetClip(clip);
 	if (currentClip != nullptr) {
 		if (currentClip->name == newClip->name && !restartIfAlready) {
@@ -46,9 +46,9 @@ void Animation::SetClip(std::string& clip, bool restartIfAlready) {
 }
 
 void Animation::Subscribe(std::string clip, ANIMATION_STATES state, void(*function)()) {
-	auto& clipEvent = events.find(clip);
+	const auto& clipEvent = events.find(clip);
 	if (clipEvent != events.end()) {
-		auto& stateEvent = clipEvent->second.find(state);
+		const auto& stateEvent = clipEvent->second.find(state);
 		if (stateEvent != clipEvent->second.end()) {
 			stateEvent->second.emplace_back(function);
 		}
@@ -65,9 +65,9 @@ void Animation::Subscribe(std::string clip, ANIMATION_STATES state, void(*functi
 }
 
 void Animation::FireEvent(std::string& clip, ANIMATION_STATES state) {
-	auto& clipEvent = events.find(clip);
+	const auto& clipEvent = events.find(clip);
 	if (clipEvent != events.end()) {
-		auto& stateEvent = clipEvent->second.find(state);
+		const auto& stateEvent = clipEvent->second.find(state);
 		if (stateEvent != clipEvent->second.end()) {
 			for (auto& func : stateEvent->second) {
 				func();

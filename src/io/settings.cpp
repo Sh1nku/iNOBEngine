@@ -19,10 +19,10 @@ bool Settings::Load() {
 		char buffer[256];
 		while (!load.eof()) {
 			load.getline(buffer, 256);
-			sscanf_s(buffer, "Screen Width = %d", &Window::SCREEN_WIDTH);
-			sscanf_s(buffer, "Screen Height = %d", &Window::SCREEN_HEIGHT);
+			sscanf(buffer, "Screen Width = %d", &Window::SCREEN_WIDTH);
+			sscanf(buffer, "Screen Height = %d", &Window::SCREEN_HEIGHT);
 			//Probably gonna crash. Have no idea why it wants an int pointer
-			sscanf_s(buffer, "Fullscreen = %d", (int*)&Window::SCREEN_FULLSCREEN);
+			sscanf(buffer, "Fullscreen = %d", (int*)&Window::SCREEN_FULLSCREEN);
 		}
 	}
 	//Save default values to the file

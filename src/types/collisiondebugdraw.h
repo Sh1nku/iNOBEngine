@@ -1,5 +1,5 @@
 #pragma once
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 
 class CollisionDebugDraw : public b2Draw {
 	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;

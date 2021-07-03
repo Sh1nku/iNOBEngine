@@ -4,10 +4,11 @@
 #include <map>
 #include <set>
 #include "types/enginetypes.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 #include "types/vectors.h"
 #include "eventmanager.h"
 #include <functional>
+#include <typeindex>
 
 class GameObject;
 class SystemProgram;
@@ -25,7 +26,7 @@ public:
 	static Manager* GetInstance();
 	SystemProgram* AddSystem(SystemProgram *system);
 	GameObject* Instantiate(GameObject* obj, std::string name = "", Vec3f* pos = nullptr);
-	void LoadScene(std::string& name);
+	void LoadScene(const std::string& name);
 	void Destroy(GameObject* obj);
 	void Update(float dt);
 

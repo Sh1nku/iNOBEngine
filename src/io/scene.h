@@ -9,7 +9,7 @@ public:
 	friend class Resources;
 	Scene();
 	~Scene();
-	static Scene* LoadFromFile(std::string& fileContents);
+	static Scene* LoadFromFile(const std::string& fileContents);
 private:
 	std::vector<GameObject*> mSceneObjects;
 };

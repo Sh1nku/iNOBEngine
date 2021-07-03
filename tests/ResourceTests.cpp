@@ -2,7 +2,7 @@
 #include "iNOBEngine.h"
 #include <fstream>
 
-char pngImage[] { 
+unsigned char pngImage[] {
 	0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,
 	0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0A, 0x08, 0x06, 0x00, 0x00, 0x00, 0x8D, 0x32, 0xCF,
 	0xBD, 0x00, 0x00, 0x00, 0x09, 0x70, 0x48, 0x59, 0x73, 0x00, 0x00, 0x2E, 0x23, 0x00, 0x00, 0x2E,
@@ -40,12 +40,12 @@ R"(
 }
 )";
 
-TEST(ResourceTest, LoadPNG) {
+TEST(ResourceTest, LoadPNG_DEPENDS_UI) {
 	std::ofstream file;
 	file.open("TEMP_FILE_PNG.png", std::ios::binary | std::ios::out);
-	file.write(pngImage, sizeof(pngImage));
+	file.write((char*)pngImage, sizeof(pngImage));
 	file.close();
-	Texture* tex = Texture::LoadTexture(std::string("TEMP_FILE_PNG.png"));
+	Texture* tex = Texture::LoadTexture("TEMP_FILE_PNG.png");
 	ASSERT_EQ(tex->GetWidth(), 10);
 	ASSERT_EQ(tex->GetComp(), 4);
 	delete tex;
@@ -80,14 +80,14 @@ TEST(ResourceTest, InstantiatePrefabTwice) {
 	delete manager;
 }
 
-TEST(RenderSystemTest, ShowTexture) {
+TEST(RenderSystemTest, ShowTexture_DEPENDS_UI) {
 	RenderSystem renderSystem;
 	GameObject obj;
 	Animation* anim = new Animation();
 
 	std::ofstream file;
 	file.open("TEMP_FILE_PNG.png", std::ios::binary | std::ios::out);
-	file.write(pngImage, sizeof(pngImage));
+	file.write((char*)pngImage, sizeof(pngImage));
 	file.close();
 	std::unique_ptr<AnimationClip> clip = std::make_unique<AnimationClip>();
 	from_json(nlohmann::json::parse(clipJson), *clip.get());

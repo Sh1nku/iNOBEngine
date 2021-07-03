@@ -13,11 +13,11 @@ class Script;
 class Resources {
 public:
 	static void Load(std::string directory);
-	static GameObject* GetPrefab(std::string& name);
-	static AnimationClip* GetClip(std::string& name);
-	static Texture* GetTexture(std::string& name);
-	static Script* GetScript(std::string& name);
-	static void LoadScene(std::string& name);
+	static GameObject* GetPrefab(const std::string& name);
+	static AnimationClip* GetClip(const std::string& name);
+	static Texture* GetTexture(const std::string& name);
+	static Script* GetScript(const std::string& name);
+	static void LoadScene(const std::string& name);
 
 	static std::unordered_map<std::string, std::unique_ptr<AnimationClip>>* GetClips();
 	static std::unordered_map<std::string, std::unique_ptr<GameObject>>* GetPrefabs();

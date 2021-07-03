@@ -11,7 +11,7 @@ Scene::~Scene() {
 
 }
 
-Scene* Scene::LoadFromFile(std::string& fileContents) {
+Scene* Scene::LoadFromFile(const std::string& fileContents) {
 	Scene* scene = new Scene();
 	nlohmann::json json = nlohmann::json::parse(fileContents);
 	for (auto gameObjectJSON : json) {
