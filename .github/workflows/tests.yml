@@ -19,8 +19,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-              apt-get update
-              DEBIAN_FRONTEND=noninteractive apt-get install -y build-tools pip pkg-config cmake libsdl2-dev libsdl2-image-dev sudo
+              sudo apt-get update
+              DEBIAN_FRONTEND=noninteractive sudo apt-get install -y build-tools pip pkg-config cmake libsdl2-dev libsdl2-image-dev sudo
               pip install conan
 
     - name: Configure Conan
