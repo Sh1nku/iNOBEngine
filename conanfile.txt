@@ -10,9 +10,13 @@ box2d/2.4.1
 imgui/1.83
 glm/0.9.9.5
 gtest/1.10.0
+cef_binaries/3.2840.1493.g4e029f4@sh1nku/stable
 
 [generators]
 cmake
 
 [options]
 sdl2:shared=True
+
+[imports]
+bin, * -> bin

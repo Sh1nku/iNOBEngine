@@ -1,9 +1,4 @@
-cmake_minimum_required(VERSION 3.4.0)
-
-if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-      CACHE STRING "")
-endif()
+cmake_minimum_required(VERSION 3.17.1)
 
 project (iNOBEngine)
 
@@ -12,6 +7,7 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE TEST_SOURCES "tests/*.cpp")
 file(GLOB_RECURSE TEST_HEADERS "tests/*.h")
 file(GLOB_RECURSE EXAMPLES_ASTEROID_SOURCES "examples/AsteroidAvoidanceGame/src/*.cpp")
+file(GLOB_RECURSE EXAMPLES_ASTEROID_MANIFEST "examples/AsteroidAvoidanceGame/src/*.manifest")
 file(GLOB_RECURSE EXAMPLES_ASTEROID_HEADERS "examples/AsteroidAvoidanceGame/src/*.h")
 
 if (MSVC)
@@ -21,7 +17,7 @@ endif (MSVC)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
-set ( PROJECT_LINK_LIBS CONAN_PKG::sdl2_image CONAN_PKG::sdl2 CONAN_PKG::lua CONAN_PKG::sol2 CONAN_PKG::nlohmann_json CONAN_PKG::opengl CONAN_PKG::glu CONAN_PKG::box2d CONAN_PKG::imgui CONAN_PKG::glm)
+set ( PROJECT_LINK_LIBS CONAN_PKG::sdl2_image CONAN_PKG::sdl2 CONAN_PKG::lua CONAN_PKG::sol2 CONAN_PKG::nlohmann_json CONAN_PKG::opengl CONAN_PKG::glu CONAN_PKG::box2d CONAN_PKG::imgui CONAN_PKG::glm CONAN_PKG::cef_binaries)
 
 add_library(iNOBEngine SHARED ${SOURCES} ${HEADERS})
 target_link_libraries(iNOBEngine PRIVATE ${PROJECT_LINK_LIBS} )

@@ -36,6 +36,7 @@ Texture* Texture::LoadTexture(const std::string& file) {
 		return retTex;
 	}
 	else {
+		
 		SDL_Surface* tempSurface = IMG_Load((Resources::gameDir + file).c_str());
 		if (tempSurface == nullptr) {
 			std::cout << "Could not load texture: " << file.c_str() << "\n" << IMG_GetError() << std::endl;

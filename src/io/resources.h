@@ -31,5 +31,6 @@ public:
 	static std::vector<std::pair<std::string, Texture*>> textureBacklog;
 	static std::vector<std::filesystem::directory_entry> prefabBacklog;
 	static std::string gameDir;
+	static std::string gameDirAbsoulute;
 private:
 };

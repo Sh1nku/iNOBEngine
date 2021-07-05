@@ -1,6 +1,8 @@
 #pragma once
 #include "../systemprogram.h"
 #include "../collisiondebugdraw.h"
+#include "../../window/cef/guibrowserclient.h"
+#include "../../window/cef/guirenderhandler.h"
 
 class Window;
 class UIComponent;
@@ -26,6 +28,10 @@ private:
 	void RenderLabel(UIComponent& component);
 	void RenderButton(UIComponent& component);
 	CollisionDebugDraw collisionDrawer;
+
+	CefRefPtr<GUIRenderHandler> GUIrenderHandler;
+	CefRefPtr<CefBrowser> GUIbrowser;
+	CefRefPtr<GUIBrowserClient> GUIbrowserClient;
 };
 
 const static float RADIAN_IN_DEGREES = 57.3f;
