@@ -67,7 +67,7 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 		CefString(&settings.resources_dir_path) = SDL_GetBasePath();
 		settings.no_sandbox = true;
 		settings.windowless_rendering_enabled = true;
-		settings.single_process = true;
+
 		CefInitialize(args, settings, nullptr, nullptr);
 	}
 	GUIrenderHandler = new GUIRenderHandler();
