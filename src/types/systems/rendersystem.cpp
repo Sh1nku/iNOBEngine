@@ -15,13 +15,9 @@
 #include "../../window/imgui/imgui_impl_sdl.h"
 #include "../../manager.h"
 #include "collisionsystem.h"
+#include "../../window/cef/cef_manager.h"
 
 RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
-
-    CefMainArgs args;
-    {
-        CefExecuteProcess(args, nullptr, nullptr);
-    }
 
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
@@ -59,37 +55,45 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 		glLoadIdentity();
 		delete data;
 	});
-	{
-		CefSettings settings;
-		std::ostringstream ss;
-		ss << SDL_GetBasePath() << "locales/";
-		CefString(&settings.locales_dir_path) = ss.str();
-		CefString(&settings.resources_dir_path) = SDL_GetBasePath();
-		settings.no_sandbox = true;
-		settings.windowless_rendering_enabled = true;
+	if (CEF_INITIALIZED) {
+		{
+			CefMainArgs args;
+			CefSettings settings;
+			std::ostringstream ss;
+			ss << SDL_GetBasePath() << "locales/";
+			CefString(&settings.locales_dir_path) = ss.str();
+			CefString(&settings.resources_dir_path) = SDL_GetBasePath();
+			settings.no_sandbox = true;
+			settings.windowless_rendering_enabled = true;
 
-		CefInitialize(args, settings, nullptr, nullptr);
+			CefInitialize(args, settings, nullptr, nullptr);
+		}
+		GUIrenderHandler = new GUIRenderHandler();
+		{
+			CefWindowInfo window_info;
+			CefBrowserSettings browserSettings;
+			window_info.SetAsWindowless(NULL, true); // false means no transparency (site background colour)
+			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler);
+			std::string url = "file:///" + Resources::gameDirAbsoulute + "ui.html";
+			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
+		}
 	}
-	GUIrenderHandler = new GUIRenderHandler();
-	{
-		CefWindowInfo window_info;
-		CefBrowserSettings browserSettings;
-		window_info.SetAsWindowless(NULL, true); // false means no transparency (site background colour)
-		GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler);
-		std::string url = "file:///"+Resources::gameDirAbsoulute+"ui.html";
-		GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
+	else {
+		std::cout << "Warning: CEF is not initialized";
 	}
 }
 
 RenderSystem::~RenderSystem() {
-	GUIbrowser->GetHost()->CloseBrowser(true);
-	while (GUIbrowser->HasOneRef()) {
-		CefDoMessageLoopWork();
+	if (CEF_INITIALIZED) {
+		GUIbrowser->GetHost()->CloseBrowser(true);
+		while (GUIbrowser->HasOneRef()) {
+			CefDoMessageLoopWork();
+		}
+		GUIbrowser = nullptr;
+		GUIbrowserClient = nullptr;
+		GUIrenderHandler = nullptr;
+		CefShutdown();
 	}
-	GUIbrowser = nullptr;
-	GUIbrowserClient = nullptr;
-	GUIrenderHandler = nullptr;
-	CefShutdown();
 	ImGui_ImplOpenGL2_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
@@ -152,54 +156,57 @@ void RenderSystem::Update(float dt) {
 	StartGUIDraw();
 
 
-	if (GUIrenderHandler->texture && !GUIbrowser->IsLoading()) {
-		GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-		GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
-		GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-		GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
-		glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
-		glDisable(GL_DEPTH_TEST);
+	if (CEF_INITIALIZED) {
+		CefDoMessageLoopWork();
+		if (GUIrenderHandler->texture && !GUIbrowser->IsLoading()) {
+			GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+			GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+			GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+			GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
+			glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+			glDisable(GL_DEPTH_TEST);
 
-		glViewport(0, 0, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT);
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT, 0, -1.0f, +1.0f);
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
+			glViewport(0, 0, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT);
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glOrtho(0, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT, 0, -1.0f, +1.0f);
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
 
 
-		glPushMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluOrtho2D(-1, 1, -1, 1);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glColor3f(1, 1, 1);
-		glBindTexture(GL_TEXTURE_2D, GUIrenderHandler->texture->id);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 1);
-		glVertex3f(-1.0f, -1.0f, 0.0f);
-		glTexCoord2f(1, 1);
-		glVertex3f(1.0f, -1.0f, 0.0f);
-		glTexCoord2f(1, 0);
-		glVertex3f(1.0f, 1.0f, 0.0f);
-		glTexCoord2f(0, 0);
-		glVertex3f(-1.0f, 1.0f, 0.0f);
-		glEnd();
-		glPopMatrix();
+			glPushMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			gluOrtho2D(-1, 1, -1, 1);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glColor3f(1, 1, 1);
+			glBindTexture(GL_TEXTURE_2D, GUIrenderHandler->texture->id);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0, 1);
+			glVertex3f(-1.0f, -1.0f, 0.0f);
+			glTexCoord2f(1, 1);
+			glVertex3f(1.0f, -1.0f, 0.0f);
+			glTexCoord2f(1, 0);
+			glVertex3f(1.0f, 1.0f, 0.0f);
+			glTexCoord2f(0, 0);
+			glVertex3f(-1.0f, 1.0f, 0.0f);
+			glEnd();
+			glPopMatrix();
 
-		glEnable(GL_DEPTH_TEST);
-		glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glPopAttrib();
-		glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
-		glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-		glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+			glEnable(GL_DEPTH_TEST);
+			glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glPopAttrib();
+			glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
+			glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
+			glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+		}
 	}
 
 	/*if (showFPS) {
@@ -217,9 +224,6 @@ void RenderSystem::Update(float dt) {
 		}
 	}*/
 	EndGUIDraw();
-
-
-	CefDoMessageLoopWork();
 
 	glPopMatrix();
 	SDL_GL_SwapWindow(window->mWindow);
