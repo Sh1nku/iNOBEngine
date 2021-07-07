@@ -27,7 +27,9 @@ Window::~Window()
 
 void Window::Create()
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+    }
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -43,6 +45,9 @@ void Window::Create()
 	{
 		mWindow = SDL_CreateWindow("2DRPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	}
+    if (mWindow == NULL) {
+        SDL_Log("Could not create window: %s\n", SDL_GetError());
+    }
 	mContext = SDL_GL_CreateContext(mWindow);
 	SDL_GL_SetSwapInterval(0);
 

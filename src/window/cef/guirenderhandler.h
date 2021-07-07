@@ -7,7 +7,7 @@
 #include <include/cef_load_handler.h>
 #include <include/wrapper/cef_helpers.h>
 #include <SDL.h>
-#include <gl/GL.h>
+#include <GL/gl.h>
 
 class Texture;
 class RenderSystem;

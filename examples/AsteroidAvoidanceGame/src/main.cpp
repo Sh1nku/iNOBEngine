@@ -3,9 +3,13 @@
 int main(int argc, char **argv) {
 	// Init GUI, HOLY FUCKING SHIT; THIS NEEDS TO BE AS EARLY IN THE APPLICATION AS POSSIBLE, OR ELSE IT WILL SPAWN MULTIPLE WINDOWS USING THE ACTUAL MAIN FUNCTION, WHAT A FUCKING USELESS FEATURE
 	//https://www.magpcss.org/ceforum/viewtopic.php?f=6&t=11977
-	CefMainArgs args;
+	CefMainArgs args(argc, argv);
 	{
-		CefExecuteProcess(args, nullptr, nullptr);
+        int exit_code = CefExecuteProcess(args, nullptr, nullptr);
+        if (exit_code >= 0) {
+            // The sub-process terminated, exit now.
+            return exit_code;
+        }
 	}
 	
 	bool quit = false;

@@ -18,10 +18,11 @@
 
 RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 
-	CefMainArgs args;
-	{
-		CefExecuteProcess(args, nullptr, nullptr);
-	}
+    CefMainArgs args;
+    {
+        CefExecuteProcess(args, nullptr, nullptr);
+    }
+
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("UIComponent"), std::make_unique<gameObject_map>() });
