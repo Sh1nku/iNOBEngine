@@ -16,6 +16,10 @@ CefRefPtr<CefRenderHandler> GUIBrowserClient::GetRenderHandler() {
     return handler;
 }
 
+CefRefPtr<CefDisplayHandler> GUIBrowserClient::GetDisplayHandler() {
+    return this;
+}
+
 // CefLifeSpanHandler methods.
 void GUIBrowserClient::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     // Must be executed on the UI thread.
@@ -62,6 +66,13 @@ bool GUIBrowserClient::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
 void GUIBrowserClient::OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward)
 {
     std::cout << "OnLoadingStateChange()" << std::endl;
+}
+
+bool GUIBrowserClient::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line)
+{
+     
+    std::wcout << "Javascript error, line " << line << "\n    " << message.c_str() << "\n";
+    return true;
 }
 
 void GUIBrowserClient::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame)

@@ -1,4 +1,6 @@
 #include <box2d/box2d.h>
+#include <deque>
+#include <numeric>
 #include "rendersystem.h"
 #include "../../io/resources.h"
 #include "../../window/window.h"
@@ -158,7 +160,13 @@ void RenderSystem::Update(float dt) {
 
 	if (CEF_INITIALIZED) {
 		CefDoMessageLoopWork();
+
 		if (GUIrenderHandler->texture && !GUIbrowser->IsLoading()) {
+
+			if (showFPS) {
+				ShowFPS(dt);
+			}
+
 			GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
 			GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
 			GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
@@ -208,11 +216,7 @@ void RenderSystem::Update(float dt) {
 			glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
 		}
 	}
-
-	/*if (showFPS) {
-		ShowFPS();
-	}
-	for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
+	/*for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
 		if (entry.first->active) {
 			UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
 			if (ui->type == UI_TYPE::LABEL) {
@@ -262,15 +266,27 @@ void RenderSystem::ShowCollisions() {
 	}
 }
 
-void RenderSystem::ShowFPS() {
-	ImGui::SetNextWindowPos(ImVec2(0, 0) , ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(90,20), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowBgAlpha(0);
-	ImGui::Begin("FPSCounter", nullptr,
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
-		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-	ImGui::End();
+void RenderSystem::ShowFPS(float dt) {
+	static int average_count = 10;
+	static std::deque<float> averages;
+	static char* create_fps_string =
+R"(
+if (!document.getElementById('__fps_counter')) {
+	let fps = document.createElement('p');
+	fps.style.cssText = 'position:absolute;left:0;top:0;color:white;z-index:9999;margin: 0;';
+	fps.id = '__fps_counter';
+	document.body.appendChild(fps);
+}
+)";
+	CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+	frame->ExecuteJavaScript(create_fps_string, frame->GetURL(), 0);
+	if (averages.size() >= average_count) {
+		averages.pop_front();
+	}
+	averages.push_back((float)(1 / dt));
+	std::ostringstream ss;
+	ss << "document.getElementById('__fps_counter').innerHTML = '" << (int)(std::accumulate(averages.begin(), averages.end(), 0) / averages.size()) << "';";
+	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
 }
 
 void RenderSystem::RenderLabel(UIComponent& component) {

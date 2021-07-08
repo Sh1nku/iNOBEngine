@@ -22,7 +22,7 @@ private:
 	void StartGUIDraw();
 	void EndGUIDraw();
 	bool showFPS;
-	void ShowFPS();
+	void ShowFPS(float dt);
 	bool showCollisions;
 	void ShowCollisions();
 	void RenderLabel(UIComponent& component);
