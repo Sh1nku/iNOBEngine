@@ -248,7 +248,7 @@ void RenderSystem::ShowCollisions() {
 void RenderSystem::ShowFPS(float dt) {
 	static int average_count = 10;
 	static std::deque<float> averages;
-	static char* create_fps_string =
+	static std::string create_fps_string =
 R"(
 if (!document.getElementById('__fps_counter')) {
 	let fps = document.createElement('p');

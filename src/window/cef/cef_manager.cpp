@@ -47,9 +47,9 @@ void CEF_INIT(int argc, char** argv) {
 		{
 			CefWindowInfo window_info;
 			CefBrowserSettings browserSettings;
-			window_info.SetAsWindowless(NULL, true); // false means no transparency (site background colour)
+			window_info.SetAsWindowless(0, true); // false means no transparency (site background colour)
 			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler);
-			std::string url = "file:///"; //+ Resources::gameDirAbsoulute + "ui.html";
+			std::string url = "about:blank"; //+ Resources::gameDirAbsoulute + "ui.html";
 			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
 
 		}
