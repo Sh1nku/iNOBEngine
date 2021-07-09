@@ -31,3 +31,4 @@
 #include "eventmanager.h"
 #include "box2d/box2d.h"
 #include "window/cef/cef_manager.h"
+#include "window/cef/guiapp.h"

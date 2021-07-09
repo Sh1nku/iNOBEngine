@@ -1,6 +1,13 @@
 #include "cef_manager.h"
+#include "guiapp.h"
+#include <iostream>
+#include <SDL.h>
+#include "../../io/resources.h"
 
 bool CEF_INITIALIZED = false;
+CefRefPtr<GUIRenderHandler> GUIrenderHandler = nullptr;
+CefRefPtr<CefBrowser> GUIbrowser = nullptr;
+CefRefPtr<GUIBrowserClient> GUIbrowserClient = nullptr;
 
 void CEF_INIT(int argc, char** argv) {
 	// Init GUI, HOLY FUCKING SHIT; THIS NEEDS TO BE AS EARLY IN THE APPLICATION AS POSSIBLE, OR ELSE IT WILL SPAWN MULTIPLE WINDOWS USING THE ACTUAL MAIN FUNCTION, WHAT A FUCKING USELESS FEATURE
@@ -14,11 +21,53 @@ void CEF_INIT(int argc, char** argv) {
 	CefMainArgs args(argc, argv);
 #endif
 	{
-		int exit_code = CefExecuteProcess(args, nullptr, nullptr);
+		CefRefPtr<GUIApp> cef_app(new GUIApp());
+		int exit_code = CefExecuteProcess(args, cef_app.get(), nullptr);
 		if (exit_code >= 0) {
 			// The sub-process terminated, exit now.
+			std::cout << "Terminate child process" << std::endl;
 			exit(exit_code);
+		}
+
+		{
+			CefMainArgs args;
+			CefSettings settings;
+			std::ostringstream ss;
+			ss << SDL_GetBasePath() << "locales/";
+			CefString(&settings.locales_dir_path) = ss.str();
+			CefString(&settings.resources_dir_path) = SDL_GetBasePath();
+			settings.no_sandbox = true;
+			settings.windowless_rendering_enabled = true;
+			//This causes UI thread not to exist, and instead be in main thread
+			settings.multi_threaded_message_loop = false;
+			//settings.single_process = true;
+			CefInitialize(args, settings, cef_app.get(), nullptr);
+		}
+		GUIrenderHandler = new GUIRenderHandler();
+		{
+			CefWindowInfo window_info;
+			CefBrowserSettings browserSettings;
+			window_info.SetAsWindowless(NULL, true); // false means no transparency (site background colour)
+			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler);
+			std::string url = "file:///"; //+ Resources::gameDirAbsoulute + "ui.html";
+			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
+
 		}
 	}
 	CEF_INITIALIZED = true;
+}
+
+void CEF_CLOSE()
+{
+	if (CEF_INITIALIZED) {
+		CEF_INITIALIZED = false;
+		GUIbrowser->GetHost()->CloseBrowser(true);
+		GUIbrowserClient = nullptr;
+		GUIrenderHandler = nullptr;
+
+		CefDoMessageLoopWork();
+
+		GUIbrowser = nullptr;
+		CefShutdown();
+	}
 }

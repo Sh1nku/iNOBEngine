@@ -15,6 +15,8 @@ public:
 	void SetBackgroundColor(float r, float g, float b, float a);
 	void SetShowFPS(bool active);
 	void SetShowCollisions(bool active);
+	void ExecuteJavascript(const std::string& script);
+	void CreateCallback();
 	UI16 pixelsPerUnit = 32;
 private:
 	Window* window;
@@ -29,9 +31,6 @@ private:
 	void RenderButton(UIComponent& component);
 	CollisionDebugDraw collisionDrawer;
 
-	CefRefPtr<GUIRenderHandler> GUIrenderHandler;
-	CefRefPtr<CefBrowser> GUIbrowser;
-	CefRefPtr<GUIBrowserClient> GUIbrowserClient;
 };
 
 const static float RADIAN_IN_DEGREES = 57.3f;

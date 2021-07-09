@@ -1,4 +1,5 @@
 #include "guibrowserclient.h"
+#include "guiv8handler.h"
 #include <iostream>
 
 GUIBrowserClient::GUIBrowserClient(CefRefPtr<CefRenderHandler> ptr) : handler(ptr) {
@@ -73,6 +74,15 @@ bool GUIBrowserClient::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const Cef
      
     std::wcout << "Javascript error, line " << line << "\n    " << message.c_str() << "\n";
     return true;
+}
+
+bool GUIBrowserClient::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, CefProcessId source_process, CefRefPtr<CefProcessMessage> message)
+{
+    std::cout << "Recieved javascript message: " << message->GetName().ToString() << std::endl;
+    for (int i = 0; i < message->GetArgumentList()->GetSize(); i++) {
+        std::cout << "    " << message->GetArgumentList()->GetString(i).ToString() << std::endl;
+    }
+    return false;
 }
 
 void GUIBrowserClient::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame)

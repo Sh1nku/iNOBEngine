@@ -31,5 +31,7 @@ int main(int argc, char **argv) {
         deltaTime = (double)((now - last) / (double)SDL_GetPerformanceFrequency());
         manager->Update(((float)deltaTime));
     }
+
+	CEF_CLOSE();
 	return 0;
 }

@@ -18,6 +18,8 @@
 #include "../../manager.h"
 #include "collisionsystem.h"
 #include "../../window/cef/cef_manager.h"
+#include "../../window/cef/guiv8handler.h"
+#include "../../window/cef/guiapp.h"
 
 RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 
@@ -57,45 +59,12 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 		glLoadIdentity();
 		delete data;
 	});
-	if (CEF_INITIALIZED) {
-		{
-			CefMainArgs args;
-			CefSettings settings;
-			std::ostringstream ss;
-			ss << SDL_GetBasePath() << "locales/";
-			CefString(&settings.locales_dir_path) = ss.str();
-			CefString(&settings.resources_dir_path) = SDL_GetBasePath();
-			settings.no_sandbox = true;
-			settings.windowless_rendering_enabled = true;
-
-			CefInitialize(args, settings, nullptr, nullptr);
-		}
-		GUIrenderHandler = new GUIRenderHandler();
-		{
-			CefWindowInfo window_info;
-			CefBrowserSettings browserSettings;
-			window_info.SetAsWindowless(NULL, true); // false means no transparency (site background colour)
-			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler);
-			std::string url = "file:///" + Resources::gameDirAbsoulute + "ui.html";
-			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
-		}
-	}
-	else {
+	if (!CEF_INITIALIZED) {
 		std::cout << "Warning: CEF is not initialized";
 	}
 }
 
 RenderSystem::~RenderSystem() {
-	if (CEF_INITIALIZED) {
-		GUIbrowser->GetHost()->CloseBrowser(true);
-		while (GUIbrowser->HasOneRef()) {
-			CefDoMessageLoopWork();
-		}
-		GUIbrowser = nullptr;
-		GUIbrowserClient = nullptr;
-		GUIrenderHandler = nullptr;
-		CefShutdown();
-	}
 	ImGui_ImplOpenGL2_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
@@ -166,6 +135,7 @@ void RenderSystem::Update(float dt) {
 			if (showFPS) {
 				ShowFPS(dt);
 			}
+
 
 			GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
 			GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
@@ -257,6 +227,15 @@ void RenderSystem::SetShowCollisions(bool active) {
 	showCollisions = active;
 }
 
+void RenderSystem::ExecuteJavascript(const std::string& script) {
+	CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+	frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+}
+
+void RenderSystem::CreateCallback() {
+
+}
+
 void RenderSystem::ShowCollisions() {
 	CollisionSystem* collisionSystem = Manager::GetInstance()->GetSystem<CollisionSystem>();
 	if (collisionSystem != nullptr) {
@@ -287,6 +266,9 @@ if (!document.getElementById('__fps_counter')) {
 	std::ostringstream ss;
 	ss << "document.getElementById('__fps_counter').innerHTML = '" << (int)(std::accumulate(averages.begin(), averages.end(), 0) / averages.size()) << "';";
 	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
+
+
+	frame->ExecuteJavaScript("window.__sendMessage('Test variable', 'Test variable 2', 'Test variable 3');", frame->GetURL(), 0);
 }
 
 void RenderSystem::RenderLabel(UIComponent& component) {
