@@ -247,7 +247,7 @@ void RenderSystem::ExecuteJavascript(const std::string& script) {
 void RenderSystem::LoadURL(const std::string& url)
 {
 	if (CEF_INITIALIZED) {
-		GUIbrowser->GetMainFrame()->LoadURL(Resources::gameDirAbsoulute + url);
+		GUIbrowser->GetMainFrame()->LoadURL("file:///" + Resources::gameDirAbsoulute + url);
 	}
 }
 
