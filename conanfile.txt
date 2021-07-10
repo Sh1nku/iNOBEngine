@@ -7,7 +7,6 @@ nlohmann_json/3.9.1
 opengl/system
 glu/system
 box2d/2.4.1
-imgui/1.83
 glm/0.9.9.5
 gtest/1.10.0
 cef_binaries/3.2785.1485.g2b5c3a7@sh1nku/stable

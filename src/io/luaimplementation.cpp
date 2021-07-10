@@ -101,7 +101,8 @@ void LuaImplementation::CreateBindings() {
 		"setBackgroundColor", &RenderSystem::SetBackgroundColor,
 		"setShowFPS", &RenderSystem::SetShowFPS,
 		"setShowCollisions", &RenderSystem::SetShowCollisions,
-		"loadURL", &RenderSystem::LoadURL);
+		"loadURL", &RenderSystem::LoadURL,
+		"executeJavascript", &RenderSystem::ExecuteJavascript);
 
 	lua->new_usertype<AnimationSystem>("AnimationSystem",
 		sol::base_classes, sol::bases<SystemProgram>(),

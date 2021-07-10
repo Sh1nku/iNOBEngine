@@ -27,8 +27,6 @@ private:
 	void ShowFPS(float dt);
 	bool showCollisions;
 	void ShowCollisions();
-	void RenderLabel(UIComponent& component);
-	void RenderButton(UIComponent& component);
 	CollisionDebugDraw collisionDrawer;
 
 };

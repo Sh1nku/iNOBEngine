@@ -8,13 +8,9 @@
 #include "../components/animation.h"
 #include "../components/transform.h"
 #include "../components/camera.h"
-#include "../components/uicomponent.h"
 #include "../components/collision.h"
 #include "../gameobject.h"
 #include "../../eventmanager.h"
-#include "imgui.h"
-#include "../../window/imgui/imgui_impl_opengl2.h"
-#include "../../window/imgui/imgui_impl_sdl.h"
 #include "../../manager.h"
 #include "collisionsystem.h"
 #include "../../window/cef/cef_manager.h"
@@ -25,7 +21,6 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
-	mMap.insert({ Component::GetBitcode("UIComponent"), std::make_unique<gameObject_map>() });
 
 	window = new Window();
 	window->Create();
@@ -77,9 +72,6 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 }
 
 RenderSystem::~RenderSystem() {
-	ImGui_ImplOpenGL2_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
 	delete window;
 }
 
@@ -136,7 +128,6 @@ void RenderSystem::Update(float dt) {
 	if (showCollisions) {
 		ShowCollisions();
 	}
-	StartGUIDraw();
 
 
 	if (CEF_INITIALIZED) {
@@ -198,18 +189,6 @@ void RenderSystem::Update(float dt) {
 			glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
 		}
 	}
-	/*for (auto& entry : *GetEntries(Component::GetBitcode("UIComponent"))) {
-		if (entry.first->active) {
-			UIComponent* ui = (UIComponent*)entry.second->at(Component::GetBitcode("UIComponent"));
-			if (ui->type == UI_TYPE::LABEL) {
-				RenderLabel(*ui);
-			}
-			else {
-				RenderButton(*ui);
-			}
-		}
-	}*/
-	EndGUIDraw();
 
 	glPopMatrix();
 	SDL_GL_SwapWindow(window->mWindow);
@@ -218,17 +197,6 @@ void RenderSystem::Update(float dt) {
 
 void RenderSystem::SetBackgroundColor(float r, float g, float b, float a) {
 	backgroundColor = std::make_tuple(r, g, b, a);
-}
-
-void RenderSystem::StartGUIDraw() {
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(Window::mWindow);
-	ImGui::NewFrame();
-}
-
-void RenderSystem::EndGUIDraw() {
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }
 
 void RenderSystem::SetShowFPS(bool active) {
@@ -281,28 +249,4 @@ if (!document.getElementById('__fps_counter')) {
 	std::ostringstream ss;
 	ss << "document.getElementById('__fps_counter').innerHTML = '" << (int)(std::accumulate(averages.begin(), averages.end(), 0) / averages.size()) << "';";
 	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
-}
-
-void RenderSystem::RenderLabel(UIComponent& component) {
-	ImGui::SetNextWindowPos(component.GetPosition(), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(component.GetSize(), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowBgAlpha(0);
-	ImGui::Begin(component.windowID.c_str(), nullptr,
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
-		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-	ImGui::Text(component.GetText().c_str(), ImGui::GetIO().Framerate);
-	ImGui::End();
-}
-
-void RenderSystem::RenderButton(UIComponent& component) {
-	ImGui::SetNextWindowPos(component.GetPosition(), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(component.GetSize(), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowBgAlpha(0);
-	ImGui::Begin(component.windowID.c_str(), nullptr,
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove
-		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-	if (ImGui::Button(component.GetText().c_str(), ImGui::GetContentRegionAvail())) {
-		Manager::GetInstance()->FireEvent(component.GetParent(),component.buttonEvent,(void*)"Test text");
-	}
-	ImGui::End();
 }

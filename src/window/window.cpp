@@ -1,7 +1,4 @@
 #include "window.h"
-#include <imgui.h>
-#include "imgui/imgui_impl_sdl.h"
-#include "imgui/imgui_impl_opengl2.h"
 
 SDL_Window *Window::mWindow = NULL;
 SDL_GLContext Window::mContext;
@@ -50,16 +47,6 @@ void Window::Create()
     }
 	mContext = SDL_GL_CreateContext(mWindow);
 	SDL_GL_SetSwapInterval(0);
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.IniFilename = NULL;
-	ImGui::StyleColorsDark();
-	ImGui_ImplSDL2_InitForOpenGL(mWindow, mContext);
-	ImGui_ImplOpenGL2_Init();
-	ImGuiStyle& style = ImGui::GetStyle();
-	style.WindowBorderSize = 0.0f;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

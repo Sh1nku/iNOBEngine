@@ -45,6 +45,7 @@ function start()
 	renderSystem = manager:getRenderSystem()
 	animationSystem = manager:getAnimationSystem()
 	collisionSystem = manager:getCollisionSystem()
+	renderSystem:loadURL('manager/game.html');
 	scriptSystem = manager:getScriptSystem()
 	renderSystem:setBackgroundColor(0,0,0,1)
 	renderSystem:setShowFPS(true)
@@ -62,6 +63,7 @@ function update(dt)
 end
 
 function paused(pausedBool)
+		renderSystem:executeJavascript('document.getElementById("paused").style.display = "' .. (voidToBool(pausedBool) and "flex" or "none") .. '";')
 		animationSystem.active = not voidToBool(pausedBool)
 		collisionSystem.active = not voidToBool(pausedBool)
 end
