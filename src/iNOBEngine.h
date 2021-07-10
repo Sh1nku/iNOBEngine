@@ -12,7 +12,6 @@
 #include "types/components/camera.h"
 #include "types/components/scriptcomponent.h"
 #include "types/components/input.h"
-#include "types/components/uicomponent.h"
 #include "types/components/collision.h"
 #include "eventmanager.h"
 #include "types/gameobject.h"
@@ -30,3 +29,5 @@
 #include "manager.h"
 #include "eventmanager.h"
 #include "box2d/box2d.h"
+#include "window/cef/cef_manager.h"
+#include "window/cef/guiapp.h"

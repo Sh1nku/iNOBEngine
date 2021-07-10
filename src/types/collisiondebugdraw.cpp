@@ -5,7 +5,7 @@
 void CollisionDebugDraw::DrawPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color & color)
 {
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, NULL);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBegin(GL_LINE_LOOP);
 	glColor4f(color.r, color.g, color.b, color.a);
 	for (int i = 0; i < vertexCount; i++) {
@@ -18,7 +18,7 @@ void CollisionDebugDraw::DrawPolygon(const b2Vec2 * vertices, int32 vertexCount,
 void CollisionDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color & color)
 {
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, NULL);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBegin(GL_TRIANGLE_FAN);
 	glColor4f(color.r, color.g, color.b, color.a);
 	for (int i = 0; i < vertexCount; i++) {

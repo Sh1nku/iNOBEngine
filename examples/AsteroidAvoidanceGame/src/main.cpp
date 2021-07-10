@@ -1,8 +1,13 @@
 #include <iNOBEngine.h>
 
+
 int main(int argc, char **argv) {
+	CEF_INIT(argc, argv);
+	
 	bool quit = false;
 	LuaImplementation::Init();
+
+
 	Resources::Load("../examples/AsteroidAvoidanceGame/game");
 	Manager* manager = Manager::GetInstance();
 	manager->AddSystem(new AnimationSystem());
@@ -15,14 +20,18 @@ int main(int argc, char **argv) {
 		quit = true; 
 	});
 
+	manager->GetSystem<RenderSystem>()->SetShowFPS(true);
+
 	Uint64 now = SDL_GetPerformanceCounter();
 	Uint64 last = 0;
 	double deltaTime = 0;
-	while (!quit) {
-		last = now;
-		now = SDL_GetPerformanceCounter();
-		deltaTime = (double)((now - last)/ (double)SDL_GetPerformanceFrequency());
-		manager->Update(((float)deltaTime));
-	}
+    while (!quit) {
+        last = now;
+        now = SDL_GetPerformanceCounter();
+        deltaTime = (double)((now - last) / (double)SDL_GetPerformanceFrequency());
+        manager->Update(((float)deltaTime));
+    }
+
+	CEF_CLOSE();
 	return 0;
 }

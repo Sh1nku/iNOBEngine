@@ -1,13 +1,11 @@
 #include "inputsystem.h"
 #include "../components/input.h"
 #include "../../eventmanager.h"
-#include "imgui.h"
-#include "../../window/imgui/imgui_impl_sdl.h"
-#include "../../window/imgui/imgui_impl_opengl2.h"
 #include "../../window/window.h"
 #include "../gameobject.h"
 #include "../../manager.h"
 #include <iostream>
+#include "../../window/cef/cef_manager.h"
 
 SDL_Event e;
 
@@ -45,15 +43,6 @@ void InputSystem::Update(float dt) {
 		}
 	}
 	while (SDL_PollEvent(&e)) {
-		if (Window::mWindow != nullptr) {
-			ImGui_ImplSDL2_ProcessEvent(&e);
-			ImGuiIO& io = ImGui::GetIO(); (void)io;
-			//std::cout << io.DisplayFramebufferScale.x << " " << io.DisplayFramebufferScale.y << std::endl;
-			//Interferes with button up/down, if hovering over imgui element
-			/*if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
-				continue;
-			}*/
-		}
 		switch (e.type) {
 			case SDL_KEYDOWN:
 			{
@@ -135,7 +124,62 @@ void InputSystem::Update(float dt) {
 			case SDL_QUIT:
 			{
 				Manager::GetInstance()->FireEvent(nullptr,"QUIT", nullptr);
+				break;
 			}
+
+			case SDL_MOUSEMOTION:
+			{
+				if (CEF_INITIALIZED) {
+					CefMouseEvent mouseEvent;
+					mouseEvent.x = e.motion.x;
+					mouseEvent.y = e.motion.y;
+					GUIbrowser->GetHost()->SendMouseMoveEvent(mouseEvent, false);
+				}
+				break;
+			}
+
+			case SDL_MOUSEBUTTONDOWN:
+				if (CEF_INITIALIZED) {
+					CefMouseEvent mouseEvent;
+					mouseEvent.x = e.motion.x;
+					mouseEvent.y = e.motion.y;
+					CefBrowserHost::MouseButtonType button = MBT_LEFT;
+					switch (e.button.button) {
+						case SDL_BUTTON_LEFT:
+							button = MBT_LEFT;
+							break;
+						case SDL_BUTTON_RIGHT:
+							button = MBT_RIGHT;
+							break;
+						case SDL_BUTTON_MIDDLE:
+							button = MBT_MIDDLE;
+							break;
+					}
+					GUIbrowser->GetHost()->SendMouseClickEvent(mouseEvent, button, false, 1);
+				}
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				if (CEF_INITIALIZED) {
+					CefMouseEvent mouseEvent;
+					mouseEvent.x = e.motion.x;
+					mouseEvent.y = e.motion.y;
+					CefBrowserHost::MouseButtonType button = MBT_LEFT;
+					switch (e.button.button) {
+					case SDL_BUTTON_LEFT:
+						button = MBT_LEFT;
+						break;
+					case SDL_BUTTON_RIGHT:
+						button = MBT_RIGHT;
+						break;
+					case SDL_BUTTON_MIDDLE:
+						button = MBT_MIDDLE;
+						break;
+					}
+					GUIbrowser->GetHost()->SendMouseClickEvent(mouseEvent, button, true, 1);
+				}
+				break;
+				
 		}
 
 	}

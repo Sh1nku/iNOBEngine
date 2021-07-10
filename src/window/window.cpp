@@ -1,7 +1,4 @@
 #include "window.h"
-#include <imgui.h>
-#include "imgui/imgui_impl_sdl.h"
-#include "imgui/imgui_impl_opengl2.h"
 
 SDL_Window *Window::mWindow = NULL;
 SDL_GLContext Window::mContext;
@@ -27,7 +24,9 @@ Window::~Window()
 
 void Window::Create()
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+    }
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -43,18 +42,11 @@ void Window::Create()
 	{
 		mWindow = SDL_CreateWindow("2DRPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Window::SCREEN_WIDTH, Window::SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	}
+    if (mWindow == NULL) {
+        SDL_Log("Could not create window: %s\n", SDL_GetError());
+    }
 	mContext = SDL_GL_CreateContext(mWindow);
 	SDL_GL_SetSwapInterval(0);
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.IniFilename = NULL;
-	ImGui::StyleColorsDark();
-	ImGui_ImplSDL2_InitForOpenGL(mWindow, mContext);
-	ImGui_ImplOpenGL2_Init();
-	ImGuiStyle& style = ImGui::GetStyle();
-	style.WindowBorderSize = 0.0f;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

@@ -19,6 +19,7 @@ std::unordered_map<std::string, std::unique_ptr<Script>> Resources::scripts;
 std::vector<std::pair<std::string, Texture*>> Resources::textureBacklog;
 std::vector<std::filesystem::directory_entry> Resources::prefabBacklog;
 std::string Resources::gameDir = "";
+std::string Resources::gameDirAbsoulute = "";
 
 GameObject* Resources::GetPrefab(const std::string& name) {
 	GameObject* obj = new GameObject(*(prefabs.at(name).get()));
@@ -62,6 +63,9 @@ void loadClips(const std::string& contents) {
 
 void Resources::Load(std::string directory) {
 	Resources::gameDir = directory + "/";
+	std::string abs = std::filesystem::absolute(directory).string();
+	std::replace(abs.begin(), abs.end(), '\\', '/');
+	Resources::gameDirAbsoulute = abs + "/";
 	loadClips(FileUtils::GetFileToString(gameDir + "animationClips.clips"));
 	for (auto& p : fs::recursive_directory_iterator(directory)) {
 		auto ex = p.path().extension();
