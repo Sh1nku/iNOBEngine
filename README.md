@@ -9,7 +9,7 @@ A c++17 based engine, using an entity-component-system structure. Capable of dis
  - Collision using [Box2d](https://box2d.org/)
  - Animation system for sprites
  - Event-Subscriber model for having different gameobjects react to events
- - UI using [Dear Imgui](https://github.com/ocornut/imgui) with support for text and buttons.
+ - Writing UIs with HTML by embedding [Cef](https://bitbucket.org/chromiumembedded) 
 ## Demonstration
 An asteroid avoidance game, written entirely using the Lua scripting system
 ![AsteroidAvoidanceGame](https://i.imgur.com/8yT1eZm.gif)
