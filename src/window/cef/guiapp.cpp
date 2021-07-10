@@ -1,6 +1,7 @@
 #include "guiapp.h"
 #include "guiv8handler.h"
 #include <iostream>
+#include "../../io/resources.h"
 
 GUIApp::GUIApp() {}
 
@@ -25,7 +26,6 @@ void GUIApp::OnContextCreated(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame>
     object->SetValue("__sendMessage",
         CefV8Value::CreateFunction("__sendMessage", handler),
         V8_PROPERTY_ATTRIBUTE_NONE);
-
 }
 
 void GUIApp::OnContextReleased(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefV8Context> context)

@@ -62,6 +62,18 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 	if (!CEF_INITIALIZED) {
 		std::cout << "Warning: CEF is not initialized";
 	}
+	else {
+		GUIrenderHandler = new GUIRenderHandler();
+		{
+			CefWindowInfo window_info;
+			CefBrowserSettings browserSettings;
+			window_info.SetAsWindowless(0, true); // false means no transparency (site background colour)
+			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler, this);
+			std::string url = "about:blank"; //+ Resources::gameDirAbsoulute + "ui.html";
+			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
+
+		}
+	}
 }
 
 RenderSystem::~RenderSystem() {
@@ -232,8 +244,11 @@ void RenderSystem::ExecuteJavascript(const std::string& script) {
 	frame->ExecuteJavaScript(script, frame->GetURL(), 0);
 }
 
-void RenderSystem::CreateCallback() {
-
+void RenderSystem::LoadURL(const std::string& url)
+{
+	if (CEF_INITIALIZED) {
+		GUIbrowser->GetMainFrame()->LoadURL(Resources::gameDirAbsoulute + url);
+	}
 }
 
 void RenderSystem::ShowCollisions() {
@@ -266,9 +281,6 @@ if (!document.getElementById('__fps_counter')) {
 	std::ostringstream ss;
 	ss << "document.getElementById('__fps_counter').innerHTML = '" << (int)(std::accumulate(averages.begin(), averages.end(), 0) / averages.size()) << "';";
 	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
-
-
-	frame->ExecuteJavaScript("window.__sendMessage('Test variable', 'Test variable 2', 'Test variable 3');", frame->GetURL(), 0);
 }
 
 void RenderSystem::RenderLabel(UIComponent& component) {

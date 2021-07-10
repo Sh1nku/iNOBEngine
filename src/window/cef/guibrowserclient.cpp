@@ -1,8 +1,11 @@
 #include "guibrowserclient.h"
 #include "guiv8handler.h"
 #include <iostream>
+#include "../../io/resources.h"
+#include "../../manager.h"
+#include "../../types/systems/rendersystem.h"
 
-GUIBrowserClient::GUIBrowserClient(CefRefPtr<CefRenderHandler> ptr) : handler(ptr) {
+GUIBrowserClient::GUIBrowserClient(CefRefPtr<CefRenderHandler> ptr, RenderSystem* renderSystem) : handler(ptr), renderSystem(renderSystem) {
 }
 
 CefRefPtr<CefLifeSpanHandler> GUIBrowserClient::GetLifeSpanHandler() {
@@ -54,6 +57,9 @@ void GUIBrowserClient::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 void GUIBrowserClient::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode)
 {
     std::cout << "OnLoadEnd(" << httpStatusCode << ")" << std::endl;
+    std::ostringstream ss;
+    ss << "window.__applicationPath = '" << Resources::gameDirAbsoulute << "';";
+    frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
     loaded = true;
 }
 
@@ -72,7 +78,7 @@ void GUIBrowserClient::OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool 
 bool GUIBrowserClient::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line)
 {
      
-    std::wcout << "Javascript error, line " << line << "\n    " << message.c_str() << "\n";
+    std::wcout << message.c_str() << std::endl;
     return true;
 }
 
@@ -81,6 +87,9 @@ bool GUIBrowserClient::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, C
     std::cout << "Recieved javascript message: " << message->GetName().ToString() << std::endl;
     for (int i = 0; i < message->GetArgumentList()->GetSize(); i++) {
         std::cout << "    " << message->GetArgumentList()->GetString(i).ToString() << std::endl;
+    }
+    if (message->GetName().ToString().compare("__sendMessage") == 0) {
+        Manager::GetInstance()->FireEvent(nullptr, message->GetArgumentList()->GetString(0), (void*)"data");
     }
     return false;
 }

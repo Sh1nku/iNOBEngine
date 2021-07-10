@@ -57,6 +57,11 @@ Manager *Manager::GetInstance(){
 	return manager;
 }
 
+bool Manager::IsStarted()
+{
+	return manager != nullptr;
+}
+
 GameObject* Manager::Instantiate(GameObject* obj, std::string name, Vec3f* pos) {
 	AddGameObject(obj);
 	if (name != "") {

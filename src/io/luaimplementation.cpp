@@ -100,7 +100,8 @@ void LuaImplementation::CreateBindings() {
 		"new", sol::no_constructor,
 		"setBackgroundColor", &RenderSystem::SetBackgroundColor,
 		"setShowFPS", &RenderSystem::SetShowFPS,
-		"setShowCollisions", &RenderSystem::SetShowCollisions);
+		"setShowCollisions", &RenderSystem::SetShowCollisions,
+		"loadURL", &RenderSystem::LoadURL);
 
 	lua->new_usertype<AnimationSystem>("AnimationSystem",
 		sol::base_classes, sol::bases<SystemProgram>(),

@@ -10,6 +10,7 @@ function start()
 	collisionSystem = manager:getCollisionSystem()
 	scriptSystem = manager:getScriptSystem()
 	renderSystem:setBackgroundColor(0,0,0,1)
+	renderSystem:loadURL('menu/menu.html');
 end
 
 function update(dt)

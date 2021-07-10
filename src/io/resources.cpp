@@ -63,7 +63,9 @@ void loadClips(const std::string& contents) {
 
 void Resources::Load(std::string directory) {
 	Resources::gameDir = directory + "/";
-	Resources::gameDirAbsoulute = std::filesystem::absolute(directory).string() + "/";
+	std::string abs = std::filesystem::absolute(directory).string();
+	std::replace(abs.begin(), abs.end(), '\\', '/');
+	Resources::gameDirAbsoulute = abs + "/";
 	loadClips(FileUtils::GetFileToString(gameDir + "animationClips.clips"));
 	for (auto& p : fs::recursive_directory_iterator(directory)) {
 		auto ex = p.path().extension();

@@ -8,6 +8,7 @@
 #include "../gameobject.h"
 #include "../../manager.h"
 #include <iostream>
+#include "../../window/cef/cef_manager.h"
 
 SDL_Event e;
 
@@ -135,7 +136,64 @@ void InputSystem::Update(float dt) {
 			case SDL_QUIT:
 			{
 				Manager::GetInstance()->FireEvent(nullptr,"QUIT", nullptr);
+				break;
 			}
+
+			case SDL_MOUSEMOTION:
+			{
+				if (CEF_INITIALIZED) {
+					CefMouseEvent mouseEvent;
+					mouseEvent.x = e.motion.x;
+					mouseEvent.y = e.motion.y;
+					GUIbrowser->GetHost()->SendMouseMoveEvent(mouseEvent, false);
+				}
+				break;
+			}
+
+			case SDL_MOUSEBUTTONDOWN:
+				if (CEF_INITIALIZED) {
+					CefMouseEvent mouseEvent;
+					mouseEvent.x = e.motion.x;
+					mouseEvent.y = e.motion.y;
+					CefBrowserHost::MouseButtonType button = MBT_LEFT;
+					switch (e.button.button) {
+						case SDL_BUTTON_LEFT:
+							button = MBT_LEFT;
+							break;
+						case SDL_BUTTON_RIGHT:
+							button = MBT_RIGHT;
+							break;
+						case SDL_BUTTON_MIDDLE:
+							button = MBT_MIDDLE;
+							break;
+					}
+					GUIbrowser->GetHost()->SendMouseClickEvent(mouseEvent, button, false, 1);
+				}
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				if (CEF_INITIALIZED) {
+					CefMouseEvent mouseEvent;
+					mouseEvent.x = e.motion.x;
+					mouseEvent.y = e.motion.y;
+					CefBrowserHost::MouseButtonType button = MBT_LEFT;
+					switch (e.button.button) {
+					case SDL_BUTTON_LEFT:
+						button = MBT_LEFT;
+						break;
+					case SDL_BUTTON_RIGHT:
+						button = MBT_RIGHT;
+						break;
+					case SDL_BUTTON_MIDDLE:
+						button = MBT_MIDDLE;
+						break;
+					}
+					GUIbrowser->GetHost()->SendMouseClickEvent(mouseEvent, button, true, 1);
+				}
+				break;
+
+			
+				
 		}
 
 	}

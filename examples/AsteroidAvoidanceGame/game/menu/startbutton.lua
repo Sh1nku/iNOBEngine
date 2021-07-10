@@ -1,9 +1,15 @@
+local manager
+local renderSystem
+
 function startButtonPressed(data)
-	Manager:getInstance():loadScene("game.scene")
+	manager:loadScene("game.scene")
+	renderSystem:loadURL('about:blank');
 end
 
 function start()
-	localObject:subscribe(localObject,"START_BUTTON", startButtonPressed)
+	manager = Manager:getInstance()
+	renderSystem = manager:getRenderSystem()
+	localObject:subscribe(nullptr,"START_BUTTON", startButtonPressed)
 end
 
 function update()

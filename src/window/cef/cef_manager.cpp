@@ -43,16 +43,6 @@ void CEF_INIT(int argc, char** argv) {
 			//settings.single_process = true;
 			CefInitialize(args, settings, cef_app.get(), nullptr);
 		}
-		GUIrenderHandler = new GUIRenderHandler();
-		{
-			CefWindowInfo window_info;
-			CefBrowserSettings browserSettings;
-			window_info.SetAsWindowless(0, true); // false means no transparency (site background colour)
-			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler);
-			std::string url = "about:blank"; //+ Resources::gameDirAbsoulute + "ui.html";
-			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
-
-		}
 	}
 	CEF_INITIALIZED = true;
 }

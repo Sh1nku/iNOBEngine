@@ -24,6 +24,7 @@ public:
 	friend class RenderSystem;
 	virtual ~Manager();
 	static Manager* GetInstance();
+	static bool IsStarted();
 	SystemProgram* AddSystem(SystemProgram *system);
 	GameObject* Instantiate(GameObject* obj, std::string name = "", Vec3f* pos = nullptr);
 	void LoadScene(const std::string& name);

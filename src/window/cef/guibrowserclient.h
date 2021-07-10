@@ -7,6 +7,8 @@
 #include <include/cef_load_handler.h>
 #include <include/wrapper/cef_helpers.h>
 
+class RenderSystem;
+
 // for manual render handler
 class GUIBrowserClient :
     public CefClient,
@@ -15,7 +17,7 @@ class GUIBrowserClient :
     public CefDisplayHandler
 {
 public:
-    GUIBrowserClient(CefRefPtr<CefRenderHandler> ptr);
+    GUIBrowserClient(CefRefPtr<CefRenderHandler> ptr, RenderSystem* renderSystem);
 
     virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override;
     virtual CefRefPtr<CefLoadHandler> GetLoadHandler() override;
@@ -43,6 +45,7 @@ private:
     int browser_id;
     bool closing = false;
     bool loaded = false;
+    RenderSystem* renderSystem = nullptr;
     CefRefPtr<CefRenderHandler> handler;
 
     IMPLEMENT_REFCOUNTING(GUIBrowserClient);

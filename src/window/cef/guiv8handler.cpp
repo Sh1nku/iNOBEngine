@@ -16,8 +16,13 @@ bool GUIV8Handler::Execute(const CefString& name,
 
         auto& argument = arguments.at(i);
         if (argument->IsString()) {
-            CefString param = argument->GetStringValue();
-            message->GetArgumentList()->SetString(i, param);
+            message->GetArgumentList()->SetString(i, argument->GetStringValue());
+        }
+        else if (argument->IsInt()) {
+            message->GetArgumentList()->SetInt(i, argument->GetIntValue());
+        }
+        else if (argument->IsBool()) {
+            message->GetArgumentList()->SetBool(i, argument->GetBoolValue());
         }
         else {
             std::cout << "Unsupported Type" << std::endl;

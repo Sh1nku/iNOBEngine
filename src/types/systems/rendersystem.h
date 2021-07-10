@@ -16,7 +16,7 @@ public:
 	void SetShowFPS(bool active);
 	void SetShowCollisions(bool active);
 	void ExecuteJavascript(const std::string& script);
-	void CreateCallback();
+	void LoadURL(const std::string& url);
 	UI16 pixelsPerUnit = 32;
 private:
 	Window* window;
