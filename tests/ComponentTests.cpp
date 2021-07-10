@@ -5,7 +5,6 @@ TEST(ComponentTest, TransformCreation) {
 	Transform *transform = new Transform();
 	ASSERT_NE(transform, nullptr);
 	delete transform;
-
 }
 
 TEST(ComponentTest, GetBitcode) {

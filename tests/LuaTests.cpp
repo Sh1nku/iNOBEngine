@@ -16,9 +16,9 @@ TEST(LuaTest, AddGameObjectToManager) {
 object = GameObject.create()
 manager = Manager.getInstance()
 manager:instantiate(object, "", Vec3(0,0,0)))");
-	GameObject* obj = Manager::GetInstance()->GetGameObjectByID(1);
-	ASSERT_NE(obj, nullptr);
 	Manager* manager = Manager::GetInstance();
+	GameObject* obj = manager->GetGameObjectByID(1);
+	ASSERT_NE(obj, nullptr);
 	LuaImplementation::Destroy();
 	delete(manager);
 }

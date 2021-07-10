@@ -6,13 +6,15 @@ EventManager::EventManager() {
 }
 
 EventManager::~EventManager() {
-	Manager* manager = Manager::GetInstance();
-	for (auto& ev : ref) {
-		for (auto& string : ev.second) {
-			manager->Unsubscribe(ev.first, string, this);
+	if (Manager::IsStarted()) {
+		Manager* manager = Manager::GetInstance();
+		for (auto& ev : ref) {
+			for (auto& string : ev.second) {
+				manager->Unsubscribe(ev.first, string, this);
+			}
 		}
+		manager->RemoveFromEvent(this);
 	}
-	manager->RemoveFromEvent(this);
 }
 
 void EventManager::Subscribe(EventManager* to, std::string ev, std::function<void(void*)> func) {

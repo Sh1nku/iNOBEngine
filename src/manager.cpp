@@ -25,6 +25,8 @@ Manager::~Manager() {
 		delete (*it);
 	}
 	mSystems.clear();
+	globalID = 1;
+	globalPoolIDS.clear();
 	manager = nullptr;
 }
 
@@ -52,6 +54,8 @@ GameObject* Manager::AddGameObject(GameObject *obj) {
 
 Manager *Manager::GetInstance(){
 	if (manager == nullptr) {
+		std::cout << globalID << std::endl;
+		std::cout << globalPoolIDS.size() << std::endl;
 		manager = new Manager();
 	}
 	return manager;
