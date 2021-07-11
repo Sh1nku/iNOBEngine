@@ -91,7 +91,7 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	nlohmann::json jsonAll = nlohmann::json::parse(contents);
 	nlohmann::json go = jsonAll.at("GameObject");
 	GameObject* gameObject = new GameObject(parent);
-	auto& it = go.find("name");
+	const auto& it = go.find("name");
 	if (it != go.end()) {
 		std::string name = go.at("name");
 		gameObject->mName = name;
@@ -130,10 +130,10 @@ GameObject* GameObject::LoadFromFile(std::string contents, GameObject* parent) {
 	return gameObject;
 };
 
-Component* GameObject::GetComponent(std::string type) {
-	auto& bitcode = bitcodes.find(type);
+Component* GameObject::GetComponent(const std::string& type) {
+	const auto& bitcode = bitcodes.find(type);
 	if (bitcode != bitcodes.end()) {
-		auto& component = mComponents.find(bitcode->second);
+		const auto& component = mComponents.find(bitcode->second);
 		if (component != mComponents.end()) {
 			return component->second;
 		}

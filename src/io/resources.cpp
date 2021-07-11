@@ -28,12 +28,12 @@ GameObject* Resources::GetPrefab(const std::string& name) {
 
 Texture* Resources::GetTexture(const std::string& name) {
 	Texture* tex = nullptr;
-	auto& it = textures.find(name);
+	const auto& it = textures.find(name);
 	if (it != textures.end()) {
 		tex = it->second.get();
 	}
 	else {
-		auto& it2 = textures.find("error_texture");
+		const auto& it2 = textures.find("error_texture");
 		if (it2 != textures.end()) {
 			tex = it2->second.get();
 		}
