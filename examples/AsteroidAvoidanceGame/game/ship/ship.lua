@@ -16,7 +16,7 @@ function start()
 	collision = localObject:getCollisionComponent()
 	transform = localObject:getTransformComponent()
 	animation = localObject:getAnimationComponent()
-	renderSystem = Manager.getInstance():getRenderSystem()
+	renderSystem = manager:getRenderSystem()
 	_G.paused = false
 	drawCollisionData = false
 	lastShot = 0
@@ -66,7 +66,6 @@ function update(dt)
 
 	end
 
-	
 	if input:getKeyDown("Escape") then
 		_G.paused = not _G.paused
 		manager:fireEvent(nil,"PAUSED", boolToVoid(paused))

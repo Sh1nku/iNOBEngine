@@ -12,9 +12,9 @@ public:
 	Input(GameObject *parent = nullptr) : Component(parent), id(-1) { }
 	Component* Clone(GameObject* parent) override;
 	UI32 GetBitcode() override;
-	bool GetKeyDown(std::string key);
-	bool GetKeyUp(std::string key);
-	bool IsKeyPressed(std::string key);
+	bool GetKeyDown(const std::string& key);
+	bool GetKeyUp(const std::string& key);
+	bool IsKeyPressed(const std::string& key);
 	///TODO Implement multiple controllers
 	void SetController(I8 id);
 	Vec2f GetControllerLeftAxis();
