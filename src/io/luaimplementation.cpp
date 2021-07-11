@@ -62,12 +62,9 @@ void LuaImplementation::CreateBindings() {
 		"getWorldPosition", &Transform::GetWorldPosition,
 		"setScale", &Transform::SetScale);
 
-	lua->new_usertype<Input>("Input",
+	auto input = lua->new_usertype<Input>("Input",
 		sol::base_classes, sol::bases<Component>(),
 		"new", sol::no_constructor,
-		"getKeyDown", &Input::GetKeyDown,
-		"getKeyUp", &Input::GetKeyUp,
-		"isKeyPressed", &Input::IsKeyPressed,
 		"getControllerButtonDown", &Input::GetControllerButtonDown,
 		"getControllerButtonUp", &Input::GetControllerButtonUp,
 		"isControllerButtonPressed", &Input::IsControllerButtonPressed,
@@ -76,6 +73,9 @@ void LuaImplementation::CreateBindings() {
 		"getControllerLeftTrigger", &Input::GetControllerLeftTrigger,
 		"getControllerRightTrigger", &Input::GetControllerRightTrigger,
 		"setController", &Input::SetController);
+	input["isKeyPressed"] = sol::c_call<decltype(&Input::IsKeyPressed), &Input::IsKeyPressed>;
+	input["getKeyDown"] = sol::c_call<decltype(&Input::GetKeyDown), &Input::GetKeyDown>;
+	input["getKeyUp"] = sol::c_call<decltype(&Input::GetKeyUp), &Input::GetKeyUp>;
 
 	lua->new_usertype<Collision>("Collision",
 		sol::base_classes, sol::bases<Component>(),
@@ -100,6 +100,9 @@ void LuaImplementation::CreateBindings() {
 		"new", sol::no_constructor,
 		"setBackgroundColor", &RenderSystem::SetBackgroundColor,
 		"setShowFPS", &RenderSystem::SetShowFPS,
+		"getShowFPS", &RenderSystem::GetShowFPS,
+		"getShowProfiling", &RenderSystem::GetShowProfiling,
+		"setShowProfiling", &RenderSystem::SetShowProfiling,
 		"setShowCollisions", &RenderSystem::SetShowCollisions,
 		"loadURL", &RenderSystem::LoadURL,
 		"executeJavascript", &RenderSystem::ExecuteJavascript);

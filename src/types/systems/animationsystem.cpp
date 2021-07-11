@@ -4,6 +4,7 @@
 #include "../components/animation.h"
 
 AnimationSystem::AnimationSystem() {
+	mName = "AnimationSystem";
 	mMap.insert({ Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 }
 

@@ -4,7 +4,7 @@
 
 
 SystemProgram::SystemProgram() {
-
+	mName = "Not Defined";
 }
 
 
@@ -38,4 +38,9 @@ void SystemProgram::RemoveFromSystem(UI32 id, GameObject* obj) {
 
 gameObject_map* SystemProgram::GetEntries(UI32 bitcode) {
 	return mMap.at(bitcode).get();
+}
+
+const std::string& SystemProgram::GetName()
+{
+	return mName;
 }

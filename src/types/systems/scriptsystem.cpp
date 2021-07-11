@@ -4,6 +4,7 @@
 #include "../gameobject.h"
 
 ScriptSystem::ScriptSystem() {
+	mName = "ScriptSystem";
 	mMap.insert({ Component::GetBitcode("ScriptComponent"), std::make_unique<gameObject_map>() });
 	LuaImplementation::Init();
 }

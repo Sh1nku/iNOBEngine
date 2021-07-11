@@ -14,6 +14,9 @@ public:
 	void Update(float dt) override;
 	void SetBackgroundColor(float r, float g, float b, float a);
 	void SetShowFPS(bool active);
+	bool GetShowFPS();
+	void SetShowProfiling(bool active);
+	bool GetShowProfiling();
 	void SetShowCollisions(bool active);
 	void ExecuteJavascript(const std::string& script);
 	void LoadURL(const std::string& url);
@@ -21,10 +24,10 @@ public:
 private:
 	Window* window;
 	std::tuple<float, float, float, float> backgroundColor;
-	void StartGUIDraw();
-	void EndGUIDraw();
 	bool showFPS;
 	void ShowFPS(float dt);
+	bool showProfiling;
+	void ShowProfiling();
 	bool showCollisions;
 	void ShowCollisions();
 	CollisionDebugDraw collisionDrawer;

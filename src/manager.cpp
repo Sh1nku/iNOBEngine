@@ -54,8 +54,6 @@ GameObject* Manager::AddGameObject(GameObject *obj) {
 
 Manager *Manager::GetInstance(){
 	if (manager == nullptr) {
-		std::cout << globalID << std::endl;
-		std::cout << globalPoolIDS.size() << std::endl;
 		manager = new Manager();
 	}
 	return manager;
@@ -140,11 +138,15 @@ GameObject* Manager::GetGameObjectByName(std::string name) {
 }
 
 void Manager::Update(float dt) {
+	std::vector < std::pair<std::string, double>> profiling;
 	for (SystemProgram* system : mSystems) {
 		if (system->active) {
+			auto start = std::chrono::high_resolution_clock::now();
 			system->Update(dt);
+			profiling.emplace_back(std::make_pair(system->GetName(), std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - start).count()));
 		}
 	}
+	mProfiling = profiling;
 	for (GameObject* obj : objectsToBeDeleted) {
 		RemoveGameObject(obj);
 	}
@@ -195,6 +197,11 @@ void Manager::FireEvent(EventManager* ptr, std::string ev, void* data) {
 			}
 		}
 	}
+}
+
+const std::vector<std::pair<std::string, double>>& Manager::GetProfiling()
+{
+	return mProfiling;
 }
 
 void Manager::Subscribe(EventManager* ptr, std::string ev, EventManager* ref, std::function<void(void*)> func) {

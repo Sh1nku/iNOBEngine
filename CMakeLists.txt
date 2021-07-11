@@ -17,7 +17,7 @@ endif (MSVC)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
-set ( PROJECT_LINK_LIBS CONAN_PKG::sdl2_image CONAN_PKG::sdl2 CONAN_PKG::lua CONAN_PKG::sol2 CONAN_PKG::nlohmann_json CONAN_PKG::opengl CONAN_PKG::glu CONAN_PKG::box2d CONAN_PKG::glm CONAN_PKG::cef_binaries)
+set ( PROJECT_LINK_LIBS CONAN_PKG::sdl2_image CONAN_PKG::sdl2 CONAN_PKG::luajit CONAN_PKG::sol2 CONAN_PKG::nlohmann_json CONAN_PKG::opengl CONAN_PKG::glu CONAN_PKG::box2d CONAN_PKG::glm CONAN_PKG::cef_binaries)
 
 add_library(iNOBEngine SHARED ${SOURCES} ${HEADERS})
 target_link_libraries(iNOBEngine PRIVATE ${PROJECT_LINK_LIBS} )

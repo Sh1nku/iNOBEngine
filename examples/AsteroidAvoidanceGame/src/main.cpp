@@ -20,8 +20,6 @@ int main(int argc, char **argv) {
 		quit = true; 
 	});
 
-	manager->GetSystem<RenderSystem>()->SetShowFPS(true);
-
 	Uint64 now = SDL_GetPerformanceCounter();
 	Uint64 last = 0;
 	double deltaTime = 0;

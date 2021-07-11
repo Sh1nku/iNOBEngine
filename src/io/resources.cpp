@@ -28,18 +28,21 @@ GameObject* Resources::GetPrefab(const std::string& name) {
 
 Texture* Resources::GetTexture(const std::string& name) {
 	Texture* tex = nullptr;
-	try {
-		Texture* tex = textures.at(name).get();
+	const auto& it = textures.find(name);
+	if (it != textures.end()) {
+		tex = it->second.get();
 	}
-	catch (std::exception) {
-		try {
-			tex = textures.at("error_texture").get();
+	else {
+		const auto& it2 = textures.find("error_texture");
+		if (it2 != textures.end()) {
+			tex = it2->second.get();
 		}
-		catch (std::exception) {
+		else {
 			Resources::textures.emplace("error_texture", std::move(Texture::LoadTexture("THIS_FILE_SHOULD_NOT_EXIST")));
 			tex = textures.at("error_texture").get();
 		}
 	}
+
 	return tex;
 }
 

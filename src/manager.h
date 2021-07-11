@@ -48,6 +48,7 @@ public:
 
 	void Subscribe(EventManager* ptr, std::string ev, EventManager* ref, std::function<void(void*)> func);
 	void FireEvent(EventManager* ptr, std::string ev, void* data);
+	const std::vector < std::pair<std::string, double>>& GetProfiling();
 
 protected:
 	void Unsubscribe(EventManager* ptr, std::string ev, EventManager* obj);
@@ -64,6 +65,7 @@ private:
 	std::vector<GameObject*> namedObjects;
 	std::vector<SystemProgram*> mSystems;
 	std::unordered_map < EventManager*, std::unordered_map < std::string, std::unordered_map<EventManager*, std::function<void(void*)>>>> mEvents;
+	std::vector < std::pair<std::string, double>> mProfiling;
 
 	void LoadNewScene();
 	std::string sceneToLoad = "";

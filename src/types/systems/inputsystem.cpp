@@ -10,6 +10,7 @@
 SDL_Event e;
 
 InputSystem::InputSystem() {
+	mName = "InputSystem";
 	mMap.insert({ Component::GetBitcode("Input"), std::make_unique<gameObject_map>() });
 	for (int i = 0; i < SDL_NumJoysticks(); ++i) {
 		if (SDL_IsGameController(i)) {
@@ -48,13 +49,13 @@ void InputSystem::Update(float dt) {
 			{
 				if (e.key.repeat == 0) {
 					auto keyDown = e.key.keysym.sym;
-					try {
-						auto& tupleDown = keyCodes.at(keyDown);
-						std::get<0>(tupleDown) = true;
-						std::get<1>(tupleDown) = false;
-						std::get<2>(tupleDown) = true;
+					std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>>::iterator it = keyCodes.find(keyDown);
+					if (it != keyCodes.end()) {
+						std::get<0>(it->second) = true;
+						std::get<1>(it->second) = false;
+						std::get<2>(it->second) = true;
 					}
-					catch (std::out_of_range) {
+					else {
 						keyCodes.emplace(keyDown, std::make_tuple<bool, bool, bool>(true, false, true));
 					}
 					break;
@@ -64,16 +65,15 @@ void InputSystem::Update(float dt) {
 			{
 				if (e.key.repeat == 0) {
 					auto keyUp = e.key.keysym.sym;
-					try {
-						auto& tupleUp = keyCodes.at(keyUp);
-						std::get<0>(tupleUp) = false;
-						std::get<1>(tupleUp) = true;
-						std::get<2>(tupleUp) = false;
+					std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>>::iterator it = keyCodes.find(keyUp);
+					if (it != keyCodes.end()) {
+						std::get<0>(it->second) = false;
+						std::get<1>(it->second) = true;
+						std::get<2>(it->second) = false;
 					}
-					catch (std::out_of_range) {
-						keyCodes.emplace(keyUp, std::make_tuple<bool, bool, bool>(false, true, false));
+					else {
+						keyCodes.emplace(keyUp, std::make_tuple<bool, bool, bool>(true, false, true));
 					}
-					break;
 				}
 			}
 			case SDL_CONTROLLERDEVICEADDED:

@@ -4,37 +4,34 @@
 std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>> keyCodes;
 std::unordered_map <UI8, SDL_GameController*> controllers;
 
-bool Input::GetKeyDown(std::string key) {
-	try {
-		SDL_Keycode keyCode = SDL_GetKeyFromName(key.c_str());
-		auto[down, up, continuous] = keyCodes.at(keyCode);
+bool Input::GetKeyDown(const std::string& key) {
+	SDL_Keycode keyCode = SDL_GetKeyFromName(key.c_str());
+	std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>>::iterator it = keyCodes.find(keyCode);
+	if (it != keyCodes.end()) {
+		auto [down, up, continuous] = it->second;
 		return down;
 	}
-	catch (std::out_of_range) {
-		return false;
-	}
+	return false;
 }
 
-bool Input::GetKeyUp(std::string key) {
-	try {
-		SDL_Keycode keyCode = SDL_GetKeyFromName(key.c_str());
-		auto[down, up, continuous] = keyCodes.at(keyCode);
+bool Input::GetKeyUp(const std::string& key) {
+	SDL_Keycode keyCode = SDL_GetKeyFromName(key.c_str());
+	std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>>::iterator it = keyCodes.find(keyCode);
+	if (it != keyCodes.end()) {
+		auto [down, up, continuous] = it->second;
 		return up;
 	}
-	catch (std::out_of_range) {
-		return false;
-	}
+	return false;
 }
 
-bool Input::IsKeyPressed(std::string key) {
-	try {
-		SDL_Keycode keyCode = SDL_GetKeyFromName(key.c_str());
-		auto[down, up, continuous] = keyCodes.at(keyCode);
+bool Input::IsKeyPressed(const std::string& key) {
+	SDL_Keycode keyCode = SDL_GetKeyFromName(key.c_str());
+	std::unordered_map < SDL_Keycode, std::tuple<bool, bool, bool>>::iterator it = keyCodes.find(keyCode);
+	if (it != keyCodes.end()) {
+		auto [down, up, continuous] = it->second;
 		return continuous;
 	}
-	catch (std::out_of_range) {
-		return false;
-	}
+	return false;
 }
 
 bool Input::GetControllerButtonDown(std::string button) {

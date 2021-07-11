@@ -44,7 +44,7 @@ class GameObject : public EventManager{
 			AddComponent(component);
 			return component;
 		}
-		Component* GetComponent(std::string type);
+		Component* GetComponent(const std::string& type);
 
 		Component* AddComponent(Component* component);
 
