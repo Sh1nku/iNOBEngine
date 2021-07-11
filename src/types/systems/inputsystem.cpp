@@ -10,6 +10,7 @@
 SDL_Event e;
 
 InputSystem::InputSystem() {
+	mName = "InputSystem";
 	mMap.insert({ Component::GetBitcode("Input"), std::make_unique<gameObject_map>() });
 	for (int i = 0; i < SDL_NumJoysticks(); ++i) {
 		if (SDL_IsGameController(i)) {

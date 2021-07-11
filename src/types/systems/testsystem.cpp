@@ -4,6 +4,7 @@
 
 
 TestSystem::TestSystem() {
+	mName = "TestSystem";
 	mMap.insert({ Component::GetBitcode("TestComponent"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("TestComponent") | Component::GetBitcode("Transform"), std::make_unique<gameObject_map>() });
 }

@@ -57,9 +57,23 @@ void GUIBrowserClient::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 void GUIBrowserClient::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode)
 {
     std::cout << "OnLoadEnd(" << httpStatusCode << ")" << std::endl;
-    std::ostringstream ss;
-    ss << "window.__applicationPath = '" << Resources::gameDirAbsoulute << "';";
-    frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
+
+    std::ostringstream applicationPathString;
+    applicationPathString << "window.__applicationPath = '" << Resources::gameDirAbsoulute << "';";
+    frame->ExecuteJavaScript(applicationPathString.str(), frame->GetURL(), 0);
+    static std::string create_fps_string =
+    R"(
+	        let fps = document.createElement('p');
+	        fps.style.cssText = 'position:absolute;left:0;top:0;color:white;z-index:9999;margin:0;display:none';
+	        fps.id = '__fps_counter';
+	        document.body.appendChild(fps);
+    )";
+    frame->ExecuteJavaScript(create_fps_string, frame->GetURL(), 0);
+
+    std::ostringstream fpsDisplayString;
+    fpsDisplayString << "document.getElementById('__fps_counter').style.display='" << (renderSystem->GetShowFPS() ? "inline" : "none") << "';";
+    frame->ExecuteJavaScript(fpsDisplayString.str(), frame->GetURL(), 0);
+
     loaded = true;
 }
 

@@ -17,7 +17,8 @@
 #include "../../window/cef/guiv8handler.h"
 #include "../../window/cef/guiapp.h"
 
-RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
+RenderSystem::RenderSystem() : showFPS(false), showCollisions(false), showProfiling(false) {
+	mName = "RenderSystem";
 
 	mMap.insert({ Component::GetBitcode("Transform") | Component::GetBitcode("Animation"), std::make_unique<gameObject_map>() });
 	mMap.insert({ Component::GetBitcode("Camera"), std::make_unique<gameObject_map>() });
@@ -66,7 +67,6 @@ RenderSystem::RenderSystem() : showFPS(false), showCollisions(false) {
 			GUIbrowserClient = new GUIBrowserClient(GUIrenderHandler, this);
 			std::string url = "about:blank"; //+ Resources::gameDirAbsoulute + "ui.html";
 			GUIbrowser = CefBrowserHost::CreateBrowserSync(window_info, GUIbrowserClient.get(), url, browserSettings, nullptr);
-
 		}
 	}
 }
@@ -76,10 +76,13 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::Update(float dt) {
+	std::chrono::steady_clock::time_point time;
+	mProfiling.clear();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), std::get<3>(backgroundColor));
 	glLoadIdentity();
 
+	time = std::chrono::high_resolution_clock::now();
 	for (auto& entry : *GetEntries(Component::GetBitcode("Camera"))) {
 		if (entry.first->active) {
 			Camera* camera = (Camera*)entry.second->at(Component::GetBitcode("Camera"));
@@ -95,6 +98,8 @@ void RenderSystem::Update(float dt) {
 			}
 		}
 	}
+	mProfiling["Camera"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
+	time = std::chrono::high_resolution_clock::now();
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
 		if (entry.first->active) {
 			Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
@@ -125,18 +130,25 @@ void RenderSystem::Update(float dt) {
 			glPopMatrix();
 		}
 	}
+	mProfiling["Drawing-Sprite"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
+	time = std::chrono::high_resolution_clock::now();
 	if (showCollisions) {
 		ShowCollisions();
 	}
-
-
+	mProfiling["Drawing-Collision"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 	if (CEF_INITIALIZED) {
+		time = std::chrono::high_resolution_clock::now();
 		CefDoMessageLoopWork();
-
+		mProfiling["UI-Messages"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
+		time = std::chrono::high_resolution_clock::now();
 		if (GUIrenderHandler->texture && !GUIbrowser->IsLoading()) {
 
 			if (showFPS) {
 				ShowFPS(dt);
+			}
+
+			if (Manager::IsStarted() && showProfiling) {
+				ShowProfiling();
 			}
 
 
@@ -188,8 +200,8 @@ void RenderSystem::Update(float dt) {
 			glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
 			glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
 		}
+		mProfiling["Draw-UI"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 	}
-
 	glPopMatrix();
 	SDL_GL_SwapWindow(window->mWindow);
 	
@@ -201,6 +213,26 @@ void RenderSystem::SetBackgroundColor(float r, float g, float b, float a) {
 
 void RenderSystem::SetShowFPS(bool active) {
 	showFPS = active;
+	if (!GUIbrowser->IsLoading()) {
+		CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+		std::ostringstream ss;
+		ss << "document.getElementById('__fps_counter').style.display='" << (active ? "inline" : "none") << ";'";
+		frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
+	}
+}
+
+bool RenderSystem::GetShowFPS()
+{
+	return showFPS;
+}
+
+void RenderSystem::SetShowProfiling(bool active) {
+	showProfiling = active;
+}
+
+bool RenderSystem::GetShowProfiling()
+{
+	return showProfiling;
 }
 
 void RenderSystem::SetShowCollisions(bool active) {
@@ -231,17 +263,7 @@ void RenderSystem::ShowCollisions() {
 void RenderSystem::ShowFPS(float dt) {
 	static int average_count = 10;
 	static std::deque<float> averages;
-	static std::string create_fps_string =
-R"(
-if (!document.getElementById('__fps_counter')) {
-	let fps = document.createElement('p');
-	fps.style.cssText = 'position:absolute;left:0;top:0;color:white;z-index:9999;margin: 0;';
-	fps.id = '__fps_counter';
-	document.body.appendChild(fps);
-}
-)";
 	CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
-	frame->ExecuteJavaScript(create_fps_string, frame->GetURL(), 0);
 	if (averages.size() >= average_count) {
 		averages.pop_front();
 	}
@@ -249,4 +271,13 @@ if (!document.getElementById('__fps_counter')) {
 	std::ostringstream ss;
 	ss << "document.getElementById('__fps_counter').innerHTML = '" << (int)(std::accumulate(averages.begin(), averages.end(), 0) / averages.size()) << "';";
 	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
+}
+
+void RenderSystem::ShowProfiling()
+{
+	std::ostringstream ss;	
+	for (auto& it : Manager::GetInstance()->GetProfiling()) {
+		ss << it.first << ": " << std::setprecision(2) << it.second << std::endl;
+	}
+	std::cout << ss.str();
 }

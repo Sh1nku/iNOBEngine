@@ -4,6 +4,7 @@
 #include "../../manager.h"
 
 CollisionSystem::CollisionSystem(Vec2f gravity) : world(Vec2fToB2Vec2(gravity)) {
+	mName = "CollisionSystem";
 	mMap.insert({ Component::GetBitcode("Collision") | Component::GetBitcode("Transform"), std::make_unique<gameObject_map>() });
 };
 
