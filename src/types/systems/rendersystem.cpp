@@ -216,7 +216,7 @@ void RenderSystem::SetShowFPS(bool active) {
 	if (!GUIbrowser->IsLoading()) {
 		CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
 		std::ostringstream ss;
-		ss << "document.getElementById('__fps_counter').style.display='" << (active ? "inline" : "none") << ";'";
+		ss << "document.getElementById('__fps_counter').style.display='" << (active ? "inline" : "none") << "';";
 		frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
 	}
 }
@@ -228,6 +228,12 @@ bool RenderSystem::GetShowFPS()
 
 void RenderSystem::SetShowProfiling(bool active) {
 	showProfiling = active;
+	if (!GUIbrowser->IsLoading()) {
+		CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+		std::ostringstream ss;
+		ss << "document.getElementById('__profiling').style.display='" << (active ? "inline" : "none") << "';";
+		frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
+	}
 }
 
 bool RenderSystem::GetShowProfiling()
@@ -275,9 +281,15 @@ void RenderSystem::ShowFPS(float dt) {
 
 void RenderSystem::ShowProfiling()
 {
+	CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
 	std::ostringstream ss;	
+	double total = 0;
+	ss << "document.getElementById('__profiling').innerHTML = '";
 	for (auto& it : Manager::GetInstance()->GetProfiling()) {
-		ss << it.first << ": " << std::setprecision(2) << it.second << std::endl;
+		ss << it.first << ":&nbsp" << std::setprecision(2) << std::fixed << it.second << "<br>";
+		total += it.second;
 	}
-	std::cout << ss.str();
+	ss << "Total:&nbsp" << std::setprecision(2) << total << "<br>";
+	ss << "';";
+	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
 }

@@ -63,6 +63,7 @@ function update(dt)
 			manager:instantiate(getPrefab("bullet"), "", Vec3(position.x - BULLET_POS.x,position.y + BULLET_POS.y, 0))
 			manager:instantiate(getPrefab("bullet"), "", Vec3(position.x + BULLET_POS.x,position.y + BULLET_POS.y, 0))
 		end
+
 	end
 
 	
@@ -76,6 +77,12 @@ function update(dt)
 	end
 	if input:getKeyDown("F2") then
 		manager:loadScene("game.scene")
+	end
+	if input:getKeyDown("F3") then
+		renderSystem:setShowFPS(not renderSystem:getShowFPS())
+	end
+	if input:getKeyDown("F4") then
+		renderSystem:setShowProfiling(not renderSystem:getShowProfiling())
 	end
 end
 

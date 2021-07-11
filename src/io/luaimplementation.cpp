@@ -100,6 +100,9 @@ void LuaImplementation::CreateBindings() {
 		"new", sol::no_constructor,
 		"setBackgroundColor", &RenderSystem::SetBackgroundColor,
 		"setShowFPS", &RenderSystem::SetShowFPS,
+		"getShowFPS", &RenderSystem::GetShowFPS,
+		"getShowProfiling", &RenderSystem::GetShowProfiling,
+		"setShowProfiling", &RenderSystem::SetShowProfiling,
 		"setShowCollisions", &RenderSystem::SetShowCollisions,
 		"loadURL", &RenderSystem::LoadURL,
 		"executeJavascript", &RenderSystem::ExecuteJavascript);
