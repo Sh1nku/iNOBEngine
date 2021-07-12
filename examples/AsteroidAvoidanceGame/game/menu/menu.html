@@ -3,11 +3,72 @@
 <head>
 	<link rel="stylesheet" href="menu.css">
 </head>
+<script>
+var main_view;
+var controls_view;
+window.addEventListener('load', (event) => {
+  main_view = document.getElementById("main_view");
+  controls_view = document.getElementById("controls_view");
+});
+
+function showControls(active) {
+	if (active) {
+		main_view.style.display = "none";
+		controls_view.style.display = "inline";
+	}
+	else {
+		main_view.style.display = "inline";
+		controls_view.style.display = "none";
+	}
+}
+
+</script>
 <body>
-	<div class='main'>
+	<div id='main_view' class='main'>
 		<h1 class='title'>Asteroid Avoidance Game</h1>
 		<div style="display:flex;justify-content:center;align-items:center;">
-			<button class="button" onclick='window.__sendMessage("START_BUTTON");'>Start Game</button>
+			<div>
+				<button style='width:100%' class="button" onclick='window.__sendMessage("START_BUTTON");'>Start Game</button><br>
+				<button style='width:100%' class="button" onclick='showControls(true)'>Controls</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id='controls_view' style='display:none' class='main'>
+		<div style="display:flex;justify-content:center;align-items:center;">
+			<table class='controls_table' >
+				<th>General</th>
+				<tr>
+					<td>Move: W A S D</td>
+				</tr>
+				<tr>
+					<td>Boost:  Left-Shift</td>
+				</tr>
+				<tr>
+					<td>Shoot:  Spacebar </td>
+				</tr>
+				<tr>
+					<td>Pause:  Escape </td>
+				</tr>
+			</table> 
+			<table class='controls_table' >
+				<th>Debug</th>
+				<tr>
+					<td>Show Collisions:  F1</td>
+				</tr>
+				<tr>
+					<td>Reload Level:  F2</td>
+				</tr>
+				<tr>
+					<td>Show FPS:  F3 </td>
+				</tr>
+				<tr>
+					<td>Show Profiling:  F4 </td>
+				</tr>
+			</table>
+		</div>
+		<div style='width:100%'>
+			<button style="position:relative;left:50%;transform:translateX(-50%);" class="button" onclick='showControls(false)'>Back</button>
 		</div>
 	</div>
 
