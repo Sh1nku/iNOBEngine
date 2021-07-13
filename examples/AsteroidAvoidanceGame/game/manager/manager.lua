@@ -45,7 +45,6 @@ function start()
 	renderSystem = manager:getRenderSystem()
 	animationSystem = manager:getAnimationSystem()
 	collisionSystem = manager:getCollisionSystem()
-	renderSystem:loadURL('manager/game.html');
 	scriptSystem = manager:getScriptSystem()
 	renderSystem:setBackgroundColor(0,0,0,1)
 	renderSystem:setShowFPS(true)

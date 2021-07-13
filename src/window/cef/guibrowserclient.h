@@ -17,6 +17,7 @@ class GUIBrowserClient :
     public CefDisplayHandler
 {
 public:
+    friend class RenderSystem;
     GUIBrowserClient(CefRefPtr<CefRenderHandler> ptr, RenderSystem* renderSystem);
 
     virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override;
@@ -35,7 +36,7 @@ public:
     void OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward) override;
     bool OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line) override;
     bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, CefProcessId source_process, CefRefPtr<CefProcessMessage> message) override;
-    void OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame);
+    void OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type) override;
 
     bool closeAllowed() const;
 

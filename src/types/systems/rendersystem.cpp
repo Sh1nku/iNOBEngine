@@ -245,13 +245,21 @@ void RenderSystem::SetShowCollisions(bool active) {
 }
 
 void RenderSystem::ExecuteJavascript(const std::string& script) {
-	CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
-	frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+	if (CEF_INITIALIZED) {
+		if (GUIbrowserClient->isLoaded()) {
+			CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+			frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+		}
+		else {
+			mScriptBacklog.push_back(script);
+		}
+	}
 }
 
 void RenderSystem::LoadURL(const std::string& url)
 {
 	if (CEF_INITIALIZED) {
+		GUIbrowserClient->loaded = false;
 		GUIbrowser->GetMainFrame()->LoadURL("file:///" + Resources::gameDirAbsoulute + url);
 	}
 }

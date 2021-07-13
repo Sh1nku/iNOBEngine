@@ -80,7 +80,10 @@ void GUIBrowserClient::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFra
     displayString << "document.getElementById('__fps_counter').style.display='" << (renderSystem->GetShowFPS() ? "inline" : "none") << "';\n";
     displayString << "document.getElementById('__profiling').style.display='" << (renderSystem->GetShowProfiling() ? "inline" : "none") << "';";
     frame->ExecuteJavaScript(displayString.str(), frame->GetURL(), 0);
-
+    for (auto& script : renderSystem->mScriptBacklog) {
+        frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+    }
+    renderSystem->mScriptBacklog.clear();
     loaded = true;
 }
 
@@ -93,7 +96,8 @@ bool GUIBrowserClient::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
 
 void GUIBrowserClient::OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward)
 {
-    std::cout << "OnLoadingStateChange()" << std::endl;
+    std::cout << "OnLoadingStateChange(): " << !isLoading << std::endl;
+    loaded = isLoading == true ? false : loaded;
 }
 
 bool GUIBrowserClient::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line)
@@ -115,7 +119,7 @@ bool GUIBrowserClient::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, C
     return false;
 }
 
-void GUIBrowserClient::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame)
+void GUIBrowserClient::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type)
 {
     std::cout << "OnLoadStart()" << std::endl;
 }

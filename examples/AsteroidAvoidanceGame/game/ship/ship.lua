@@ -5,6 +5,7 @@ local renderSystem
 local speed = 4
 local TIME_BETWEEN_SHOTS = 0.3
 local BULLET_POS = Vec2(0.35, -0.2);
+local lives = 3
 local lastShot
 local manager
 local transform
@@ -21,6 +22,7 @@ function start()
 	drawCollisionData = false
 	lastShot = 0
 	collision:setCollisionFunc(collisionFunc)
+	renderSystem:executeJavascript('updateLives(' .. lives .. ');')
 end
 
 function update(dt)
@@ -86,8 +88,14 @@ function update(dt)
 end
 
 function collisionFunc(otherCollision)
-	manager:destroy(localObject)
-	manager:destroy(manager:getGameObjectByName("Backgrounds"))
-	manager:destroy(manager:getGameObjectByName("Camera"))
-	manager:loadScene("menu.scene")
+	lives = lives - 1;
+	if lives > 0 then
+		manager:destroy(otherCollision:getParent())
+		renderSystem:executeJavascript('updateLives(' .. lives .. ');')
+	else
+		manager:destroy(localObject)
+		manager:destroy(manager:getGameObjectByName("Backgrounds"))
+		manager:destroy(manager:getGameObjectByName("Camera"))
+		manager:loadScene("menu.scene")
+	end
 end
