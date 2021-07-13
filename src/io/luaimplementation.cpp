@@ -13,6 +13,7 @@
 #include "resources.h"
 #include "../types/vectors.h"
 
+
 sol::state* LuaImplementation::lua;
 
 void LuaImplementation::Init() {
@@ -88,7 +89,9 @@ void LuaImplementation::CreateBindings() {
 	lua->new_usertype<Animation>("Animation",
 		sol::base_classes, sol::bases<Component>(),
 		"new", sol::no_constructor,
-		"setClip", &Animation::SetClip);
+		"setClip", &Animation::SetClip,
+		"getColor", &Animation::GetColor,
+		"setColor", &Animation::SetColor);
 
 	//// Systems
 	lua->new_usertype<SystemProgram>("SystemProgram",

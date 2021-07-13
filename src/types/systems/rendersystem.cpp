@@ -107,6 +107,7 @@ void RenderSystem::Update(float dt) {
 			const auto& worldPos = transform->GetWorldPosition();
 			Texture* tex = anim->currentClip->texture;
 			AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
+			const auto& color = anim->GetColor();
 
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
@@ -116,7 +117,7 @@ void RenderSystem::Update(float dt) {
 			UI32 height = coords.bottomRight.y - coords.topRight.y;
 			float scale = transform->GetScale();
 			glBegin(GL_QUADS);
-			glColor4f(1, 1, 1, 1);
+			glColor4f(std::get<0>(color), std::get<1>(color), std::get<2>(color), std::get<3>(color));
 			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
 			glVertex3f(-.5f * scale * width / pixelsPerUnit, -.5f * scale * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
