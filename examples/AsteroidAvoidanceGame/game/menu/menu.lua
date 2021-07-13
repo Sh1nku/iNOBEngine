@@ -4,7 +4,6 @@ local collisionSystem
 local animationSystem
 
 function startButtonPressed(data)
-	renderSystem:loadURL('manager/game.html');
 	manager:loadScene("game.scene")
 end
 

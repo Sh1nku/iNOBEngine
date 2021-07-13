@@ -137,6 +137,13 @@ void RenderSystem::Update(float dt) {
 	mProfiling["Drawing-Collision"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 	if (CEF_INITIALIZED) {
 		time = std::chrono::high_resolution_clock::now();
+		if (GUIbrowserClient->isLoaded()) {
+			CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+			for (auto& script : mScriptBacklog) {
+				frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+			}
+			mScriptBacklog.clear();
+		}
 		CefDoMessageLoopWork();
 		mProfiling["UI-Messages"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 		time = std::chrono::high_resolution_clock::now();
@@ -246,13 +253,7 @@ void RenderSystem::SetShowCollisions(bool active) {
 
 void RenderSystem::ExecuteJavascript(const std::string& script) {
 	if (CEF_INITIALIZED) {
-		if (GUIbrowserClient->isLoaded()) {
-			CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
-			frame->ExecuteJavaScript(script, frame->GetURL(), 0);
-		}
-		else {
-			mScriptBacklog.push_back(script);
-		}
+		mScriptBacklog.push_back(script);
 	}
 }
 
@@ -296,7 +297,6 @@ void RenderSystem::ShowProfiling()
 		ss << it.first << ":&nbsp" << std::setprecision(2) << std::fixed << it.second << "<br>";
 		total += it.second;
 	}
-	ss << "Total:&nbsp" << std::setprecision(2) << total << "<br>";
-	ss << "';";
+	ss << "Total:&nbsp" << std::setprecision(2) << total << " ms"<< "<br>" << "';";
 	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
 }
