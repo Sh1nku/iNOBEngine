@@ -20,6 +20,5 @@ function update(dt)
 end
 
 function collisionFunc(otherCollision)
-	manager:destroy(otherCollision:getParent())
 	manager:destroy(localObject)
 end

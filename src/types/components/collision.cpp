@@ -66,6 +66,16 @@ void Collision::SetCollisionFunc(std::function<void(Collision*)> func)
 	collisionFunc = func;
 }
 
+void Collision::SetEnabled(bool enabled)
+{
+	should_change = enabled ? Collision_ChangeEnabled::ENABLE : Collision_ChangeEnabled::DISABLE;
+}
+
+bool Collision::IsEnabled()
+{
+	return body->IsEnabled();
+}
+
 b2Shape * Collision::cloneB2Shape(b2Shape * shape)
 {
 	if (shape->GetType() == b2Shape::e_circle) {
@@ -171,6 +181,10 @@ void from_json(const nlohmann::json& j, Collision& t) {
 		const auto& maskBits = def.find("maskbits");
 		if (maskBits != def.end()) {
 			fixtureDef.filter.maskBits = stringToBin(maskBits.value());
+		}
+		const auto& is_sensor = def.find("issensor");
+		if (is_sensor != def.end()) {
+			fixtureDef.isSensor = is_sensor.value();
 		}
 		t.fixtures.emplace_back(fixtureDef);
 	}

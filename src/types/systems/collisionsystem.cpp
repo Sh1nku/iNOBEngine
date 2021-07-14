@@ -19,7 +19,6 @@ void CollisionSystem::Update(float dt) {
 					collision->body->CreateFixture(&fixture);
 				}
 			}
-			collision->body->SetEnabled(true);
 			auto worldPosition = Vec3fToB2Vec2(transform->GetWorldPosition());
 			if ((b2Vec2)collision->body->GetPosition() != worldPosition || collision->body->GetAngle() != transform->GetWorldRotation()) {
 				collision->body->SetTransform(worldPosition, transform->GetWorldRotation());
@@ -48,11 +47,28 @@ void CollisionSystem::Update(float dt) {
 		}
 	}
 	for (b2Contact* c = world.GetContactList(); c; c = c->GetNext()) {
-		if (((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
-			((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer));
+		if (c != nullptr) {
+			if (((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
+				((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer));
+			}
+			if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
+				((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer));
+			}
 		}
-		if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
-			((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer));
+	}
+
+	for (auto& entry : *GetEntries(Component::GetBitcode("Collision") | Component::GetBitcode("Transform"))) {
+		if (entry.first->active) {
+			Collision* collision = (Collision*)entry.second->at(Component::GetBitcode("Collision"));
+			if (collision->body != nullptr && collision->should_change != Collision_ChangeEnabled::NO_CHANGE) {
+				if (collision->should_change == Collision_ChangeEnabled::ENABLE) {
+					collision->body->SetEnabled(true);
+				}
+				else {
+					collision->body->SetEnabled(false);
+				}
+			}
+			collision->should_change = Collision_ChangeEnabled::NO_CHANGE;
 		}
 	}
 

@@ -25,7 +25,7 @@ void AnimationSystem::Update(float dt) {
 						animation->timeSinceLastUpdate = 0;
 					}
 					else {
-						animation->FireEvent(animation->currentClip->name, ANIMATION_STATES::FINISHED);
+						animation->FireEvent(animation->currentClip->name, nullptr);
 					}
 				}
 			}

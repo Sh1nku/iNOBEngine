@@ -84,14 +84,19 @@ void LuaImplementation::CreateBindings() {
 		"body", &Collision::body,
 		"setLinearVelocity", [](Collision& obj, Vec2f& vel) {obj.SetLinearVelocity(vel); },
 		"setAngularVelocity", &Collision::SetAngularVelocity,
-		"setCollisionFunc", &Collision::SetCollisionFunc);
+		"setCollisionFunc", &Collision::SetCollisionFunc,
+		"isEnabled", &Collision::IsEnabled,
+		"setEnabled", &Collision::SetEnabled);
 
 	lua->new_usertype<Animation>("Animation",
 		sol::base_classes, sol::bases<Component>(),
+		sol::base_classes, sol::bases<EventManager>(),
 		"new", sol::no_constructor,
 		"setClip", &Animation::SetClip,
+		"getClip", &Animation::GetClip,
 		"getColor", &Animation::GetColor,
-		"setColor", &Animation::SetColor);
+		"setColor", &Animation::SetColor,
+		"subscribe", &Animation::Subscribe);
 
 	//// Systems
 	lua->new_usertype<SystemProgram>("SystemProgram",

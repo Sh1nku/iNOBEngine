@@ -112,7 +112,6 @@ function collisionFunc(otherCollision)
 	end
 	if lives > 0 then
 		is_invincible = true
-		manager:destroy(otherCollision:getParent())
 		renderSystem:executeJavascript('updateLives(' .. lives .. ');')
 	else
 		manager:destroy(localObject)

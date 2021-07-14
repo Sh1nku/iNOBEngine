@@ -52,6 +52,11 @@ void Animation::SetClip(const std::string& clip, bool restartIfAlready) {
 	currentFrame = 0;
 }
 
+const std::string& Animation::GetClip()
+{
+	return currentClip->name;
+}
+
 void Animation::SetColor(float r, float g, float b, float a)
 {
 	std::get<0>(mColor) = r;
@@ -63,35 +68,4 @@ void Animation::SetColor(float r, float g, float b, float a)
 const std::tuple<float, float, float, float>& Animation::GetColor()
 {
 	return mColor;
-}
-
-void Animation::Subscribe(std::string clip, ANIMATION_STATES state, void(*function)()) {
-	const auto& clipEvent = events.find(clip);
-	if (clipEvent != events.end()) {
-		const auto& stateEvent = clipEvent->second.find(state);
-		if (stateEvent != clipEvent->second.end()) {
-			stateEvent->second.emplace_back(function);
-		}
-		else {
-			clipEvent->second.emplace(state, std::vector<void(*)()>());
-			clipEvent->second.at(state).emplace_back(function);
-		}
-	}
-	else {
-		events.emplace(clip, std::unordered_map<ANIMATION_STATES, std::vector<void(*)()>>());
-		events.at(clip).emplace(state, std::vector<void(*)()>());
-		events.at(clip).at(state).emplace_back(function);
-	}
-}
-
-void Animation::FireEvent(std::string& clip, ANIMATION_STATES state) {
-	const auto& clipEvent = events.find(clip);
-	if (clipEvent != events.end()) {
-		const auto& stateEvent = clipEvent->second.find(state);
-		if (stateEvent != clipEvent->second.end()) {
-			for (auto& func : stateEvent->second) {
-				func();
-			}
-		}
-	}
 }

@@ -4,6 +4,12 @@
 #include "box2d/box2d.h"
 #include "../vectors.h"
 
+enum class Collision_ChangeEnabled {
+	NO_CHANGE,
+	ENABLE,
+	DISABLE
+};
+
 class Collision : public Component {
 public:
 	friend class CollisionSystem;
@@ -17,6 +23,8 @@ public:
 	void SetLinearVelocity(Vec2f vel);
 	void SetAngularVelocity(float vel);
 	void SetCollisionFunc(std::function<void(Collision*)> func);
+	void SetEnabled(bool enabled);
+	bool IsEnabled();
 	b2Body *body;
 	b2Shape* cloneB2Shape(b2Shape* shape);
 protected:
@@ -25,6 +33,7 @@ protected:
 	std::function<void(Collision*)> collisionFunc;
 	void SetScale(float scale);
 	float mScale;
+	Collision_ChangeEnabled should_change = Collision_ChangeEnabled::NO_CHANGE;
 };
 
 UI16 stringToBin(std::string str);
