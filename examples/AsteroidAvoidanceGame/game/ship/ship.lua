@@ -3,6 +3,7 @@ local TIME_BETWEEN_SHOTS = 0.3
 local BULLET_POS = Vec2(0.35, -0.2);
 local TOTAL_LIVES = 3
 local INVINCIBILITY_DURATION = 4
+local BLINK_RATE = 4
 
 local is_invincible = false
 local invincibility = 0
@@ -75,7 +76,7 @@ function update(dt)
 
 		if is_invincible then
 			invincibility = invincibility - dt
-			current_blink = (2 * math.pi) * invincibility % 1
+			current_blink = ((math.cos((2*math.pi * BLINK_RATE)*(invincibility % 1)) / 2) + 0.5)
 			if invincibility <= 0 then
 				is_invincible = false
 				current_blink = 1
