@@ -2,6 +2,7 @@
 #include "../components/collision.h"
 #include "../gameobject.h"
 #include "../../manager.h"
+#include <iostream>
 
 CollisionSystem::CollisionSystem(Vec2f gravity) : world(Vec2fToB2Vec2(gravity)) {
 	mName = "CollisionSystem";
@@ -48,11 +49,13 @@ void CollisionSystem::Update(float dt) {
 	}
 	for (b2Contact* c = world.GetContactList(); c; c = c->GetNext()) {
 		if (c != nullptr) {
-			if (((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
-				((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer));
-			}
-			if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
-				((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer));
+			if (c->IsTouching()) {
+				if (((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
+					((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer));
+				}
+				if (((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc != nullptr) {
+					((Collision*)c->GetFixtureB()->GetBody()->GetUserData().pointer)->collisionFunc(((Collision*)c->GetFixtureA()->GetBody()->GetUserData().pointer));
+				}
 			}
 		}
 	}

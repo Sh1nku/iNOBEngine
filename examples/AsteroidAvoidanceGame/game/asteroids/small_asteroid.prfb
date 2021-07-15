@@ -22,7 +22,6 @@
 				"type" : "polygon",
 				"categorybits" : "0100",
 				"maskbits" : "1010",
-				
 				"issensor" : true,
 				"coords" : [
 				[-0.3125, -0.21875], [0.125,  -0.3125],
