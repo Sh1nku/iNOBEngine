@@ -9,9 +9,10 @@ local impacted = false
 
 function impact()
 	if not impacted then
+		local explosion_clip = animation:getClip() .. '_explosion'
 		collision:setEnabled(false)
-		animation:setClip('small_asteroid_explosion', false)
-		animation:subscribe(animation,'small_asteroid_explosion', death_done)
+		animation:setClip(explosion_clip, false)
+		animation:subscribe(animation, explosion_clip, death_done)
 	end
 
 	impacted = true
