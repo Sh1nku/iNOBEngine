@@ -27,6 +27,7 @@ protected:
 	GameObject *mParent;
 	void SetParent(GameObject* parent);
 	virtual Component* Clone(GameObject* parent = nullptr) = 0;
+private:
 	static void AddBitcode(std::string name);
 	static void AddComponent(const std::string& name, Component* (*function)(nlohmann::json json));
 };
