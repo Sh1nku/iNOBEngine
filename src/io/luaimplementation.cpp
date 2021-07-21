@@ -12,6 +12,7 @@
 #include "../eventmanager.h"
 #include "resources.h"
 #include "../types/vectors.h"
+#include "../types/components/scriptcomponent.h"
 
 
 sol::state* LuaImplementation::lua;
@@ -61,6 +62,7 @@ void LuaImplementation::CreateBindings() {
 		"setPosition", &Transform::SetLocalPosition,
 		"getLocalPosition", &Transform::GetLocalPosition,
 		"getWorldPosition", &Transform::GetWorldPosition,
+		"getScreenPosition", &Transform::GetScreenPosition,
 		"setScale", &Transform::SetScale);
 
 	auto input = lua->new_usertype<Input>("Input",
@@ -97,6 +99,10 @@ void LuaImplementation::CreateBindings() {
 		"getColor", &Animation::GetColor,
 		"setColor", &Animation::SetColor,
 		"subscribe", &Animation::Subscribe);
+
+	lua->new_usertype<ScriptComponent>("ScriptComponent",
+		sol::base_classes, sol::bases<Component>(),
+		"new", sol::no_constructor);
 
 	//// Systems
 	lua->new_usertype<SystemProgram>("SystemProgram",

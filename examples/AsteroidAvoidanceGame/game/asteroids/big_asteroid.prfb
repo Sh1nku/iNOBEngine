@@ -15,6 +15,10 @@
 			]
 		},
 		{
+			"name": "Points",
+			"points" : 30
+		},
+		{
 			"name" : "Collision",
 			"type" : "dynamic",
 			"bodydef" : [

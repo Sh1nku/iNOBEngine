@@ -99,7 +99,13 @@ void RenderSystem::Update(float dt) {
 	}
 	mProfiling["Camera"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 	time = std::chrono::high_resolution_clock::now();
+	std::array<GLdouble, 16> projection; glGetDoublev(GL_PROJECTION_MATRIX, projection.data());
+	std::array<GLdouble, 16> modelview; glGetDoublev(GL_MODELVIEW_MATRIX, modelview.data());
+	std::array<GLint, 4> viewPort; glGetIntegerv(GL_VIEWPORT, viewPort.data());
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
+		
+		
+
 		if (entry.first->active) {
 			Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
 			Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
@@ -108,6 +114,12 @@ void RenderSystem::Update(float dt) {
 			Texture* tex = anim->currentClip->texture;
 			AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
 			const auto& color = anim->GetColor();
+			std::array<GLdouble, 3> screen_coords;
+
+			gluProject(worldPos.x, worldPos.y, worldPos.z,
+				modelview.data(), projection.data(), viewPort.data(),
+				screen_coords.data(), screen_coords.data() + 1, screen_coords.data() + 2);
+			transform->SetScreenPosition(Vec2f(screen_coords[0], screen_coords[1]));
 
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
