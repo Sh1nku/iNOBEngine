@@ -13,6 +13,7 @@ local SPEED_MAX = 4.0
 local SPEED_MIN = 2.5
 local SCALE_MIN = 1
 local SCALE_MAX = 1.5
+_G.points = 0
 
 function randomFloat(low, high)
     return low + math.random()  * (high - low);

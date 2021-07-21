@@ -1,4 +1,5 @@
 #include <iNOBEngine.h>
+#include "components/points.h"
 
 
 int main(int argc, char **argv) {
@@ -6,6 +7,12 @@ int main(int argc, char **argv) {
 	
 	bool quit = false;
 	LuaImplementation::Init();
+	auto lua = LuaImplementation::GetState();
+	lua->new_usertype<Points>("Points",
+		sol::base_classes, sol::bases<Component>(),
+		"new", sol::no_constructor,
+		"getPoints", &Points::GetPoints);
+	(*lua)["GameObject"]["getPointsComponent"] = &GameObject::GetComponent<Points>;
 
 
 	Resources::Load("../examples/AsteroidAvoidanceGame/game");
