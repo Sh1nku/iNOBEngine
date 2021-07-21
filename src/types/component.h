@@ -37,5 +37,5 @@ template<typename T> Component* CreateComponent(nlohmann::json json) {
 
 template<typename T> void AddComponentToList(std::string name) {
 	Component::AddBitcode(name);
-	//jsonComponentList.emplace(name, &CreateComponent<T>);
+	jsonComponentList.emplace(name, &CreateComponent<T>);
 }
