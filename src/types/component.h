@@ -10,19 +10,6 @@ typedef std::unordered_map<std::string, Component*(*)(nlohmann::json json)> mapT
 extern std::unordered_map< std::string, UI32> bitcodes;
 extern mapType jsonComponentList;
 
-template<typename T> Component* CreateComponent(nlohmann::json json) {
-	T* t = new T();
-	from_json(json, *t);
-	return t;
-}
-
-template<typename T> void AddComponentToList(std::string name) {
-	Component::AddBitcode(name);
-	Component::AddComponent(name, &CreateComponent<T>);
-
-}
-
-
 class Component
 {
 public:
@@ -43,3 +30,15 @@ protected:
 	static void AddBitcode(std::string name);
 	static void AddComponent(const std::string& name, Component* (*function)(nlohmann::json json));
 };
+
+template<typename T> Component* CreateComponent(nlohmann::json json) {
+    T* t = new T();
+    from_json(json, *t);
+    return t;
+}
+
+template<typename T> void AddComponentToList(std::string name) {
+    Component::AddBitcode(name);
+    Component::AddComponent(name, &CreateComponent<T>);
+
+}
