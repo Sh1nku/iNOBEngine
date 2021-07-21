@@ -33,7 +33,7 @@ Component* Collision::Clone(GameObject* parent) {
 }
 
 UI32 Collision::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Collision");
+	static UI32 bitcode = Component::GetBitcode("Collision");
 	return bitcode;
 }
 

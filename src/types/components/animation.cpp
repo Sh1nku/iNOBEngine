@@ -16,7 +16,7 @@ Component* Animation::Clone(GameObject* parent) {
 }
 
 UI32 Animation::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Animation");
+	static UI32 bitcode = Component::GetBitcode("Animation");
 	return bitcode;
 }
 

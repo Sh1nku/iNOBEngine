@@ -27,7 +27,7 @@ Component* ScriptComponent::Clone(GameObject* parent) {
 }
 
 UI32 ScriptComponent::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("ScriptComponent");
+	static UI32 bitcode = Component::GetBitcode("ScriptComponent");
 	return bitcode;
 }
 

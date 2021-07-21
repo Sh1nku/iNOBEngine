@@ -12,7 +12,7 @@ Component* Transform::Clone(GameObject* parent) {
 }
 
 UI32 Transform::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Transform");
+	static UI32 bitcode = Component::GetBitcode("Transform");
 	return bitcode;
 }
 

@@ -8,7 +8,7 @@ Component* Points::Clone(GameObject* parent) {
 }
 
 UI32 Points::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Points");
+	static UI32 bitcode = Component::GetBitcode("Points");
 	return bitcode;
 }
 
