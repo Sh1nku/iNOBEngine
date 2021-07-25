@@ -30,10 +30,6 @@ void LuaImplementation::Destroy() {
 	lua = nullptr;
 }
 
-void func() {
-
-}
-
 void LuaImplementation::CreateBindings() {
 	auto gameObject = lua->new_usertype<GameObject>("GameObject",
 		"new", sol::no_constructor,

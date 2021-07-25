@@ -119,7 +119,7 @@ void RenderSystem::Update(float dt) {
 			gluProject(worldPos.x, worldPos.y, worldPos.z,
 				modelview.data(), projection.data(), viewPort.data(),
 				screen_coords.data(), screen_coords.data() + 1, screen_coords.data() + 2);
-			transform->SetScreenPosition(Vec2f(screen_coords[0], screen_coords[1]));
+			transform->SetScreenPosition(Vec2f(screen_coords[0], window->SCREEN_HEIGHT - screen_coords[1]));
 
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
