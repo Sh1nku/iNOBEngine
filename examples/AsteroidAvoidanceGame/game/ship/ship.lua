@@ -1,10 +1,19 @@
+local speed = 4
+local TIME_BETWEEN_SHOTS = 0.3
+local BULLET_POS = Vec2(0.35, -0.2);
+local TOTAL_LIVES = 3
+local INVINCIBILITY_DURATION = 4
+local BLINK_RATE = 4
+
+local is_invincible = false
+local invincibility = 0
+local current_blink = 1
+local lives = TOTAL_LIVES
+
 local input
 _G.paused = false
 local collision
 local renderSystem
-local speed = 4
-local TIME_BETWEEN_SHOTS = 0.3
-local BULLET_POS = Vec2(0.35, -0.2);
 local lastShot
 local manager
 local transform
@@ -21,6 +30,7 @@ function start()
 	drawCollisionData = false
 	lastShot = 0
 	collision:setCollisionFunc(collisionFunc)
+	renderSystem:executeJavascript('updateLives(' .. lives .. ');')
 end
 
 function update(dt)
@@ -64,6 +74,16 @@ function update(dt)
 			manager:instantiate(getPrefab("bullet"), "", Vec3(position.x + BULLET_POS.x,position.y + BULLET_POS.y, 0))
 		end
 
+		if is_invincible then
+			invincibility = invincibility - dt
+			current_blink = ((math.cos((2*math.pi * BLINK_RATE)*(invincibility % 1)) / 2) + 0.5)
+			if invincibility <= 0 then
+				is_invincible = false
+				current_blink = 1
+			end
+			animation:setColor(current_blink, current_blink, current_blink, 1)
+		end
+
 	end
 
 	if input:getKeyDown("Escape") then
@@ -86,8 +106,17 @@ function update(dt)
 end
 
 function collisionFunc(otherCollision)
-	manager:destroy(localObject)
-	manager:destroy(manager:getGameObjectByName("Backgrounds"))
-	manager:destroy(manager:getGameObjectByName("Camera"))
-	manager:loadScene("menu.scene")
+	if not is_invincible then
+		lives = lives - 1;
+		invincibility = INVINCIBILITY_DURATION
+	end
+	if lives > 0 then
+		is_invincible = true
+		renderSystem:executeJavascript('updateLives(' .. lives .. ');')
+	else
+		manager:destroy(localObject)
+		manager:destroy(manager:getGameObjectByName("Backgrounds"))
+		manager:destroy(manager:getGameObjectByName("Camera"))
+		manager:loadScene("menu.scene")
+	end
 end

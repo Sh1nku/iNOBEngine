@@ -99,7 +99,13 @@ void RenderSystem::Update(float dt) {
 	}
 	mProfiling["Camera"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 	time = std::chrono::high_resolution_clock::now();
+	std::array<GLdouble, 16> projection; glGetDoublev(GL_PROJECTION_MATRIX, projection.data());
+	std::array<GLdouble, 16> modelview; glGetDoublev(GL_MODELVIEW_MATRIX, modelview.data());
+	std::array<GLint, 4> viewPort; glGetIntegerv(GL_VIEWPORT, viewPort.data());
 	for (auto& entry : *GetEntries(Component::GetBitcode("Animation") | Component::GetBitcode("Transform"))) {
+		
+		
+
 		if (entry.first->active) {
 			Animation* anim = (Animation*)entry.second->at(Component::GetBitcode("Animation"));
 			Transform* transform = (Transform*)entry.second->at(Component::GetBitcode("Transform"));
@@ -107,6 +113,13 @@ void RenderSystem::Update(float dt) {
 			const auto& worldPos = transform->GetWorldPosition();
 			Texture* tex = anim->currentClip->texture;
 			AnimationCoords& coords = anim->currentClip->frames.at(anim->currentFrame).coords;
+			const auto& color = anim->GetColor();
+			std::array<GLdouble, 3> screen_coords;
+
+			gluProject(worldPos.x, worldPos.y, worldPos.z,
+				modelview.data(), projection.data(), viewPort.data(),
+				screen_coords.data(), screen_coords.data() + 1, screen_coords.data() + 2);
+			transform->SetScreenPosition(Vec2f(screen_coords[0], window->SCREEN_HEIGHT - screen_coords[1]));
 
 			glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, id);
@@ -116,7 +129,7 @@ void RenderSystem::Update(float dt) {
 			UI32 height = coords.bottomRight.y - coords.topRight.y;
 			float scale = transform->GetScale();
 			glBegin(GL_QUADS);
-			glColor4f(1, 1, 1, 1);
+			glColor4f(std::get<0>(color), std::get<1>(color), std::get<2>(color), std::get<3>(color));
 			glTexCoord2f(coords.bottomLeft.x / tex->width, coords.bottomLeft.y / tex->height);
 			glVertex3f(-.5f * scale * width / pixelsPerUnit, -.5f * scale * height / pixelsPerUnit, 0);
 			glTexCoord2f(coords.bottomRight.x / tex->width, coords.bottomRight.y / tex->height);
@@ -137,6 +150,13 @@ void RenderSystem::Update(float dt) {
 	mProfiling["Drawing-Collision"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 	if (CEF_INITIALIZED) {
 		time = std::chrono::high_resolution_clock::now();
+		if (GUIbrowserClient->isLoaded()) {
+			CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
+			for (auto& script : mScriptBacklog) {
+				frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+			}
+			mScriptBacklog.clear();
+		}
 		CefDoMessageLoopWork();
 		mProfiling["UI-Messages"] = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - time).count();
 		time = std::chrono::high_resolution_clock::now();
@@ -245,13 +265,15 @@ void RenderSystem::SetShowCollisions(bool active) {
 }
 
 void RenderSystem::ExecuteJavascript(const std::string& script) {
-	CefRefPtr<CefFrame> frame = GUIbrowser->GetMainFrame();
-	frame->ExecuteJavaScript(script, frame->GetURL(), 0);
+	if (CEF_INITIALIZED) {
+		mScriptBacklog.push_back(script);
+	}
 }
 
 void RenderSystem::LoadURL(const std::string& url)
 {
 	if (CEF_INITIALIZED) {
+		GUIbrowserClient->loaded = false;
 		GUIbrowser->GetMainFrame()->LoadURL("file:///" + Resources::gameDirAbsoulute + url);
 	}
 }
@@ -288,7 +310,6 @@ void RenderSystem::ShowProfiling()
 		ss << it.first << ":&nbsp" << std::setprecision(2) << std::fixed << it.second << "<br>";
 		total += it.second;
 	}
-	ss << "Total:&nbsp" << std::setprecision(2) << total << "<br>";
-	ss << "';";
+	ss << "Total:&nbsp" << std::setprecision(2) << total << " ms"<< "<br>" << "';";
 	frame->ExecuteJavaScript(ss.str(), frame->GetURL(), 0);
 }

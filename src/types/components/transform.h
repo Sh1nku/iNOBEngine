@@ -5,15 +5,17 @@
 
 class Transform : public Component {
 public:
-	Transform(GameObject *parent = nullptr) : Component(parent), mWorldPosition(Vec3f(0,0,0)), mWorldRotation(0),  mScale(1) {}
-	Transform(Vec3f position, float rotation, GameObject *parent = nullptr) : Component(parent), mWorldPosition(position), mWorldRotation(rotation), mScale(1) {};
+	Transform(GameObject *parent = nullptr) : Component(parent), mWorldPosition(Vec3f(0,0,0)), mWorldRotation(0),  mScale(1), mScreenPosition(Vec2f(0,0)) {}
+	Transform(Vec3f position, float rotation, GameObject *parent = nullptr) : Component(parent), mWorldPosition(position), mWorldRotation(rotation), mScale(1), mScreenPosition(Vec2f(0, 0)) {};
 	Component* Clone(GameObject* parent);
 	Vec3f GetWorldPosition() const;
 	Vec3f GetLocalPosition() const;
+	const Vec2f& GetScreenPosition() const;
 	float GetWorldRotation() const;
 	float GetLocalRotation() const;
 	float GetScale() const;
 	void SetLocalPosition(const Vec3f& position);
+	void SetScreenPosition(const Vec2f& position);
 	///TODO Implement, and make sure works with child objects like in SetLocalPosition
 	//void SetLocalRotation(float rotation);
 	void SetWorldPosition(const Vec3f& position);
@@ -25,6 +27,7 @@ private:
 	void UpdatePosition(Vec3f* oldPos);
 
 	Vec3f mWorldPosition;
+	Vec2f mScreenPosition;
 	float mWorldRotation;
 	float mScale;
 };

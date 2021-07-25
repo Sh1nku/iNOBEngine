@@ -111,5 +111,65 @@
 				"length": 1,
 				"coords": [0, 0, 32, 32]
 			}]
+	},
+	{
+			"name": "small_asteroid_explosion",
+			"texture": "asteroids/asteroid1_explosion.png",
+			"looping": false,
+			"frames": [
+			{
+				"length": 4,
+				"coords": [0, 0, 32, 32]
+			},
+			{
+				"length": 4,
+				"coords": [32, 0, 32, 32]
+			},
+			{
+				"length": 4,
+				"coords": [64, 0, 32, 32]
+			},
+			{
+				"length": 4,
+				"coords": [96, 0, 32, 32]
+			},
+			{
+				"length": 4,
+				"coords": [128, 0, 32, 32]
+			},
+			{
+				"length": 4,
+				"coords": [160, 0, 32, 32]
+			}]
+	},
+	{
+			"name": "big_asteroid_explosion",
+			"texture": "asteroids/asteroid2_explosion.png",
+			"looping": false,
+			"frames": [
+			{
+				"length": 4,
+				"coords": [0, 0, 64, 64]
+			},
+			{
+				"length": 4,
+				"coords": [64, 0, 64, 64]
+			},
+			{
+				"length": 4,
+				"coords": [128, 0, 64, 64]
+			},
+			{
+				"length": 4,
+				"coords": [192, 0, 64, 64]
+			},
+			{
+				"length": 4,
+				"coords": [256, 0, 64, 64]
+			},
+			{
+				"length": 4,
+				"coords": [320, 0, 64, 64]
+			}]
 	}]
 }

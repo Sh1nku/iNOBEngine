@@ -128,7 +128,11 @@ const auto loadErrorClip = [] {
 }();
 
 AnimationClip* Resources::GetClip(const std::string& clip) {
-	return clips.at(clip).get();
+	const auto& it = clips.find(clip);
+	if (it != clips.end()) {
+		return it->second.get();
+	}
+	return clips["error_clip"].get();
 }
 
 std::unordered_map<std::string, std::unique_ptr<AnimationClip>>* Resources::GetClips() {

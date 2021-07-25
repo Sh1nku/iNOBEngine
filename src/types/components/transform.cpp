@@ -12,7 +12,7 @@ Component* Transform::Clone(GameObject* parent) {
 }
 
 UI32 Transform::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Transform");
+	static UI32 bitcode = Component::GetBitcode("Transform");
 	return bitcode;
 }
 
@@ -31,6 +31,11 @@ Vec3f Transform::GetLocalPosition() const{
 	else {
 		return mWorldPosition;
 	}
+}
+
+const Vec2f& Transform::GetScreenPosition() const
+{
+	return mScreenPosition;
 }
 
 float Transform::GetWorldRotation() const{
@@ -71,6 +76,11 @@ void Transform::SetLocalPosition(const Vec3f& position) {
 			go->transform->UpdatePosition(&oldPos);
 		}
 	}
+}
+
+void Transform::SetScreenPosition(const Vec2f& position) {
+	this->mScreenPosition.x = position.x;
+	this->mScreenPosition.y = position.y;
 }
 
 void Transform::SetWorldPosition(const Vec3f& position) {

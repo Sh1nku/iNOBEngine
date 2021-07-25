@@ -12,7 +12,8 @@ A c++17 based engine, using an entity-component-system structure. Capable of dis
  - Writing UIs with HTML by embedding [Cef](https://bitbucket.org/chromiumembedded) 
 ## Demonstration
 An asteroid avoidance game, written entirely using the Lua scripting system
-![AsteroidAvoidanceGame](https://i.imgur.com/8yT1eZm.gif)
+![AsteroidAvoidanceGame](https://user-images.githubusercontent.com/42642351/126903753-08e08fb9-1dca-488d-bad0-fb42808e22f5.gif)
+
 
 ## Build
 You will need the [conan](https://conan.io/) package manager and the remote repository for bincrafters

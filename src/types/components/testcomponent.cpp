@@ -11,7 +11,7 @@ Component* TestComponent::Clone(GameObject* parent) {
 }
 
 UI32 TestComponent::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("TestComponent");
+	static UI32 bitcode = Component::GetBitcode("TestComponent");
 	return bitcode;
 }
 

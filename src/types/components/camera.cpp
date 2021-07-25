@@ -14,7 +14,7 @@ Component* Camera::Clone(GameObject* parent) {
 }
 
 UI32 Camera::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Camera");
+	static UI32 bitcode = Component::GetBitcode("Camera");
 	return bitcode;
 }
 

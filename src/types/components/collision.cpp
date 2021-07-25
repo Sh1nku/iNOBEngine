@@ -33,7 +33,7 @@ Component* Collision::Clone(GameObject* parent) {
 }
 
 UI32 Collision::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Collision");
+	static UI32 bitcode = Component::GetBitcode("Collision");
 	return bitcode;
 }
 
@@ -64,6 +64,16 @@ void Collision::SetAngularVelocity(float vel)
 void Collision::SetCollisionFunc(std::function<void(Collision*)> func)
 {
 	collisionFunc = func;
+}
+
+void Collision::SetEnabled(bool enabled)
+{
+	should_change = enabled ? Collision_ChangeEnabled::ENABLE : Collision_ChangeEnabled::DISABLE;
+}
+
+bool Collision::IsEnabled()
+{
+	return body->IsEnabled();
 }
 
 b2Shape * Collision::cloneB2Shape(b2Shape * shape)
@@ -171,6 +181,10 @@ void from_json(const nlohmann::json& j, Collision& t) {
 		const auto& maskBits = def.find("maskbits");
 		if (maskBits != def.end()) {
 			fixtureDef.filter.maskBits = stringToBin(maskBits.value());
+		}
+		const auto& is_sensor = def.find("issensor");
+		if (is_sensor != def.end()) {
+			fixtureDef.isSensor = is_sensor.value();
 		}
 		t.fixtures.emplace_back(fixtureDef);
 	}

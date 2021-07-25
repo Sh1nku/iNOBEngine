@@ -18,6 +18,10 @@ void Component::AddBitcode(std::string name) {
 	bitcodes.emplace(name, 1 << code++);
 }
 
+void Component::AddComponent(const std::string& name, Component* (*function)(nlohmann::json json)) {
+	jsonComponentList.emplace(name, function);
+}
+
 GameObject *Component::GetParent(){
 	return mParent;
 }

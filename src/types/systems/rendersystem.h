@@ -9,6 +9,7 @@ class UIComponent;
 
 class RenderSystem : public SystemProgram {
 public:
+	friend class GUIBrowserClient;
 	RenderSystem();
 	~RenderSystem();
 	void Update(float dt) override;
@@ -24,6 +25,7 @@ public:
 private:
 	Window* window;
 	std::tuple<float, float, float, float> backgroundColor;
+	std::vector<std::string> mScriptBacklog;
 	bool showFPS;
 	void ShowFPS(float dt);
 	bool showProfiling;

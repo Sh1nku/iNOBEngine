@@ -15,3 +15,17 @@
     font-size: 40px;
 	color: white;
 }
+
+#lives {
+  position:absolute;
+  left: 0px;
+  top: 0px;
+}
+
+#points {
+  display:absolute;
+  width:100%;
+  font-size: 30px;
+  text-align: center;
+	color: white;
+}

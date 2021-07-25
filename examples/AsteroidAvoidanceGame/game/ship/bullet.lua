@@ -3,6 +3,7 @@ local timeDie = 5
 local manager
 local BULLET_SPEED = 20
 local collision
+local renderSystem
 
 function start()
 	timeAlive = 0
@@ -10,6 +11,7 @@ function start()
 	collision = localObject:getCollisionComponent()
 	collision:setLinearVelocity(Vec2(0, BULLET_SPEED))
 	collision:setCollisionFunc(collisionFunc)
+	renderSystem = manager:getRenderSystem()
 end
 
 function update(dt)
@@ -20,6 +22,8 @@ function update(dt)
 end
 
 function collisionFunc(otherCollision)
-	manager:destroy(otherCollision:getParent())
+	points = otherCollision:getParent():getPointsComponent():getPoints()
+	_G.points = _G.points + points
+	renderSystem:executeJavascript('document.getElementById("points").innerHTML = "' .. _G.points .. '";')
 	manager:destroy(localObject)
 end

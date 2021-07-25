@@ -13,6 +13,7 @@ local SPEED_MAX = 4.0
 local SPEED_MIN = 2.5
 local SCALE_MIN = 1
 local SCALE_MAX = 1.5
+_G.points = 0
 
 function randomFloat(low, high)
     return low + math.random()  * (high - low);
@@ -45,8 +46,8 @@ function start()
 	renderSystem = manager:getRenderSystem()
 	animationSystem = manager:getAnimationSystem()
 	collisionSystem = manager:getCollisionSystem()
-	renderSystem:loadURL('manager/game.html');
 	scriptSystem = manager:getScriptSystem()
+	renderSystem:loadURL('manager/game.html');
 	renderSystem:setBackgroundColor(0,0,0,1)
 	renderSystem:setShowFPS(true)
 	renderSystem:setShowProfiling(true)

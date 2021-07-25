@@ -104,7 +104,7 @@ Component* Input::Clone(GameObject* parent) {
 }
 
 UI32 Input::GetBitcode() {
-	static UI32 bitcode = bitcodes.at("Input");
+	static UI32 bitcode = Component::GetBitcode("Input");
 	return bitcode;
 }
 
