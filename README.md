@@ -22,7 +22,7 @@ this requires the profile `default` to already exist, if not use `conan profile 
 ```
 conan config set general.revisions_enabled=1
 conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
-conan remote add inobstudios http://inobstudios.com:20301
+conan remote add inobstudios https://conan.inobstudios.com
 mkdir build
 cd build
 conan install .. --build=missing
