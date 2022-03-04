@@ -1,6 +1,6 @@
 [requires]
 sdl2_image/2.0.5@bincrafters/stable
-sdl2/2.0.14@bincrafters/stable
+sdl2/2.0.14@bincrafters/stable#03ca97f9cc7ea7355c2f6ac441ed566d
 luajit/2.0.5
 sol2/3.2.3
 nlohmann_json/3.9.1
@@ -10,7 +10,6 @@ box2d/2.4.1
 glm/0.9.9.5
 gtest/1.10.0
 cef_binaries/3.2785.1485.g2b5c3a7@sh1nku/stable
-
 [generators]
 cmake
 
