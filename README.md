@@ -16,12 +16,11 @@ An asteroid avoidance game, written entirely using the Lua scripting system
 
 
 ## Build
-You will need the [conan](https://conan.io/) (Note: 2x not supported yet use 1.60.0) package manager and the remote repository for bincrafters
+You will need the [conan](https://conan.io/) (Note: 2x not supported yet use 1.60.0) package manager and the remote repository for inobstudios
 - Note: If on linux using GCC you should run this to use the new GCC abi `conan profile update settings.compiler.libcxx=libstdc++11 default`
 this requires the profile `default` to already exist, if not use `conan profile new default --detect`
 ```
 conan config set general.revisions_enabled=1
-conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
 conan remote add inobstudios https://conan.inobstudios.com
 mkdir build
 cd build

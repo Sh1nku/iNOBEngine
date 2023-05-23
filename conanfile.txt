@@ -1,15 +1,21 @@
 [requires]
-sdl2_image/2.0.5@bincrafters/stable
-sdl2/2.0.14@bincrafters/stable#03ca97f9cc7ea7355c2f6ac441ed566d
+sdl_image/2.0.5
+sdl/2.26.1
 luajit/2.0.5
-sol2/3.2.3
-nlohmann_json/3.9.1
+sol2/3.3.0
+nlohmann_json/3.11.2
 opengl/system
 glu/system
 box2d/2.4.1
 glm/0.9.9.5
 gtest/1.10.0
 cef_binaries/3.2785.1485.g2b5c3a7@sh1nku/stable
+
+#Fix inconsistent package versions
+xz_utils/5.4.2
+libalsa/1.2.7.2
+
+
 [generators]
 cmake
 
