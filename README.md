@@ -1,7 +1,7 @@
 
 # iNOB Engine
 ![Tests](https://github.com/Sh1nku/iNOBEngine/actions/workflows/tests.yml/badge.svg)
-![](https://inobstudios.com/LOCCounterBadge/iNOBEngine/responses/pybadges) <br>
+![](https://api.badgestore.dev/badge/a0f8c2f00fcb90c2/local?style=flat-square) <br>
 A c++17 based engine, using an entity-component-system structure. Capable of displaying 2d sprites in a 3d environment with either orthographic, or perspective projections.
 ## Features
  - Entities can have components, and can be manipulated by systems

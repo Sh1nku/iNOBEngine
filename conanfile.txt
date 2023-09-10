@@ -21,6 +21,7 @@ cmake
 
 [options]
 sdl2:shared=True
+sol2:with_lua=luajit
 
 [imports]
 bin, * -> bin
